@@ -16,23 +16,28 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { DataTablePagination } from "./data-table-pagination"
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onCellClick?: (event: TData) => void
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onCellClick,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    enableRowSelection: true,
   })
 
   return (
-    <div className="rounded-md border">
+    <div>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -58,6 +63,8 @@ export function DataTable<TData, TValue>({
               <TableRow
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
+                onClick={() => onCellClick && onCellClick(row.original)}
+                className={`${onCellClick ? "cursor-pointer" : ""}`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
@@ -75,6 +82,9 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
+      <div className="mt-2">
+        <DataTablePagination table={table} />
+      </div>
     </div>
   )
 }

@@ -2,6 +2,7 @@ import Link from "next/link"
 
 import { siteConfig } from "@/config/site"
 import { buttonVariants } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Inbox } from "@/components/inbox"
 import { AppLayout } from "@/components/layouts/app-layout"
 
@@ -25,7 +26,12 @@ export default function IndexPage() {
   return (
     <AppLayout>
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
-        <Inbox />
+        <div className="flex flex-col gap-8">
+          <p className="text-lg font-semibold leading-none tracking-tight">
+            Inbox
+          </p>
+          <Inbox />
+        </div>
       </section>
     </AppLayout>
   )

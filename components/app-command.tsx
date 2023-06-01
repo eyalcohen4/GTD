@@ -1,38 +1,15 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
-import { File, Laptop, Moon, Plus, PlusCircle, SunMedium } from "lucide-react"
+import { PlusCircle } from "lucide-react"
 import { useSession } from "next-auth/react"
-import { useTheme } from "next-themes"
 
 import { cn } from "@/lib/utils"
 import { useCreateTask } from "@/hooks/tasks"
-import { Button } from "@/components/ui/button"
-import {
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command"
-import {
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog"
 
-import { Dialog, DialogFooter, DialogHeader, DialogTrigger } from "./ui/dialog"
+import { TaskDialog } from "./task-dialog"
 import { Input } from "./ui/input"
 
-const commands = [
-  {
-    name: "Add to Inbox",
-    description: "Add a new task to your inbox",
-  },
-]
 export function AppCommand({ ...props }: any) {
   const ref = React.useRef<HTMLInputElement>(null)
   const { createTask, isLoading, data } = useCreateTask()
