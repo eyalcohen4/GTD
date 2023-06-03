@@ -1,47 +1,34 @@
-import { Flower2Icon, FlowerIcon, HomeIcon, LocateIcon } from "lucide-react"
+import { ReactNode, useMemo, useState } from "react"
+import { statuses } from "@/constants/statuses"
+import {
+  BoxIcon,
+  CalendarIcon,
+  Flower2Icon,
+  FlowerIcon,
+  HomeIcon,
+  Loader,
+  LocateIcon,
+} from "lucide-react"
+import { useSession } from "next-auth/react"
+import TextareaAutosize from "react-textarea-autosize"
 
 import { Task } from "@/types/task"
-import {
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { cn } from "@/lib/utils"
+import { useCreateContext, useGetContexts } from "@/hooks/contexts"
+import { useCreateProjects, useGetProjects } from "@/hooks/projects"
+import { Separator } from "@/components/ui/seperator"
 
-import { ComboboxPopover } from "./combobox"
+import { ColorPicker } from "./color-picker"
+import { ComboboxPopover, Option } from "./combobox"
+import { DatePicker } from "./date-picker"
+import { MultipleSelect } from "./multiple-select"
+import { Button } from "./ui/button"
+import { Calendar } from "./ui/calendar"
 import { Checkbox } from "./ui/checkbox"
-import { Dialog, DialogHeader } from "./ui/dialog"
 import { Input } from "./ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select"
-
-const projects = [
-  {
-    value: "home",
-    label: "Home",
-    color: "red",
-  },
-  {
-    value: "desk",
-    label: "Desk",
-    color: "blue",
-  },
-]
-
-const contexts = [
-  {
-    value: "home",
-    label: "Home",
-  },
-  {
-    value: "desk",
-    label: "Desk",
-  },
-]
+import { Popover } from "./ui/popover"
+import { Select } from "./ui/select"
+import { Sheet, SheetContent, SheetDescription } from "./ui/sheet"
 
 export const TaskDialog = ({
   task,
@@ -52,38 +39,115 @@ export const TaskDialog = ({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) => {
-  return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="min-w-[600px] min-h-[400px] shadow-lg dark:bg-zinc-950/90 backdrop-blur-sm border-0 border-transparent pb-8">
-        <DialogDescription>
-          <div className="flex items-center gap-4">
-            <Checkbox className="h-10 w-10" />
-            <Input
-              className="border-0 border-transparent dark:bg-slate-800/90 bg-slate-100/90 text-slate-900 dark:text-slate-100 font-medium"
-              placeholder={task?.title || "Task Title"}
-              value={task?.title}
-            />
-          </div>
-          <div className="mt-8 flex flex-col gap-8">
-            <div className="flex items-center justify-start gap-4">
-              <div className="flex gap-2 w-24">
-                <Flower2Icon />
-                <p>Project</p>
-              </div>
-              <ComboboxPopover items={projects} cta="Select Project" />
-            </div>
-            <div className="flex items-center justify-start gap-4">
-              <div className="flex gap-2 w-24">
-                <LocateIcon />
-                <p>Context</p>
-              </div>
-              <div>
-                <ComboboxPopover items={contexts} cta="Select Context" />
-              </div>
-            </div>
-          </div>
-        </DialogDescription>
-      </DialogContent>
-    </Dialog>
+  const { projects } = useGetProjects()
+  const { contexts } = useGetContexts()
+
+  const projectsOptions = useMemo(
+    () =>
+      projects?.map((project) => ({
+        value: project.id,
+        label: project.title,
+        color: project.color,
+      })),
+    [projects]
   )
+
+  const contextsOptions = useMemo(
+    () =>
+      contexts?.map((context) => ({
+        value: context.id,
+        label: context.title,
+        color: context.color,
+      })),
+    [contexts]
+  )
+
+  console.log(contextsOptions)
+
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent>
+        <SheetDescription className="text-slate-950">
+          <div className="flex flex-col gap-8">
+            <div className="flex items-center gap-4">
+              <Checkbox className="h-6 w-6" />
+              <TextareaAutosize
+                className="w-full border-0 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
+                placeholder={task?.title || "Task Title"}
+                value={task?.title}
+              />
+            </div>
+            <Separator />
+            <div className="flex flex-col gap-8 dark:text-white">
+              <TaskProperty>
+                <TaskPropertyLabel label="Status" icon={<BoxIcon />} />
+                <TaskPropertyValue>
+                  <ComboboxPopover
+                    type="status"
+                    items={statuses}
+                    name="Status"
+                    onChange={() => {}}
+                  />
+                </TaskPropertyValue>
+              </TaskProperty>
+              <TaskProperty>
+                <TaskPropertyLabel label="Project" icon={<Flower2Icon />} />
+                <TaskPropertyValue>
+                  <ComboboxPopover
+                    items={projectsOptions}
+                    type="project"
+                    name="Project"
+                    onChange={() => {}}
+                  />
+                </TaskPropertyValue>
+              </TaskProperty>
+              <TaskProperty>
+                <TaskPropertyLabel label="Context" icon={<LocateIcon />} />
+                <TaskPropertyValue>
+                  <ComboboxPopover
+                    multiple
+                    type="context"
+                    items={contextsOptions}
+                    name="Context"
+                    createType="Context"
+                    onChange={() => {}}
+                  />
+                </TaskPropertyValue>
+              </TaskProperty>
+
+              <TaskProperty>
+                <TaskPropertyLabel label="Due Date" icon={<CalendarIcon />} />
+                <TaskPropertyValue>
+                  <DatePicker />
+                </TaskPropertyValue>
+              </TaskProperty>
+            </div>
+          </div>
+        </SheetDescription>
+      </SheetContent>
+    </Sheet>
+  )
+}
+
+const TaskProperty = ({ children }: { children: ReactNode }) => {
+  return <div className="flex items-center justify-start gap-4">{children}</div>
+}
+
+const TaskPropertyLabel = ({
+  label,
+  icon,
+}: {
+  label: string
+  icon?: ReactNode
+}) => {
+  return (
+    <div className="flex gap-2 w-[200px] items-center text-lg">
+      <span>{icon}</span>
+      <p>{label}</p>
+    </div>
+  )
+}
+
+const TaskPropertyValue = ({ children }: { children: ReactNode }) => {
+  return <div className="w-full">{children}</div>
 }

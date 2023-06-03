@@ -42,5 +42,8 @@ export const getInbox = async (userId: string) => {
       },
       category: "INBOX",
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   })
 }

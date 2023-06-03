@@ -1,19 +1,20 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
+import { Project, ProjectInput } from "@/types/project"
 import { Task, TaskInput } from "@/types/task"
 
-export function useCreateTask() {
+export function useCreateProjects() {
   const queryClient = useQueryClient()
 
   const {
-    mutate: createTask,
+    mutate: createProject,
     isLoading,
     data,
     isSuccess,
     reset,
   } = useMutation(
-    async (input: TaskInput) => {
-      const request = await fetch(`/api/task`, {
+    async (input: ProjectInput) => {
+      const request = await fetch(`/api/project`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -25,22 +26,17 @@ export function useCreateTask() {
     },
     {
       onSuccess: (data) => {
-        if (!data?.task) {
+        if (!data?.project) {
           return
         }
-        queryClient.setQueryData(["inbox"], (old?: { inbox: Array<Task> }) => {
-          if (!old?.inbox) {
-            return { inbox: [data.task] }
-          }
 
-          return { inbox: [data.task, ...old?.inbox] }
-        })
+        queryClient.invalidateQueries(["projects"])
       },
     }
   )
 
   return {
-    createTask,
+    createProject,
     isSuccess,
     data,
     isLoading,
@@ -48,15 +44,18 @@ export function useCreateTask() {
   }
 }
 
-export function useGetInbox() {
-  const { isLoading, data } = useQuery(["inbox"], async () => {
-    const request = await fetch(`/api/task/inbox`)
+export function useGetProjects(): {
+  isLoading: boolean
+  projects: Array<Project>
+} {
+  const { isLoading, data } = useQuery(["projects"], async () => {
+    const request = await fetch(`/api/project`)
 
     return request.json()
   })
 
   return {
     isLoading,
-    inbox: data?.inbox,
+    projects: data?.projects,
   }
 }

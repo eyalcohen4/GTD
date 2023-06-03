@@ -77,7 +77,7 @@ model Project {
   id                  String    @id @default(uuid())
   title               String
   content             String
-  dueDate             DateTime
+  dueDate             DateTime?
   color               String?
   completed           Boolean   @default(false)
   userId              String
@@ -101,6 +101,8 @@ model Task {
   project   Project?     @relation(fields: [projectId], references: [id])
   contexts  Context[]
   category  CategoryEnum
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
 }
 
 enum CategoryEnum {

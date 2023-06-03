@@ -27,9 +27,6 @@ export default function IndexPage() {
     <AppLayout>
       <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
         <div className="flex flex-col gap-8">
-          <p className="text-lg font-semibold leading-none tracking-tight">
-            Inbox
-          </p>
           <Inbox />
         </div>
       </section>

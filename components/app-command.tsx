@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { PlusCircle } from "lucide-react"
+import { LoaderIcon, PlusCircle } from "lucide-react"
 import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
@@ -12,7 +12,7 @@ import { Input } from "./ui/input"
 
 export function AppCommand({ ...props }: any) {
   const ref = React.useRef<HTMLInputElement>(null)
-  const { createTask, isLoading, data } = useCreateTask()
+  const { createTask, isLoading } = useCreateTask()
   const session = useSession()
 
   React.useEffect(() => {
@@ -58,7 +58,7 @@ export function AppCommand({ ...props }: any) {
             transform: "translateY(-50%)",
           }}
         >
-          <PlusCircle />
+          {isLoading ? <LoaderIcon /> : <PlusCircle />}
         </div>
       </form>
     </div>
