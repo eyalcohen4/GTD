@@ -12,10 +12,11 @@ import {
 import { useSession } from "next-auth/react"
 import TextareaAutosize from "react-textarea-autosize"
 
-import { Task } from "@/types/task"
+import { Task, TaskInput } from "@/types/task"
 import { cn } from "@/lib/utils"
 import { useCreateContext, useGetContexts } from "@/hooks/contexts"
 import { useCreateProjects, useGetProjects } from "@/hooks/projects"
+import { useUpdateTask } from "@/hooks/tasks"
 import { Separator } from "@/components/ui/seperator"
 
 import { ColorPicker } from "./color-picker"
@@ -28,7 +29,13 @@ import { Checkbox } from "./ui/checkbox"
 import { Input } from "./ui/input"
 import { Popover } from "./ui/popover"
 import { Select } from "./ui/select"
-import { Sheet, SheetContent, SheetDescription } from "./ui/sheet"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "./ui/sheet"
 
 export const TaskDialog = ({
   task,
@@ -39,6 +46,7 @@ export const TaskDialog = ({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) => {
+  const { updateTask } = useUpdateTask()
   const { projects } = useGetProjects()
   const { contexts } = useGetContexts()
 
@@ -62,11 +70,24 @@ export const TaskDialog = ({
     [contexts]
   )
 
+  const handleUpdateTask = (input: Partial<TaskInput>) => {
+    updateTask({ id: task?.id || "", input })
+  }
+
+  const categoryOption = statuses.find(({ value }) => value === task?.category)
+  const projectOption = projectsOptions?.find(
+    ({ value }) => value === task?.projectId
+  )
+  const selectedContextsIds = task?.contexts?.map(({ id }) => id) || []
+  const contextOptions = contextsOptions?.filter(({ value }) =>
+    selectedContextsIds.includes(value)
+  )
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent>
-        <SheetDescription className="text-slate-950">
-          <div className="flex flex-col gap-8">
+      <SheetContent className="px-24 flex flex-col gap-8">
+        <SheetHeader>
+          <SheetTitle>
             <div className="flex items-center gap-4">
               <Checkbox className="h-6 w-6" circle />
               <TextareaAutosize
@@ -75,67 +96,89 @@ export const TaskDialog = ({
                 value={task?.title}
               />
             </div>
-            <Separator />
-            <div className="flex flex-col gap-8 dark:text-white">
-              <TaskProperty>
-                <TaskPropertyLabel label="Status" icon={<BoxIcon />} />
-                <TaskPropertyValue>
-                  <ComboboxPopover
-                    matchContainerSize
-                    type="status"
-                    items={statuses}
-                    name="Status"
-                    onChange={() => {}}
-                  />
-                </TaskPropertyValue>
-              </TaskProperty>
-              <TaskProperty>
-                <TaskPropertyLabel label="Project" icon={<Flower2Icon />} />
-                <TaskPropertyValue>
-                  <ComboboxPopover
-                    matchContainerSize
-                    items={projectsOptions}
-                    type="project"
-                    name="Project"
-                    onChange={() => {}}
-                  />
-                </TaskPropertyValue>
-              </TaskProperty>
-              <TaskProperty>
-                <TaskPropertyLabel label="Context" icon={<LocateIcon />} />
-                <TaskPropertyValue>
-                  <ComboboxPopover
-                    matchContainerSize
-                    multiple
-                    type="context"
-                    items={contextsOptions}
-                    name="Context"
-                    createType="Context"
-                    onChange={() => {}}
-                  />
-                </TaskPropertyValue>
-              </TaskProperty>
+          </SheetTitle>
+        </SheetHeader>
+        <Separator />
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-8 dark:text-white">
+            <TaskProperty>
+              <TaskPropertyLabel label="Status" icon={<BoxIcon />} />
+              <TaskPropertyValue>
+                <ComboboxPopover
+                  matchContainerSize
+                  type="status"
+                  items={statuses}
+                  value={categoryOption}
+                  name="Status"
+                  onChange={(value) => {
+                    handleUpdateTask({ category: value?.value })
+                  }}
+                />
+              </TaskPropertyValue>
+            </TaskProperty>
+            <TaskProperty>
+              <TaskPropertyLabel label="Project" icon={<Flower2Icon />} />
+              <TaskPropertyValue>
+                <ComboboxPopover
+                  matchContainerSize
+                  items={projectsOptions}
+                  type="project"
+                  name="Project"
+                  value={projectOption}
+                  onChange={(value) => {
+                    if (Array.isArray(value)) {
+                      return
+                    }
 
-              <TaskProperty>
-                <TaskPropertyLabel label="Due Date" icon={<CalendarIcon />} />
-                <TaskPropertyValue>
-                  <DatePicker />
-                </TaskPropertyValue>
-              </TaskProperty>
-            </div>
+                    handleUpdateTask({
+                      projectId: (value?.value as string) || "",
+                    })
+                  }}
+                />
+              </TaskPropertyValue>
+            </TaskProperty>
+            <TaskProperty>
+              <TaskPropertyLabel label="Context" icon={<LocateIcon />} />
+              <TaskPropertyValue>
+                <ComboboxPopover
+                  matchContainerSize
+                  multiple
+                  type="context"
+                  items={contextsOptions}
+                  name="Context"
+                  value={contextOptions}
+                  createType="Context"
+                  onChange={(value) => {
+                    if (Array.isArray(value)) {
+                      handleUpdateTask({
+                        contextIds: value?.map(({ value }) => value),
+                      })
+                    }
+                  }}
+                />
+              </TaskPropertyValue>
+            </TaskProperty>
+
+            <TaskProperty>
+              <TaskPropertyLabel label="Due Date" icon={<CalendarIcon />} />
+              <TaskPropertyValue>
+                <DatePicker
+                  value={task?.dueDate ? new Date(task?.dueDate) : undefined}
+                  onChange={(date) => {
+                    handleUpdateTask({ dueDate: date?.toISOString() })
+                  }}
+                />
+              </TaskPropertyValue>
+            </TaskProperty>
           </div>
-        </SheetDescription>
+        </div>
       </SheetContent>
     </Sheet>
   )
 }
 
 const TaskProperty = ({ children }: { children: ReactNode }) => {
-  return (
-    <div className="flex items-center justify-start gap-4 px-24">
-      {children}
-    </div>
-  )
+  return <div className="flex items-center justify-start gap-4">{children}</div>
 }
 
 const TaskPropertyLabel = ({

@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import { useRouter } from "next/navigation"
 import { LoaderIcon, PlusCircle } from "lucide-react"
 import { useSession } from "next-auth/react"
 
@@ -11,6 +12,7 @@ import { TaskDialog } from "./task-dialog"
 import { Input } from "./ui/input"
 
 export function AppCommand({ ...props }: any) {
+  const router = useRouter()
   const ref = React.useRef<HTMLInputElement>(null)
   const { createTask, isLoading } = useCreateTask()
   const session = useSession()
@@ -37,6 +39,10 @@ export function AppCommand({ ...props }: any) {
       title: value,
       userId: session.data?.user?.id,
     })
+    router.refresh()
+    // setTimeout(async () => {
+    //   await fetch("/api/revalidate")
+    // }, 2000)
   }
 
   return (

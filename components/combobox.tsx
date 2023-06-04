@@ -48,6 +48,7 @@ const CREATE_COMPONENTS = {
 }
 
 export function ComboboxPopover({
+  value,
   items,
   onChange,
   loading,
@@ -56,6 +57,7 @@ export function ComboboxPopover({
   type,
   matchContainerSize,
 }: {
+  value?: Option | Option[] | null
   name: string
   type: "project" | "context" | "status"
   items: Option[]
@@ -63,11 +65,15 @@ export function ComboboxPopover({
   loading?: boolean
   multiple?: boolean
   matchContainerSize?: boolean
-  onChange: (option: Option | null) => void
+  onChange: (option: Option | Option[] | null) => void
 }) {
   const [open, setOpen] = React.useState(false)
-  const [selected, setSelectedItem] = React.useState<Option | null>(null)
-  const [multipleSelected, setMultipleSelected] = React.useState<Option[]>([])
+  const [selected, setSelectedItem] = React.useState<Option | null>(
+    !multiple ? (value as Option) : null
+  )
+  const [multipleSelected, setMultipleSelected] = React.useState<Option[]>(
+    multiple ? (value as Option[]) : []
+  )
   const [search, setSearch] = React.useState("")
   const [renderCreate, setRenderCreate] = React.useState(false)
 
@@ -101,26 +107,24 @@ export function ComboboxPopover({
     const isSelected = multipleSelected.find(
       (item) => item.value === value || item.value === value.toUpperCase()
     )
-    console.log(isSelected)
 
     if (isSelected) {
       const filtered = multipleSelected.filter(
         (item) => item.value !== value && item.value !== value.toUpperCase()
       )
       setMultipleSelected(filtered)
+      onChange(filtered)
     } else {
       setMultipleSelected([...multipleSelected, item])
+      onChange([...multipleSelected, item])
     }
 
-    onChange(item)
     setOpen(false)
   }
 
-  const handleCreated = (value) => {
-    console.log(value)
+  const handleCreated = () => {
     setRenderCreate(false)
     setSearch("")
-    // setSelectedItem()
   }
 
   const handleCancel = () => {
@@ -179,7 +183,7 @@ export function ComboboxPopover({
                 )}
               </CommandEmpty>
               <CommandGroup>
-                <ScrollArea className="h-[200px] scrollarea">
+                <ScrollArea className="h-[300px] scrollarea">
                   {renderCreate ? null : (
                     <>
                       {items?.map((item) => (
@@ -314,7 +318,7 @@ const Trigger = ({
     >
       {loading ? <LoaderIcon /> : null}
       {multipleSelected ? (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 overflow-scroll max-w-full">
           {multipleSelected?.map((item, index) => (
             <div
               className="flex items-center gap-2 rounded"
@@ -330,7 +334,7 @@ const Trigger = ({
               <div
                 className="cursor-pointer"
                 role="button"
-                onClick={() => remove(item.value)}
+                onClick={() => remove && remove(item.value)}
               >
                 <XIcon className="text-slate-950 dark:text-white text-xs h-4 w-4" />
               </div>

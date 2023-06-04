@@ -28,19 +28,55 @@ export function useCreateTask() {
         if (!data?.task) {
           return
         }
-        queryClient.setQueryData(["inbox"], (old?: { inbox: Array<Task> }) => {
-          if (!old?.inbox) {
-            return { inbox: [data.task] }
-          }
 
-          return { inbox: [data.task, ...old?.inbox] }
-        })
+        queryClient.invalidateQueries(["inbox"])
       },
     }
   )
 
   return {
     createTask,
+    isSuccess,
+    data,
+    isLoading,
+    reset,
+  }
+}
+
+export function useUpdateTask() {
+  const queryClient = useQueryClient()
+
+  const {
+    mutate: updateTask,
+    isLoading,
+    data,
+    isSuccess,
+    reset,
+  } = useMutation(
+    async ({ id, input }: { id: string; input: Partial<TaskInput> }) => {
+      const request = await fetch(`/api/task`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id, input }),
+      })
+
+      return request.json()
+    },
+    {
+      onSuccess: (data) => {
+        if (!data?.task) {
+          return
+        }
+
+        queryClient.invalidateQueries(["inbox"])
+      },
+    }
+  )
+
+  return {
+    updateTask,
     isSuccess,
     data,
     isLoading,

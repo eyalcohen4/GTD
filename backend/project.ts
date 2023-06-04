@@ -2,8 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 import { ProjectInput } from "@/types/project"
 import { TaskInput } from "@/types/task"
-
-const prisma = new PrismaClient()
+import prisma from "@/lib/db"
 
 const DEFAULT_FREQUENCY_DAYS = 7
 

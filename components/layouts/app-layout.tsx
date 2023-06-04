@@ -2,8 +2,11 @@ import { ReactNode } from "react"
 
 import { AppCommand } from "../app-command"
 import { Nav } from "../nav"
+import { ProfilePicture } from "../profile-picture"
 import { ThemeToggle } from "../theme-toggle"
+import { Avatar, AvatarImage } from "../ui/avatar"
 import { Command } from "../ui/command"
+import { useSession } from "next-auth/react"
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -22,9 +25,12 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
 }
 
 const Header = () => {
+  
   return (
     <div className="h-[80px] border-b flex justify-between items-center px-4">
-      <div>Name/Stuff</div>
+      <div>
+        <ProfilePicture />
+      </div>
       <div>
         <AppCommand />
       </div>

@@ -54,54 +54,26 @@ export const Inbox = () => {
           Inbox
         </p>
       </div>
-      {isLoading ? (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Project</TableHead>
-              <TableHead>Contexts</TableHead>
-              <TableHead>Due Date</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell>
-                <Skeleton />
-              </TableCell>
-              <TableCell>
-                <Skeleton />
-              </TableCell>
-              <TableCell>
-                <Skeleton />
-              </TableCell>
-              <TableCell>
-                <Skeleton />
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      ) : (
-        <>
-          <DataTable
-            className="text-lg"
-            columns={columns}
-            data={inbox || []}
-            onCellClick={(task) => {
-              setOpen(true)
-              setCurrentTask(task)
-            }}
-          />
-          <TaskDialog
-            open={open}
-            task={currentTask}
-            onOpenChange={() => {
-              setOpen(false)
-              setCurrentTask(null)
-            }}
-          />
-        </>
-      )}
+
+      <>
+        <DataTable
+          className="text-lg"
+          columns={columns}
+          data={inbox || []}
+          onCellClick={(task) => {
+            setOpen(true)
+            setCurrentTask(task)
+          }}
+        />
+        <TaskDialog
+          open={open}
+          task={currentTask}
+          onOpenChange={() => {
+            setOpen(false)
+            setCurrentTask(null)
+          }}
+        />
+      </>
     </div>
   )
 }

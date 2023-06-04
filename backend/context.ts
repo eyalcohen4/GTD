@@ -2,8 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 import { ContextInput } from "@/types/context"
 import { ProjectInput } from "@/types/project"
-
-const prisma = new PrismaClient()
+import prisma from "@/lib/db"
 
 export const createContext = async (input: ContextInput) => {
   return prisma.context.create({
