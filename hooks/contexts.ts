@@ -24,20 +24,8 @@ export function useCreateContext() {
       return request.json()
     },
     {
-      onSuccess: (data) => {
-        if (!data?.task) {
-          return
-        }
-        queryClient.setQueryData(
-          ["contexts"],
-          (old?: { contexts: Array<Context> }) => {
-            if (!old?.contexts) {
-              return { contexts: [data.contexts] }
-            }
-
-            return { contexts: [data.context, ...old?.contexts] }
-          }
-        )
+      onSuccess: async () => {
+        await queryClient.invalidateQueries(["contexts"])
       },
     }
   )
@@ -55,7 +43,7 @@ export function useGetContexts(): {
   isLoading: boolean
   contexts: Array<Context>
 } {
-  const { isLoading, data } = useQuery(["contextts"], async () => {
+  const { isLoading, data } = useQuery(["contexts"], async () => {
     const request = await fetch(`/api/context`)
 
     return request.json()

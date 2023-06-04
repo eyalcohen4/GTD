@@ -62,15 +62,13 @@ export const TaskDialog = ({
     [contexts]
   )
 
-  console.log(contextsOptions)
-
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
         <SheetDescription className="text-slate-950">
           <div className="flex flex-col gap-8">
             <div className="flex items-center gap-4">
-              <Checkbox className="h-6 w-6" />
+              <Checkbox className="h-6 w-6" circle />
               <TextareaAutosize
                 className="w-full border-0 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
                 placeholder={task?.title || "Task Title"}
@@ -83,6 +81,7 @@ export const TaskDialog = ({
                 <TaskPropertyLabel label="Status" icon={<BoxIcon />} />
                 <TaskPropertyValue>
                   <ComboboxPopover
+                    matchContainerSize
                     type="status"
                     items={statuses}
                     name="Status"
@@ -94,6 +93,7 @@ export const TaskDialog = ({
                 <TaskPropertyLabel label="Project" icon={<Flower2Icon />} />
                 <TaskPropertyValue>
                   <ComboboxPopover
+                    matchContainerSize
                     items={projectsOptions}
                     type="project"
                     name="Project"
@@ -105,6 +105,7 @@ export const TaskDialog = ({
                 <TaskPropertyLabel label="Context" icon={<LocateIcon />} />
                 <TaskPropertyValue>
                   <ComboboxPopover
+                    matchContainerSize
                     multiple
                     type="context"
                     items={contextsOptions}
@@ -130,7 +131,11 @@ export const TaskDialog = ({
 }
 
 const TaskProperty = ({ children }: { children: ReactNode }) => {
-  return <div className="flex items-center justify-start gap-4">{children}</div>
+  return (
+    <div className="flex items-center justify-start gap-4 px-24">
+      {children}
+    </div>
+  )
 }
 
 const TaskPropertyLabel = ({

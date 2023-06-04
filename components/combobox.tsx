@@ -12,6 +12,7 @@ import {
   LucideIcon,
   PlusCircle,
   XCircle,
+  XIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -53,6 +54,7 @@ export function ComboboxPopover({
   multiple,
   name,
   type,
+  matchContainerSize,
 }: {
   name: string
   type: "project" | "context" | "status"
@@ -60,6 +62,7 @@ export function ComboboxPopover({
   createType?: string
   loading?: boolean
   multiple?: boolean
+  matchContainerSize?: boolean
   onChange: (option: Option | null) => void
 }) {
   const [open, setOpen] = React.useState(false)
@@ -113,8 +116,11 @@ export function ComboboxPopover({
     setOpen(false)
   }
 
-  const handleCreated = () => {
+  const handleCreated = (value) => {
+    console.log(value)
     setRenderCreate(false)
+    setSearch("")
+    // setSelectedItem()
   }
 
   const handleCancel = () => {
@@ -127,16 +133,18 @@ export function ComboboxPopover({
   return (
     <div className="flex items-center space-x-4 text-muted-foreground">
       <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger>
+        <PopoverTrigger className="w-full">
           <Trigger
             loading={loading}
             selected={selected}
             multipleSelected={multipleSelected}
             name={name}
+            remove={(value) => handleMultipleSelect(value || "")}
           />
         </PopoverTrigger>
         <PopoverContent
-          className="p-0 min-w-[200px] w-auto"
+          className="p-0 min-w-[200px] w-full"
+          matchContainerSize={matchContainerSize}
           side="bottom"
           align="center"
         >
@@ -155,71 +163,86 @@ export function ComboboxPopover({
                 </div>
               ) : null}
               <CommandEmpty>
-                {renderCreate ? null : <span>No result found.</span>}
+                {renderCreate ? null : (
+                  <div className="flex flex-col gap-4 px-4 pt-4">
+                    <span>No result found.</span>
+                    <div className="relative select-none rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer flex items-center justify-between">
+                      <div
+                        className={cn("cursor-pointer flex items-center gap-2")}
+                        onClick={handleCreate}
+                      >
+                        <PlusCircle />
+                        Create {name}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </CommandEmpty>
               <CommandGroup>
-                {renderCreate ? null : (
-                  <>
-                    {items?.map((item) => (
-                      <CommandItem
-                        key={item.label}
-                        className={cn(
-                          "cursor-pointer flex items-center justify-between"
-                        )}
-                        value={item.value}
-                        onSelect={
-                          multiple ? handleMultipleSelect : handleSelect
-                        }
-                      >
-                        <div className="flex items-center">
-                          {item?.icon ? (
-                            <item.icon className={cn("mr-2 h-4 w-4")} />
-                          ) : null}
-                          {item?.color ? (
-                            <div className="flex items-center justify-center w-6 h-6 rounded-full mr-2">
-                              <div
-                                className="w-4 h-4 rounded-full"
-                                style={{ background: item.color }}
-                              ></div>
-                            </div>
-                          ) : null}
-                          <span
-                            className={
-                              item.value === selected?.value ||
-                              multipleSelected?.find(
-                                (selected) =>
-                                  selected.value === item.value ||
-                                  selected.value === item.value.toUpperCase()
-                              )
-                                ? "font-bold"
-                                : ""
-                            }
-                          >
-                            {item.label}
+                <ScrollArea className="h-[200px] scrollarea">
+                  {renderCreate ? null : (
+                    <>
+                      {items?.map((item) => (
+                        <CommandItem
+                          key={item.label}
+                          className={cn(
+                            "cursor-pointer flex items-center justify-between"
+                          )}
+                          value={item.value}
+                          onSelect={
+                            multiple ? handleMultipleSelect : handleSelect
+                          }
+                        >
+                          <div className="flex items-center">
+                            {item?.icon ? (
+                              <item.icon className={cn("mr-2 h-4 w-4")} />
+                            ) : null}
+                            {item?.color ? (
+                              <div className="flex items-center justify-center w-6 h-6 rounded-full mr-2">
+                                <div
+                                  className="w-4 h-4 rounded-full"
+                                  style={{ background: item.color }}
+                                ></div>
+                              </div>
+                            ) : null}
+                            <span
+                              className={
+                                item.value === selected?.value ||
+                                multipleSelected?.find(
+                                  (selected) =>
+                                    selected.value === item.value ||
+                                    selected.value === item.value.toUpperCase()
+                                )
+                                  ? "font-bold"
+                                  : ""
+                              }
+                            >
+                              {item.label}
+                            </span>
+                          </div>
+                          <span>
+                            {item.value === selected?.value ||
+                            multipleSelected?.find(
+                              (selected) =>
+                                selected.value === item.value ||
+                                selected.value === item.value.toUpperCase()
+                            ) ? (
+                              <CheckIcon className="h-4 w-4" />
+                            ) : null}
                           </span>
-                        </div>
-                        <span>
-                          {item.value === selected?.value ||
-                          multipleSelected?.find(
-                            (selected) =>
-                              selected.value === item.value ||
-                              selected.value === item.value.toUpperCase()
-                          ) ? (
-                            <CheckIcon className="h-4 w-4" />
-                          ) : null}
-                        </span>
+                        </CommandItem>
+                      ))}
+                      <CommandItem
+                        key="Create"
+                        className={cn("cursor-pointer flex items-center gap-2")}
+                        onSelect={handleCreate}
+                      >
+                        <PlusCircle />
+                        Create {name}
                       </CommandItem>
-                    ))}
-                    <CommandItem
-                      key="Create"
-                      className={cn("cursor-pointer flex items-center gap-2")}
-                      onSelect={handleCreate}
-                    >
-                      <PlusCircle />
-                      Create {name}
-                    </CommandItem>
-                  </>
-                )}
+                    </>
+                  )}
+                </ScrollArea>
               </CommandGroup>
             </CommandList>
           </Command>
@@ -274,36 +297,44 @@ const Trigger = ({
   loading,
   selected,
   multipleSelected,
+  remove,
   name,
 }: {
   loading?: boolean
   selected?: Option | null
   multipleSelected?: Option[]
   name: string
+  remove?: (value?: string) => void
 }) => {
   return (
-    <Button variant="outline" size="sm" className="w-[200px] justify-start">
+    <Button
+      variant="outline"
+      size="sm"
+      className="min-w-[200px] w-full justify-start"
+    >
       {loading ? <LoaderIcon /> : null}
       {multipleSelected ? (
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           {multipleSelected?.map((item, index) => (
-            <>
-              {item?.color ? (
-                <div className="flex items-center justify-center w-6 h-6 rounded-full mr-2">
-                  <div
-                    className="w-4 h-4 rounded-full"
-                    style={{ background: item.color }}
-                  ></div>
-                </div>
-              ) : null}
+            <div
+              className="flex items-center gap-2 rounded"
+              style={{
+                color: `${item.color}`,
+                padding: "1px 4px",
+              }}
+            >
               {item?.icon ? (
                 <item.icon className="mr-2 h-4 w-4 shrink-0 text-slate-950 dark:text-white" />
               ) : null}
-              <span className="text-slate-950 dark:text-white">
-                {item.label}
-                {index !== multipleSelected.length - 1 && ","}
-              </span>
-            </>
+              <span className="">{item.label}</span>
+              <div
+                className="cursor-pointer"
+                role="button"
+                onClick={() => remove(item.value)}
+              >
+                <XIcon className="text-slate-950 dark:text-white text-xs h-4 w-4" />
+              </div>
+            </div>
           ))}
         </div>
       ) : null}

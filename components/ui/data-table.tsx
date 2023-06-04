@@ -78,6 +78,7 @@ export function DataTable<TData, TValue>({
                   className="flex items-center"
                 >
                   <Checkbox
+                    circle
                     className="h-6 w-6"
                     onClick={(e) => {
                       e.stopPropagation()
