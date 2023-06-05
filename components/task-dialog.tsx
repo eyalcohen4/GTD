@@ -1,18 +1,12 @@
 import { ReactNode, useMemo, useState } from "react"
 import { statuses } from "@/constants/statuses"
-import {
-  BoxIcon,
-  CalendarIcon,
-  Flower2Icon,
-  FlowerIcon,
-  HomeIcon,
-  Loader,
-  LocateIcon,
-} from "lucide-react"
+import { BlockNoteView, useBlockNote } from "@blocknote/react"
+import { BoxIcon, CalendarIcon, Flower2Icon, LocateIcon } from "lucide-react"
 import { useSession } from "next-auth/react"
+import { ReactMarkdown } from "react-markdown/lib/react-markdown"
 import TextareaAutosize from "react-textarea-autosize"
 
-import { Task, TaskInput } from "@/types/task"
+import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
 import { cn } from "@/lib/utils"
 import { useCreateContext, useGetContexts } from "@/hooks/contexts"
 import { useCreateProjects, useGetProjects } from "@/hooks/projects"
@@ -49,6 +43,12 @@ export const TaskDialog = ({
   const { updateTask } = useUpdateTask()
   const { projects } = useGetProjects()
   const { contexts } = useGetContexts()
+  const editor = useBlockNote({
+    onEditorContentChange: (editor) => {
+      // Log the document to console on every update
+      // console.log(editor.getJSON())
+    },
+  })
 
   const projectsOptions = useMemo(
     () =>
@@ -70,7 +70,7 @@ export const TaskDialog = ({
     [contexts]
   )
 
-  const handleUpdateTask = (input: Partial<TaskInput>) => {
+  const handleUpdateTask = (input: UpdateTaskInput) => {
     updateTask({ id: task?.id || "", input })
   }
 
@@ -89,7 +89,14 @@ export const TaskDialog = ({
         <SheetHeader>
           <SheetTitle>
             <div className="flex items-center gap-4">
-              <Checkbox className="h-6 w-6" circle />
+              <Checkbox
+                className="h-6 w-6"
+                circle
+                onCheckedChange={(value) => {
+                  handleUpdateTask({ completed: value as boolean })
+                }}
+                checked={task?.completed}
+              />
               <TextareaAutosize
                 className="w-full border-0 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
                 placeholder={task?.title || "Task Title"}
@@ -171,6 +178,10 @@ export const TaskDialog = ({
               </TaskPropertyValue>
             </TaskProperty>
           </div>
+        </div>
+        <Separator />
+        <div className="flex flex-col gap-8">
+          <BlockNoteView editor={editor} />
         </div>
       </SheetContent>
     </Sheet>

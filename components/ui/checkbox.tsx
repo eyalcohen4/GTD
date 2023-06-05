@@ -26,11 +26,15 @@ const Checkbox = React.forwardRef<
   >
     <CheckboxPrimitive.Indicator
       className={cn(
-        "flex items-center justify-center text-current dark:bg-white",
+        "flex items-center justify-center text-current dark:bg-white transition-all checkbox__check",
         circle ? "rounded-full" : "rounded-md"
       )}
     >
-      <Check className={cn("h-6 w-6 dark:text-slate-950")} />
+      <Check
+        className={`h-6 w-6 dark:text-slate-950 
+      
+      `}
+      />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ))

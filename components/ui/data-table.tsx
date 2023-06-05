@@ -42,7 +42,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <Table className={cn(className)}>
+      <Table className={cn(className, "text-md")}>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>

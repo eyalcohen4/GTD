@@ -84,7 +84,10 @@ export function useUpdateTask() {
   }
 }
 
-export function useGetInbox() {
+export function useGetInbox(): {
+  isLoading: boolean
+  inbox: Task[]
+} {
   const { isLoading, data } = useQuery(["inbox"], async () => {
     const request = await fetch(`/api/task/inbox`)
 

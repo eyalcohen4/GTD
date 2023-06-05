@@ -16,6 +16,7 @@ export const updateTaskInputSchema = z.object({
   contextIds: z.array(z.string()).optional(),
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
+  completed: z.boolean().optional(),
   category: z.string().optional(),
 })
 
@@ -25,6 +26,7 @@ export type TaskInput = z.infer<typeof taskInputSchema>
 export const taskSchema = z.object({
   id: z.string(),
   title: z.string(),
+  completed: z.boolean(),
   content: z.string().optional(),
   userId: z.string(),
   contexts: z

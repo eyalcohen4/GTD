@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { statuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
 import { CalendarIcon } from "lucide-react"
@@ -32,11 +32,11 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "contexts",
-    header: "@ Contexts",
+    header: "Contexts",
   },
   {
     accessorKey: "dueDate",
-    header: () => <CalendarIcon />,
+    header: () => "Due Date",
   },
 ]
 
@@ -44,7 +44,12 @@ const inboxStatus = statuses.find((status) => status.value === "INBOX")
 export const Inbox = () => {
   const { inbox, isLoading } = useGetInbox()
   const [open, setOpen] = useState(false)
-  const [currentTask, setCurrentTask] = useState<Task | null>(null)
+  const [currentTaskId, setCurrentTaskId] = useState<>("")
+
+  const currentTask = useMemo(() => {
+    if (!currentTaskId) return null
+    return inbox?.find((task) => task.id === currentTaskId)
+  }, [currentTaskId, inbox])
 
   return (
     <div>
@@ -62,7 +67,7 @@ export const Inbox = () => {
           data={inbox || []}
           onCellClick={(task) => {
             setOpen(true)
-            setCurrentTask(task)
+            setCurrentTaskId(task.id)
           }}
         />
         <TaskDialog
@@ -70,7 +75,7 @@ export const Inbox = () => {
           task={currentTask}
           onOpenChange={() => {
             setOpen(false)
-            setCurrentTask(null)
+            setCurrentTaskId("")
           }}
         />
       </>
