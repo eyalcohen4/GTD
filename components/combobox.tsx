@@ -61,7 +61,6 @@ export function ComboboxPopover({
   name: string
   type: "project" | "context" | "status"
   items: Option[]
-  createType?: string
   loading?: boolean
   multiple?: boolean
   matchContainerSize?: boolean
@@ -170,15 +169,19 @@ export function ComboboxPopover({
                 {renderCreate ? null : (
                   <div className="flex flex-col gap-4 px-4 pt-4">
                     <span>No result found.</span>
-                    <div className="relative select-none rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer flex items-center justify-between">
-                      <div
-                        className={cn("cursor-pointer flex items-center gap-2")}
-                        onClick={handleCreate}
-                      >
-                        <PlusCircle />
-                        Create {name}
+                    {CreateComponent ? (
+                      <div className="relative select-none rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 cursor-pointer flex items-center justify-between">
+                        <div
+                          className={cn(
+                            "cursor-pointer flex items-center gap-2"
+                          )}
+                          onClick={handleCreate}
+                        >
+                          <PlusCircle />
+                          Create {name}
+                        </div>
                       </div>
-                    </div>
+                    ) : null}
                   </div>
                 )}
               </CommandEmpty>
@@ -201,7 +204,7 @@ export function ComboboxPopover({
                             {item?.icon ? (
                               <item.icon className={cn("mr-2 h-4 w-4")} />
                             ) : null}
-                            {item?.color ? (
+                            {item?.color && !item?.icon ? (
                               <div className="flex items-center justify-center w-6 h-6 rounded-full mr-2">
                                 <div
                                   className="w-4 h-4 rounded-full"
@@ -236,14 +239,18 @@ export function ComboboxPopover({
                           </span>
                         </CommandItem>
                       ))}
-                      <CommandItem
-                        key="Create"
-                        className={cn("cursor-pointer flex items-center gap-2")}
-                        onSelect={handleCreate}
-                      >
-                        <PlusCircle />
-                        Create {name}
-                      </CommandItem>
+                      {CreateComponent ? (
+                        <CommandItem
+                          key="Create"
+                          className={cn(
+                            "cursor-pointer flex items-center gap-2"
+                          )}
+                          onSelect={handleCreate}
+                        >
+                          <PlusCircle />
+                          Create {name}
+                        </CommandItem>
+                      ) : null}
                     </>
                   )}
                 </ScrollArea>
@@ -344,7 +351,7 @@ const Trigger = ({
       ) : null}
       {selected ? (
         <>
-          {selected?.color ? (
+          {selected?.color && !selected?.icon ? (
             <div className="flex items-center justify-center w-6 h-6 rounded-full mr-2">
               <div
                 className="w-4 h-4 rounded-full"

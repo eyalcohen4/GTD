@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { useCreateContext, useGetContexts } from "@/hooks/contexts"
-import { useCreateProjects } from "@/hooks/projects"
+import { useCreateProject } from "@/hooks/projects"
 
 import { ColorPicker } from "./color-picker"
 import { Button } from "./ui/button"
@@ -22,7 +22,7 @@ export const CreateProject = ({
   const [title, setTitle] = useState("")
   const [error, setError] = useState("")
 
-  const { createProject, isLoading } = useCreateProjects()
+  const { createProject, isLoading } = useCreateProject()
 
   const handleColorChange = (color: string) => {
     setColor(color)

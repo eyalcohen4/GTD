@@ -1,10 +1,30 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import {
+  UseMutationOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query"
 
-import { Task, TaskInput } from "@/types/task"
+import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
+
+export function useGetTasks(): {
+  isLoading: boolean
+  tasks: Task[]
+} {
+  const { isLoading, data } = useQuery(["tasks"], async () => {
+    const request = await fetch(`/api/task`)
+
+    return request.json()
+  })
+
+  return {
+    isLoading,
+    tasks: data?.tasks,
+  }
+}
 
 export function useCreateTask() {
   const queryClient = useQueryClient()
-
   const {
     mutate: createTask,
     isLoading,
@@ -24,12 +44,35 @@ export function useCreateTask() {
       return request.json()
     },
     {
-      onSuccess: (data) => {
-        if (!data?.task) {
+      onMutate: async (newTask) => {
+        if (!newTask) {
           return
         }
 
-        queryClient.invalidateQueries(["inbox"])
+        await queryClient.cancelQueries({ queryKey: ["tasks"] })
+
+        const previousTasks = queryClient.getQueryData(["tasks"])
+
+        const newTaskWithId: Task = {
+          ...newTask,
+          id: Math.random().toString(36),
+          completed: false,
+        }
+
+        queryClient.setQueryData(
+          ["tasks"],
+          (old: { tasks: Task[] } | undefined) => ({
+            tasks: old?.tasks ? [newTaskWithId, ...old.tasks] : [newTaskWithId],
+          })
+        )
+
+        return { previousTasks }
+      },
+      onError: (err, newTodo, context) => {
+        queryClient.setQueryData(["tasks"], context?.previousTasks)
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["tasks"] })
       },
     }
   )
@@ -53,7 +96,7 @@ export function useUpdateTask() {
     isSuccess,
     reset,
   } = useMutation(
-    async ({ id, input }: { id: string; input: Partial<TaskInput> }) => {
+    async ({ id, input }: { id: string; input: UpdateTaskInput }) => {
       const request = await fetch(`/api/task`, {
         method: "PATCH",
         headers: {
@@ -65,12 +108,26 @@ export function useUpdateTask() {
       return request.json()
     },
     {
-      onSuccess: (data) => {
-        if (!data?.task) {
+      onMutate: async (updated) => {
+        if (!updated) {
           return
         }
+        await queryClient.cancelQueries({ queryKey: ["tasks", updated.id] })
 
-        queryClient.invalidateQueries(["inbox"])
+        // Snapshot the previous value
+        const previousTask = queryClient.getQueryData(["tasks", updated.id])
+
+        // Optimistically update to the new value
+        queryClient.setQueryData(["tasks", updated.id], updated)
+
+        // Return a context with the previous and new todo
+        return { previousTask, updated }
+      },
+      onError: (err, newTodo, context) => {
+        queryClient.setQueryData(["tasks"], context?.previousTask)
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["tasks"] })
       },
     }
   )
@@ -84,18 +141,18 @@ export function useUpdateTask() {
   }
 }
 
-export function useGetInbox(): {
+export function useGetTask(id: string): {
   isLoading: boolean
-  inbox: Task[]
+  task: Task
 } {
-  const { isLoading, data } = useQuery(["inbox"], async () => {
-    const request = await fetch(`/api/task/inbox`)
+  const { isLoading, data } = useQuery(["task", id], async () => {
+    const request = await fetch(`/api/task/${id}`)
 
     return request.json()
   })
 
   return {
     isLoading,
-    inbox: data?.inbox,
+    task: data?.task,
   }
 }

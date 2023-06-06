@@ -8,13 +8,14 @@ import { useSession } from "next-auth/react"
 import { cn } from "@/lib/utils"
 import { useCreateTask } from "@/hooks/tasks"
 
+import { useTasks } from "./providers/tasks-provider"
 import { TaskDialog } from "./task-dialog"
 import { Input } from "./ui/input"
 
 export function AppCommand({ ...props }: any) {
   const router = useRouter()
   const ref = React.useRef<HTMLInputElement>(null)
-  const { createTask, isLoading } = useCreateTask()
+  const { createTask, loadingCreateTask: isLoading } = useTasks()
   const session = useSession()
 
   React.useEffect(() => {
@@ -38,8 +39,9 @@ export function AppCommand({ ...props }: any) {
     await createTask({
       title: value,
       userId: session.data?.user?.id,
+      category: "INBOX",
     })
-    router.refresh()
+    // router.refresh()
     // setTimeout(async () => {
     //   await fetch("/api/revalidate")
     // }, 2000)

@@ -9,14 +9,17 @@ import TextareaAutosize from "react-textarea-autosize"
 import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
 import { cn } from "@/lib/utils"
 import { useCreateContext, useGetContexts } from "@/hooks/contexts"
-import { useCreateProjects, useGetProjects } from "@/hooks/projects"
-import { useUpdateTask } from "@/hooks/tasks"
+import { useCreateProject, useGetProjects } from "@/hooks/projects"
+import { useGetTask, useUpdateTask } from "@/hooks/tasks"
 import { Separator } from "@/components/ui/seperator"
 
 import { ColorPicker } from "./color-picker"
 import { ComboboxPopover, Option } from "./combobox"
 import { DatePicker } from "./date-picker"
 import { MultipleSelect } from "./multiple-select"
+import { useContexts } from "./providers/contexts-provider"
+import { useProjects } from "./providers/projects-provider"
+import { useTasks } from "./providers/tasks-provider"
 import { Button } from "./ui/button"
 import { Calendar } from "./ui/calendar"
 import { Checkbox } from "./ui/checkbox"
@@ -32,17 +35,23 @@ import {
 } from "./ui/sheet"
 
 export const TaskDialog = ({
-  task,
+  taskId,
   open,
   onOpenChange,
 }: {
-  task?: Task | null
+  taskId: string
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) => {
-  const { updateTask } = useUpdateTask()
-  const { projects } = useGetProjects()
-  const { contexts } = useGetContexts()
+  const { updateTask, tasks } = useTasks()
+  const { projects } = useProjects()
+  const { contexts } = useContexts()
+
+  const task = useMemo(
+    () => tasks?.find(({ id }) => id === taskId),
+    [tasks, taskId]
+  )
+
   const editor = useBlockNote({
     onEditorContentChange: (editor) => {
       // Log the document to console on every update
@@ -71,7 +80,7 @@ export const TaskDialog = ({
   )
 
   const handleUpdateTask = (input: UpdateTaskInput) => {
-    updateTask({ id: task?.id || "", input })
+    updateTask({ id: taskId || "", input })
   }
 
   const categoryOption = statuses.find(({ value }) => value === task?.category)
@@ -97,11 +106,15 @@ export const TaskDialog = ({
                 }}
                 checked={task?.completed}
               />
-              <TextareaAutosize
-                className="w-full border-0 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
-                placeholder={task?.title || "Task Title"}
-                value={task?.title}
-              />
+              {task?.title ? (
+                <TextareaAutosize
+                  className="w-full border-0 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
+                  placeholder={task?.title || "Task Title"}
+                  value={task?.title}
+                />
+              ) : (
+                <div className="bg-slate-200 animate-pulse h-2 w-full" />
+              )}
             </div>
           </SheetTitle>
         </SheetHeader>
@@ -154,7 +167,6 @@ export const TaskDialog = ({
                   items={contextsOptions}
                   name="Context"
                   value={contextOptions}
-                  createType="Context"
                   onChange={(value) => {
                     if (Array.isArray(value)) {
                       handleUpdateTask({

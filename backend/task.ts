@@ -76,22 +76,43 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
           : undefined,
       },
     },
+    include: {
+      contexts: true,
+    },
   })
 }
 
-export const getInbox = async (userId: string) => {
+export const getTasks = async (userId: string) => {
   return prisma.task.findMany({
     where: {
       user: {
         id: userId,
       },
-      category: "INBOX",
     },
     orderBy: {
       createdAt: "desc",
     },
     include: {
-      contexts: true,
+      contexts: {
+        select: {
+          id: true,
+        },
+      },
+    },
+  })
+}
+
+export const getTask = async (id: string) => {
+  return prisma.task.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      contexts: {
+        select: {
+          id: true,
+        },
+      },
     },
   })
 }

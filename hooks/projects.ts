@@ -3,7 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Project, ProjectInput } from "@/types/project"
 import { Task, TaskInput } from "@/types/task"
 
-export function useCreateProjects() {
+export function useCreateProject() {
   const queryClient = useQueryClient()
 
   const {
@@ -48,11 +48,17 @@ export function useGetProjects(): {
   isLoading: boolean
   projects: Array<Project>
 } {
-  const { isLoading, data } = useQuery(["projects"], async () => {
-    const request = await fetch(`/api/project`)
+  const { isLoading, data } = useQuery(
+    ["projects"],
+    async () => {
+      const request = await fetch(`/api/project`)
 
-    return request.json()
-  })
+      return request.json()
+    },
+    {
+      refetchOnMount: false,
+    }
+  )
 
   return {
     isLoading,

@@ -43,11 +43,17 @@ export function useGetContexts(): {
   isLoading: boolean
   contexts: Array<Context>
 } {
-  const { isLoading, data } = useQuery(["contexts"], async () => {
-    const request = await fetch(`/api/context`)
+  const { isLoading, data } = useQuery(
+    ["contexts"],
+    async () => {
+      const request = await fetch(`/api/context`)
 
-    return request.json()
-  })
+      return request.json()
+    },
+    {
+      refetchOnMount: false,
+    }
+  )
 
   return {
     isLoading,

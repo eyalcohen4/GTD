@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server"
-import { createTask, updateTask } from "@/backend/task"
+import { NextRequest, NextResponse } from "next/server"
+import { createTask, getTask, getTasks, updateTask } from "@/backend/task"
+import { getServerSession } from "next-auth"
 
 import {
   TaskInput,
@@ -7,6 +8,22 @@ import {
   taskInputSchema,
   updateTaskInputSchema,
 } from "@/types/task"
+
+export const GET = async (request: NextRequest) => {
+  try {
+    const session = await getServerSession()
+
+    if (!session) {
+      return 401
+    }
+
+    const tasks = await getTasks(session?.user?.id)
+    return NextResponse.json({ tasks })
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
 
 export const POST = async (request: Request) => {
   try {

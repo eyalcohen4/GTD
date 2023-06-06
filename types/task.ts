@@ -33,8 +33,6 @@ export const taskSchema = z.object({
     .array(
       z.object({
         id: z.string(),
-        name: z.string(),
-        color: z.string(),
       })
     )
     .optional(),

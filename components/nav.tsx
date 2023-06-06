@@ -10,6 +10,8 @@ import { useGetContexts } from "@/hooks/contexts"
 import { useGetProjects } from "@/hooks/projects"
 
 import { Icons } from "./icons"
+import { useContexts } from "./providers/contexts-provider"
+import { useProjects } from "./providers/projects-provider"
 import {
   Collapsible,
   CollapsibleContent,
@@ -21,6 +23,7 @@ const statusesNavItems = statuses.map((status) => ({
   name: status.label,
   href: `/status/${status.label}`,
   color: status.color,
+  icon: status.icon,
 }))
 
 const navItems = [
@@ -40,8 +43,8 @@ type Item = {
 }
 
 export const Nav = () => {
-  const { contexts } = useGetContexts()
-  const { projects } = useGetProjects()
+  const { contexts } = useContexts()
+  const { projects } = useProjects()
 
   const projectMenu = React.useMemo(
     () =>
@@ -134,14 +137,14 @@ export const NavItem = ({
         isSubItem ? "pl-8 text-sm" : ""
       )}
     >
-      {item?.color ? (
+      {item?.color && !item.icon ? (
         <div
           className="w-4 h-4 rounded-full"
           style={{ background: item.color }}
         ></div>
       ) : null}
       {item.icon ? (
-        <item.icon className="text-muted-foreground h-4 w-4" />
+        <item.icon className="text-slate-950 dark:text-white h-5 w-5" />
       ) : null}
       <span className="text-slate-950 dark:text-white">{item.name}</span>
     </div>
