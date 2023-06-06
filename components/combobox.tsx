@@ -186,7 +186,7 @@ export function ComboboxPopover({
                 )}
               </CommandEmpty>
               <CommandGroup>
-                <ScrollArea className="h-[300px] scrollarea">
+                <ScrollArea className="min-h-[110px] scrollarea">
                   {renderCreate ? null : (
                     <>
                       {items?.map((item) => (

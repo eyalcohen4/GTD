@@ -97,16 +97,24 @@
 
   50% {
     opacity: 0.5;
-    transform: scale(5);
+    transform: scale(2.5);
   }
 
   75% {
     opacity: 0.8;
-    transform: scale(5);
+    transform: scale(2.5);
   }
 
   100% {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+[data-theme="dark"] {
+  background-color: hsl(var(--background)) !important;
+}
+
+.ProseMirror {
+  padding: 0 !important;
 }

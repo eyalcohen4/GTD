@@ -11,7 +11,11 @@ import { cn } from "@/lib/utils"
 import { useCreateContext, useGetContexts } from "@/hooks/contexts"
 import { useCreateProject, useGetProjects } from "@/hooks/projects"
 import { useGetTask, useUpdateTask } from "@/hooks/tasks"
+import useDebounce from "@/hooks/use-debounce"
 import { Separator } from "@/components/ui/seperator"
+
+import "@blocknote/core/style.css"
+import { useTheme } from "next-themes"
 
 import { ColorPicker } from "./color-picker"
 import { ComboboxPopover, Option } from "./combobox"
@@ -34,6 +38,8 @@ import {
   SheetTitle,
 } from "./ui/sheet"
 
+useDebounce
+
 export const TaskDialog = ({
   taskId,
   open,
@@ -46,18 +52,25 @@ export const TaskDialog = ({
   const { updateTask, tasks } = useTasks()
   const { projects } = useProjects()
   const { contexts } = useContexts()
-
   const task = useMemo(
     () => tasks?.find(({ id }) => id === taskId),
     [tasks, taskId]
   )
+  const { theme } = useTheme()
+
+  const [title, setTitle] = useState(task?.title || "")
 
   const editor = useBlockNote({
+    initialContent: task?.content ? JSON.parse(task?.content) : {},
     onEditorContentChange: (editor) => {
-      // Log the document to console on every update
-      // console.log(editor.getJSON())
+      debouncedUpdateTask({ content: JSON.stringify(editor.topLevelBlocks) })
     },
+    theme: theme as any,
   })
+
+  const debouncedUpdateTask = useDebounce((task) => {
+    handleUpdateTask(task)
+  }, 300)
 
   const projectsOptions = useMemo(
     () =>
@@ -92,31 +105,33 @@ export const TaskDialog = ({
     selectedContextsIds.includes(value)
   )
 
+  const handleChangeTitle = async (
+    e: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setTitle(e.target.value)
+    debouncedUpdateTask({ title: e.target.value })
+  }
+
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent className="px-24 flex flex-col gap-8">
         <SheetHeader>
-          <SheetTitle>
-            <div className="flex items-center gap-4">
-              <Checkbox
-                className="h-6 w-6"
-                circle
-                onCheckedChange={(value) => {
-                  handleUpdateTask({ completed: value as boolean })
-                }}
-                checked={task?.completed}
-              />
-              {task?.title ? (
-                <TextareaAutosize
-                  className="w-full border-0 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
-                  placeholder={task?.title || "Task Title"}
-                  value={task?.title}
-                />
-              ) : (
-                <div className="bg-slate-200 animate-pulse h-2 w-full" />
-              )}
-            </div>
-          </SheetTitle>
+          <div className="flex items-center gap-4">
+            <Checkbox
+              className="h-6 w-6"
+              circle
+              onCheckedChange={(value) => {
+                handleUpdateTask({ completed: value as boolean })
+              }}
+              checked={task?.completed}
+            />
+            <textarea
+              className="w-full border-0 h-8 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
+              placeholder={title || "Task Title"}
+              value={title}
+              onChange={handleChangeTitle}
+            />
+          </div>
         </SheetHeader>
         <Separator />
         <div className="flex flex-col gap-8">
@@ -191,9 +206,11 @@ export const TaskDialog = ({
             </TaskProperty>
           </div>
         </div>
-        <Separator />
-        <div className="flex flex-col gap-8">
-          <BlockNoteView editor={editor} />
+        <div>
+          <Separator />
+          <div className="flex flex-col gap-8 py-2 outline-none">
+            <BlockNoteView editor={editor} />
+          </div>
         </div>
       </SheetContent>
     </Sheet>

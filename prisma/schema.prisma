@@ -90,19 +90,20 @@ model Project {
 }
 
 model Task {
-  id        String       @id @default(uuid())
-  title     String
-  content   String
-  dueDate   DateTime?
-  completed Boolean      @default(false)
-  userId    String
-  user      User         @relation(fields: [userId], references: [id])
-  projectId String?
-  project   Project?     @relation(fields: [projectId], references: [id])
-  contexts  Context[]
-  category  CategoryEnum
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  id          String       @id @default(uuid())
+  title       String
+  content     String
+  dueDate     DateTime?
+  completed   Boolean      @default(false)
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  projectId   String?
+  project     Project?     @relation(fields: [projectId], references: [id])
+  contexts    Context[]
+  category    CategoryEnum
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  completedAt DateTime?
 }
 
 enum CategoryEnum {

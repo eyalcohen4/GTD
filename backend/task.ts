@@ -49,7 +49,7 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
     ?.map((context) => context.id)
     .filter((contextId) => !contextIds?.includes(contextId))
 
-  return prisma.task.update({
+  const instance = await prisma.task.update({
     where: {
       id,
     },
@@ -80,6 +80,20 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
       contexts: true,
     },
   })
+
+  if (instance.completed) {
+    await prisma.task.update({
+      where: {
+        id,
+      },
+      data: {
+        category: "ARCHIVE",
+        completedAt: new Date(),
+      },
+    })
+  }
+
+  return instance
 }
 
 export const getTasks = async (userId: string) => {
