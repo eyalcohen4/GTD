@@ -45,10 +45,6 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
     },
   })
 
-  const contextIdsToDisconnect = task?.contexts
-    ?.map((context) => context.id)
-    .filter((contextId) => !contextIds?.includes(contextId))
-
   const instance = await prisma.task.update({
     where: {
       id,
@@ -66,11 +62,6 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
       contexts: {
         connect: input?.contextIds
           ? input.contextIds?.map((contextId) => ({
-              id: contextId,
-            }))
-          : undefined,
-        disconnect: contextIdsToDisconnect
-          ? contextIdsToDisconnect?.map((contextId) => ({
               id: contextId,
             }))
           : undefined,

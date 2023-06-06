@@ -39,6 +39,7 @@ export const taskSchema = z.object({
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
   category: z.string().optional(),
+  createdAt: z.string(),
 })
 
 export type Task = z.infer<typeof taskSchema>

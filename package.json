@@ -36,6 +36,7 @@
     "clsx": "^1.2.1",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "dayjs": "^1.11.8",
     "lucide-react": "0.105.0-alpha.4",
     "next": "^13.4.5-canary.3",
     "next-auth": "^4.22.1",
