@@ -1,14 +1,15 @@
-import { NextRequest, NextResponse } from "next/server"
-import { createTask, getTasks, updateTask } from "@/backend/task"
-import { CategoryEnum } from "@prisma/client"
-import { getServerSession } from "next-auth"
+import { NextRequest, NextResponse } from "next/server";
+import { createTask, getTasks, updateTask } from "@/backend/task";
+import { Status } from "@prisma/client";
+import { getServerSession } from "next-auth";
 
-import {
-  TaskInput,
-  UpdateTaskInput,
-  taskInputSchema,
-  updateTaskInputSchema,
-} from "@/types/task"
+
+
+import { TaskInput, UpdateTaskInput, taskInputSchema, updateTaskInputSchema } from "@/types/task";
+
+
+
+
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -18,11 +19,9 @@ export const GET = async (request: NextRequest) => {
       return 401
     }
 
-    const category = request.nextUrl.searchParams.get(
-      "category"
-    ) as CategoryEnum
+    const status = request.nextUrl.searchParams.get("status") as Status
     const tasks = await getTasks(session?.user?.id, {
-      category,
+      status,
     })
     return NextResponse.json({ tasks })
   } catch (error) {

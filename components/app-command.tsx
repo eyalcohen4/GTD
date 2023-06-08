@@ -40,7 +40,7 @@ export function AppCommand({ ...props }: any) {
     await createTask({
       title: value,
       userId: session.data?.user?.id,
-      category: "INBOX",
+      status: "INBOX",
     })
     toast({
       variant: "success",

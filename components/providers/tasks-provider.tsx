@@ -41,7 +41,7 @@ export const TasksProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const inbox = useMemo(
-    () => tasks?.filter((task) => task.category === "INBOX"),
+    () => tasks?.filter((task) => task.status === "INBOX"),
     [tasks]
   )
 

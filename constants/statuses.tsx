@@ -1,6 +1,7 @@
 import {
   BookmarkIcon,
   CalendarIcon,
+  Clock1Icon,
   FastForward,
   FastForwardIcon,
   HourglassIcon,
@@ -11,24 +12,32 @@ export const statuses = [
   {
     value: "INBOX",
     label: "Inbox",
+    description: "Here you can find everything you captured",
+    slug: "inbox",
     color: "#007BFF",
     icon: InboxIcon,
   },
   {
     value: "NEXT_ACTION",
     label: "Next Action",
+    description: "Here you can find all your next actions",
+    slug: "next-action",
     color: "#28A745",
     icon: FastForwardIcon,
   },
   {
     value: "WAITING_FOR",
     label: "Waiting For",
+    description: "Here you can find everything you are waiting for",
+    slug: "waiting-for",
     color: "#FFC107",
     icon: HourglassIcon,
   },
   {
     value: "SOMEDAY_MAYBE",
     label: "Someday / Maybe",
+    description: "Here you can find everything that is on hold",
+    slug: "someday-maybe",
     color: "#FD7E14",
     icon: (props) => (
       <svg
@@ -54,18 +63,23 @@ export const statuses = [
   {
     value: "CALENDAR",
     label: "Calendar",
+    description: "Here you can find everything that is scheduled",
+    slug: "calendar",
     color: "#DC3545",
     icon: CalendarIcon,
   },
   {
     value: "REFERENCE",
     label: "Reference",
+    description: "Here you can find all your reference material",
+    slug: "reference",
     color: "#6F42C1",
     icon: BookmarkIcon,
   },
-  // {
-  //   value: "REVIEW",
-  //   label: "Review",
-  //   color: "#6C757D",
-  // },
+  {
+    value: "REVIEW",
+    label: "Review",
+    icon: Clock1Icon,
+    slug: "review",
+  },
 ]

@@ -65,8 +65,9 @@ export const TaskForm = ({ task }: { task: Task }) => {
     updateTask({ id: task.id || "", input })
   }
 
-  const selectedCategory = () =>
-    statuses.find(({ value }) => value === task?.category)
+  const selectedStatus = () =>
+    statuses.find(({ value }) => value === task?.status)
+
   const selectedProject = useMemo(
     () => projectsOptions?.find(({ value }) => value === task?.projectId),
     [projectsOptions, task]
@@ -114,10 +115,10 @@ export const TaskForm = ({ task }: { task: Task }) => {
                 matchContainerSize
                 type="status"
                 items={statuses}
-                value={selectedCategory}
+                value={selectedStatus}
                 name="Status"
                 onChange={(value) => {
-                  handleUpdateTask({ category: value?.value })
+                  handleUpdateTask({ status: value?.value })
                 }}
               />
             </TaskPropertyValue>

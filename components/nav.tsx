@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { statuses } from "@/constants/statuses"
 import { ChevronDown, LucideIcon } from "lucide-react"
@@ -21,7 +22,7 @@ import { ScrollArea } from "./ui/scroll-area"
 
 const statusesNavItems = statuses.map((status) => ({
   name: status.label,
-  href: `/status/${status.label}`,
+  href: `/status/${status.slug}`,
   color: status.color,
   icon: status.icon,
 }))
@@ -128,7 +129,7 @@ export const NavItem = ({
   const isActive = pathname === item.href
 
   return (
-    <div
+    <Link
       className={cn(
         "flex items-center w-full text-sm gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800",
         isActive
@@ -136,6 +137,7 @@ export const NavItem = ({
           : "text-slate-950 dark:text-white",
         isSubItem ? "pl-8 text-sm" : ""
       )}
+      href={item.href}
     >
       {item?.color && !item.icon ? (
         <div
@@ -147,6 +149,6 @@ export const NavItem = ({
         <item.icon className="text-slate-950 dark:text-white h-5 w-5" />
       ) : null}
       <span className="text-slate-950 dark:text-white">{item.name}</span>
-    </div>
+    </Link>
   )
 }

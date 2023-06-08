@@ -1,4 +1,4 @@
-import { CategoryEnum, PrismaClient } from "@prisma/client"
+import { PrismaClient, Status } from "@prisma/client"
 
 import { TaskInput, UpdateTaskInput } from "@/types/task"
 import prisma from "@/lib/db"
@@ -15,13 +15,13 @@ export const createTask = async (input: TaskInput) => {
         },
       },
 
-      category: "INBOX",
+      status: "INBOX",
     },
   })
 }
 
 export const updateTask = async (id: string, input: UpdateTaskInput) => {
-  const { projectId, category, contexts, ...rest } = input
+  const { projectId, status, contexts, ...rest } = input
 
   try {
     const instance = await prisma.task.update({
@@ -30,7 +30,7 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
       },
       data: {
         ...rest,
-        category: category ? (category as CategoryEnum) : undefined,
+        status: status ? (status as Status) : undefined,
         project: projectId
           ? {
               connect: {
@@ -63,7 +63,7 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
 export const getTasks = async (
   userId: string,
   options?: {
-    category?: CategoryEnum
+    status?: Status
   }
 ) => {
   return prisma.task.findMany({
@@ -71,7 +71,7 @@ export const getTasks = async (
       user: {
         id: userId,
       },
-      category: options?.category || undefined,
+      status: options?.status || undefined,
     },
     orderBy: {
       createdAt: "desc",

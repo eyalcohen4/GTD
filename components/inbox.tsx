@@ -36,7 +36,7 @@ export const Inbox = () => {
   const router = useRouter()
   // const { inbox, updateTask } = useTasks()
   const { tasks, isLoading: loadingGetTasks } = useGetTasks({
-    category: "INBOX",
+    status: "INBOX",
   })
   const { updateTask } = useUpdateTask()
   const { contexts } = useContexts()
@@ -100,7 +100,7 @@ export const Inbox = () => {
             })
           }}
           onCellClick={handleCellClick}
-          rowCta="Clarify"
+          rowCta="Process"
         />
       </>
     </div>

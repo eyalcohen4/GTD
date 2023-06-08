@@ -8,7 +8,7 @@ export const taskInputSchema = z.object({
   userId: z.string(),
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
-  category: z.string().optional(),
+  status: z.string().optional(),
 })
 
 export const updateTaskInputSchema = z.object({
@@ -18,7 +18,7 @@ export const updateTaskInputSchema = z.object({
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
   completed: z.boolean().optional(),
-  category: z.string().optional(),
+  status: z.string().optional(),
 })
 
 export type UpdateTaskInput = z.infer<typeof updateTaskInputSchema>
@@ -33,7 +33,7 @@ export const taskSchema = z.object({
   contexts: z.array(z.string()).optional(),
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
-  category: z.string().optional(),
+  status: z.string().optional(),
   createdAt: z.string(),
 })
 

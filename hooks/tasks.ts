@@ -7,14 +7,27 @@ import {
 
 import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
 
-export function useGetTasks(params?: { category?: string }): {
+export function useGetTasks(params?: {
+  status?: string
+  projectId?: string
+}): {
   isLoading: boolean
   tasks: Task[]
+  refetch: Function
 } {
-  const { isLoading, data } = useQuery(["tasks"], async () => {
-    const url = params?.category
-      ? `/api/task?category=${params?.category}`
-      : `/api/task`
+  const buildUrl = () => {
+    let url = `/api/task`
+    if (params?.status) {
+      url = `${url}?status=${params?.status}`
+    }
+    if (params?.projectId) {
+      url = `${url}?projectId=${params?.projectId}`
+    }
+    return url
+  }
+
+  const { isLoading, data, refetch } = useQuery(["tasks"], async () => {
+    const url = buildUrl()
     const request = await fetch(url)
 
     return request.json()
@@ -23,6 +36,7 @@ export function useGetTasks(params?: { category?: string }): {
   return {
     isLoading,
     tasks: data?.tasks,
+    refetch,
   }
 }
 

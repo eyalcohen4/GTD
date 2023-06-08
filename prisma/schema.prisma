@@ -90,23 +90,23 @@ model Project {
 }
 
 model Task {
-  id          String       @id @default(uuid())
+  id          String    @id @default(uuid())
   title       String
   content     Json
   dueDate     DateTime?
-  completed   Boolean      @default(false)
+  completed   Boolean   @default(false)
   userId      String
-  user        User         @relation(fields: [userId], references: [id])
+  user        User      @relation(fields: [userId], references: [id])
   projectId   String?
-  project     Project?     @relation(fields: [projectId], references: [id])
+  project     Project?  @relation(fields: [projectId], references: [id])
   contexts    Context[]
-  category    CategoryEnum
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  status      Status
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   completedAt DateTime?
 }
 
-enum CategoryEnum {
+enum Status {
   INBOX
   NEXT_ACTION
   WAITING_FOR
@@ -115,6 +115,8 @@ enum CategoryEnum {
   REFERENCE
   REVIEW
   ARCHIVE
+
+  @@map("StatusEnum")
 }
 
 model Context {
