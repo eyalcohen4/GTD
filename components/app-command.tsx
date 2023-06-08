@@ -7,9 +7,9 @@ import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { useCreateTask } from "@/hooks/tasks"
+import { useToast } from "@/hooks/use-toast"
 
 import { useTasks } from "./providers/tasks-provider"
-import { TaskDialog } from "./task-dialog"
 import { Input } from "./ui/input"
 
 export function AppCommand({ ...props }: any) {
@@ -17,6 +17,7 @@ export function AppCommand({ ...props }: any) {
   const ref = React.useRef<HTMLInputElement>(null)
   const { createTask, loadingCreateTask: isLoading } = useTasks()
   const session = useSession()
+  const { toast } = useToast()
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -41,10 +42,10 @@ export function AppCommand({ ...props }: any) {
       userId: session.data?.user?.id,
       category: "INBOX",
     })
-    // router.refresh()
-    // setTimeout(async () => {
-    //   await fetch("/api/revalidate")
-    // }, 2000)
+    toast({
+      variant: "success",
+      title: "Task Created",
+    })
   }
 
   return (

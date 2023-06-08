@@ -1,5 +1,6 @@
 "use client"
 
+import Link from "next/link"
 import {
   ColumnDef,
   flexRender,
@@ -17,14 +18,17 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import { Button } from "./button"
 import { Checkbox } from "./checkbox"
 import { DataTablePagination } from "./data-table-pagination"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
-  onCellClick?: (event: TData) => void
   className?: string
+  rowCta?: string
+  onCellClick?: (event: TData) => void
+  onCheck?: (event: TData) => void
 }
 
 export function DataTable<TData, TValue>({
@@ -32,6 +36,8 @@ export function DataTable<TData, TValue>({
   data,
   onCellClick,
   className,
+  rowCta,
+  onCheck,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -80,8 +86,10 @@ export function DataTable<TData, TValue>({
                   <Checkbox
                     circle
                     className="h-6 w-6"
+                    checked={row.original?.completed}
                     onClick={(e) => {
                       e.stopPropagation()
+                      onCheck && onCheck(row.original)
                     }}
                   />
                 </TableCell>
@@ -90,6 +98,11 @@ export function DataTable<TData, TValue>({
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </TableCell>
                 ))}
+                {rowCta ? (
+                  <TableCell key={`${row.id}-cta`}>
+                    <Button size="xs">{rowCta}</Button>
+                  </TableCell>
+                ) : null}
               </TableRow>
             ))
           ) : (

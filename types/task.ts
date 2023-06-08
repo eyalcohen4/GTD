@@ -1,10 +1,11 @@
 import { z } from "zod"
 
+import { contextSchema } from "./context"
+
 export const taskInputSchema = z.object({
   title: z.string(),
   content: z.string().optional(),
   userId: z.string(),
-  contextIds: z.array(z.string()).optional(),
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
   category: z.string().optional(),
@@ -13,7 +14,7 @@ export const taskInputSchema = z.object({
 export const updateTaskInputSchema = z.object({
   title: z.string().optional(),
   content: z.string().optional(),
-  contextIds: z.array(z.string()).optional(),
+  contexts: z.array(z.string()).optional(),
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
   completed: z.boolean().optional(),
@@ -29,13 +30,7 @@ export const taskSchema = z.object({
   completed: z.boolean(),
   content: z.string().optional(),
   userId: z.string(),
-  contexts: z
-    .array(
-      z.object({
-        id: z.string(),
-      })
-    )
-    .optional(),
+  contexts: z.array(z.string()).optional(),
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
   category: z.string().optional(),

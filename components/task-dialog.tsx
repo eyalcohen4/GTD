@@ -1,35 +1,25 @@
+"use client"
+
 import { ReactNode, useMemo, useState } from "react"
 import { statuses } from "@/constants/statuses"
 import { BlockNoteView, useBlockNote } from "@blocknote/react"
 import { BoxIcon, CalendarIcon, Flower2Icon, LocateIcon } from "lucide-react"
-import { useSession } from "next-auth/react"
-import { ReactMarkdown } from "react-markdown/lib/react-markdown"
-import TextareaAutosize from "react-textarea-autosize"
 
-import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
-import { cn } from "@/lib/utils"
-import { useCreateContext, useGetContexts } from "@/hooks/contexts"
-import { useCreateProject, useGetProjects } from "@/hooks/projects"
-import { useGetTask, useUpdateTask } from "@/hooks/tasks"
+import { UpdateTaskInput } from "@/types/task"
 import useDebounce from "@/hooks/use-debounce"
 import { Separator } from "@/components/ui/seperator"
 
 import "@blocknote/core/style.css"
 import { useTheme } from "next-themes"
 
-import { ColorPicker } from "./color-picker"
-import { ComboboxPopover, Option } from "./combobox"
+import { useGetTask } from "@/hooks/tasks"
+
+import { ComboboxPopover } from "./combobox"
 import { DatePicker } from "./date-picker"
-import { MultipleSelect } from "./multiple-select"
 import { useContexts } from "./providers/contexts-provider"
 import { useProjects } from "./providers/projects-provider"
 import { useTasks } from "./providers/tasks-provider"
-import { Button } from "./ui/button"
-import { Calendar } from "./ui/calendar"
 import { Checkbox } from "./ui/checkbox"
-import { Input } from "./ui/input"
-import { Popover } from "./ui/popover"
-import { Select } from "./ui/select"
 import {
   Sheet,
   SheetContent,
@@ -37,8 +27,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "./ui/sheet"
-
-useDebounce
 
 export const TaskDialog = ({
   taskId,
@@ -49,21 +37,24 @@ export const TaskDialog = ({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) => {
-  const { updateTask, tasks } = useTasks()
+  const { task, isLoading } = useGetTask(taskId)
+
+  if (isLoading) {
+    return null
+  }
+
+  const { updateTask } = useTasks()
   const { projects } = useProjects()
   const { contexts } = useContexts()
-  const task = useMemo(
-    () => tasks?.find(({ id }) => id === taskId),
-    [tasks, taskId]
-  )
+
   const { theme } = useTheme()
 
   const [title, setTitle] = useState(task?.title || "")
 
   const editor = useBlockNote({
-    initialContent: task?.content ? JSON.parse(task?.content) : {},
+    // initialContent: task?.content ? JSON.parse(task?.content) : {},
     onEditorContentChange: (editor) => {
-      debouncedUpdateTask({ content: JSON.stringify(editor.topLevelBlocks) })
+      // debouncedUpdateTask({ content: JSON.stringify(editor.topLevelBlocks) })
     },
     theme: theme as any,
   })
@@ -96,11 +87,18 @@ export const TaskDialog = ({
     updateTask({ id: taskId || "", input })
   }
 
-  const categoryOption = statuses.find(({ value }) => value === task?.category)
-  const projectOption = projectsOptions?.find(
-    ({ value }) => value === task?.projectId
+  const categoryOption = useMemo(
+    () => statuses.find(({ value }) => value === task?.category),
+    [task]
   )
-  const selectedContextsIds = task?.contexts?.map(({ id }) => id) || []
+  const projectOption = useMemo(
+    () => projectsOptions?.find(({ value }) => value === task?.projectId),
+    [task]
+  )
+  const selectedContextsIds = useMemo(
+    () => task?.contexts?.map(({ id }) => id) || [],
+    [task]
+  )
   const contextOptions = contextsOptions?.filter(({ value }) =>
     selectedContextsIds.includes(value)
   )

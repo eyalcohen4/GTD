@@ -67,14 +67,18 @@ export function ComboboxPopover({
   onChange: (option: Option | Option[] | null) => void
 }) {
   const [open, setOpen] = React.useState(false)
-  const [selected, setSelectedItem] = React.useState<Option | null>(
-    !multiple ? (value as Option) : null
-  )
-  const [multipleSelected, setMultipleSelected] = React.useState<Option[]>(
-    multiple ? (value as Option[]) : []
-  )
+  const [selected, setSelectedItem] = React.useState<Option | null>(null)
+  const [multipleSelected, setMultipleSelected] = React.useState<Option[]>([])
   const [search, setSearch] = React.useState("")
   const [renderCreate, setRenderCreate] = React.useState(false)
+
+  React.useEffect(() => {
+    if (multiple && Array.isArray(value)) {
+      setMultipleSelected(value as Option[])
+    } else {
+      setSelectedItem(value as Option)
+    }
+  }, [value, multiple])
 
   const handleCreate = () => {
     setRenderCreate(true)
@@ -101,6 +105,7 @@ export function ComboboxPopover({
         (item) => item.value === value || item.value === value.toUpperCase()
       ) || null
 
+    console.log(value, item)
     if (!item) return
 
     const isSelected = multipleSelected.find(
@@ -329,6 +334,7 @@ const Trigger = ({
           {multipleSelected?.map((item, index) => (
             <div
               className="flex items-center gap-2 rounded"
+              key={item.label}
               style={{
                 color: `${item.color}`,
                 padding: "1px 4px",

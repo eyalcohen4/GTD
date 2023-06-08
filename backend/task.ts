@@ -14,85 +14,64 @@ export const createTask = async (input: TaskInput) => {
           id: input.userId,
         },
       },
-      project: input.projectId
-        ? {
-            connect: {
-              id: input.projectId,
-            },
-          }
-        : undefined,
+
       category: "INBOX",
-      contexts: {
-        connect: input?.contextIds
-          ? input.contextIds?.map((contextId) => ({
-              id: contextId,
-            }))
-          : undefined,
-      },
     },
   })
 }
 
 export const updateTask = async (id: string, input: UpdateTaskInput) => {
-  const { projectId, category, contextIds, ...rest } = input
+  const { projectId, category, contexts, ...rest } = input
 
-  const task = await prisma.task.findUnique({
-    where: {
-      id,
-    },
-    include: {
-      contexts: true,
-    },
-  })
-
-  const instance = await prisma.task.update({
-    where: {
-      id,
-    },
-    data: {
-      ...rest,
-      category: category ? (category as CategoryEnum) : undefined,
-      project: projectId
-        ? {
-            connect: {
-              id: input.projectId,
-            },
-          }
-        : undefined,
-      contexts: {
-        connect: input?.contextIds
-          ? input.contextIds?.map((contextId) => ({
-              id: contextId,
-            }))
-          : undefined,
-      },
-    },
-    include: {
-      contexts: true,
-    },
-  })
-
-  if (instance.completed) {
-    await prisma.task.update({
+  try {
+    const instance = await prisma.task.update({
       where: {
         id,
       },
       data: {
-        category: "ARCHIVE",
-        completedAt: new Date(),
+        ...rest,
+        category: category ? (category as CategoryEnum) : undefined,
+        project: projectId
+          ? {
+              connect: {
+                id: input.projectId,
+              },
+            }
+          : undefined,
+        contexts: {
+          connect: input?.contexts
+            ? input.contexts?.map((contextId) => ({
+                id: contextId,
+              }))
+            : undefined,
+        },
+      },
+      include: {
+        contexts: {
+          select: {
+            id: true,
+          },
+        },
       },
     })
+    return instance
+  } catch (error) {
+    console.log(error)
   }
-
-  return instance
 }
 
-export const getTasks = async (userId: string) => {
+export const getTasks = async (
+  userId: string,
+  options?: {
+    category?: CategoryEnum
+  }
+) => {
   return prisma.task.findMany({
     where: {
       user: {
         id: userId,
       },
+      category: options?.category || undefined,
     },
     orderBy: {
       createdAt: "desc",

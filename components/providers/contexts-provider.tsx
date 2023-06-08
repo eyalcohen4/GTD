@@ -37,7 +37,7 @@ export const ContextsProvider = ({ children }: { children: ReactNode }) => {
       loadingGetContexts: isLoadingContexts,
       loadingCreateContext,
     }),
-    [contexts, createContext]
+    [contexts, createContext, loadingCreateContext, isLoadingContexts]
   )
 
   return (

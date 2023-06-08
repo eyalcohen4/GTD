@@ -1,13 +1,16 @@
 "use client"
 
 import { useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
 import { statuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
 import { format, formatRelative, subDays } from "date-fns"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 
+import { Context } from "@/types/context"
 import { Task } from "@/types/task"
+import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
 
 import { useContexts } from "./providers/contexts-provider"
 import { useProjects } from "./providers/projects-provider"
@@ -23,18 +26,6 @@ export const columns: ColumnDef<Task>[] = [
     header: "Title",
   },
   {
-    accessorKey: "project",
-    header: "Project",
-  },
-  {
-    accessorKey: "contexts",
-    header: "Contexts",
-  },
-  {
-    accessorKey: "dueDate",
-    header: "Due Date",
-  },
-  {
     accessorKey: "createdAt",
     header: "Created",
   },
@@ -42,22 +33,25 @@ export const columns: ColumnDef<Task>[] = [
 
 const inboxStatus = statuses.find((status) => status.value === "INBOX")
 export const Inbox = () => {
-  const { inbox } = useTasks()
-  const [open, setOpen] = useState(false)
-  const [currentTaskId, setCurrentTaskId] = useState("")
+  const router = useRouter()
+  // const { inbox, updateTask } = useTasks()
+  const { tasks, isLoading: loadingGetTasks } = useGetTasks({
+    category: "INBOX",
+  })
+  const { updateTask } = useUpdateTask()
   const { contexts } = useContexts()
   const { projects } = useProjects()
 
   const formattedInbox = useMemo(
     () =>
-      inbox?.map((task) => {
+      tasks?.map((task) => {
         const taskContextsIds = task.contexts?.map(
           (taskContext) => taskContext.id
         )
 
         const formattedContexts = contexts
           ?.filter(({ id }) => taskContextsIds?.includes(id))
-          .map(({ title }) => title)
+          .map(({ title, color, id }) => ({ title, color, id }))
 
         const project = projects?.find(({ id }) => task.projectId === id)
         return {
@@ -70,8 +64,12 @@ export const Inbox = () => {
           createdAt: dayjs(task.createdAt).fromNow(),
         }
       }),
-    [inbox]
+    [tasks, projects, contexts]
   )
+
+  const handleCellClick = (task: Task) => {
+    router.push(`/task/${task.id}`)
+  }
 
   return (
     <div>
@@ -93,21 +91,17 @@ export const Inbox = () => {
           className="text-lg"
           columns={columns}
           data={formattedInbox || []}
-          onCellClick={(task) => {
-            setOpen(true)
-            setCurrentTaskId(task.id)
+          onCheck={(task) => {
+            updateTask({
+              id: task.id,
+              input: {
+                completed: true,
+              },
+            })
           }}
+          onCellClick={handleCellClick}
+          rowCta="Clarify"
         />
-        {open ? (
-          <TaskDialog
-            open={open}
-            taskId={currentTaskId}
-            onOpenChange={() => {
-              setOpen(false)
-              setCurrentTaskId("")
-            }}
-          />
-        ) : null}
       </>
     </div>
   )

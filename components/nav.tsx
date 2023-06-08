@@ -65,7 +65,7 @@ export const Nav = () => {
         name: context.title,
         color: context.color,
       })),
-    [projects]
+    [contexts]
   )
 
   return (

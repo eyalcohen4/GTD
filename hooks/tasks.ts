@@ -7,12 +7,15 @@ import {
 
 import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
 
-export function useGetTasks(): {
+export function useGetTasks(params?: { category?: string }): {
   isLoading: boolean
   tasks: Task[]
 } {
   const { isLoading, data } = useQuery(["tasks"], async () => {
-    const request = await fetch(`/api/task`)
+    const url = params?.category
+      ? `/api/task?category=${params?.category}`
+      : `/api/task`
+    const request = await fetch(url)
 
     return request.json()
   })
@@ -112,21 +115,34 @@ export function useUpdateTask() {
         if (!updated) {
           return
         }
-        await queryClient.cancelQueries({ queryKey: ["tasks", updated.id] })
 
-        // Snapshot the previous value
-        const previousTask = queryClient.getQueryData(["tasks", updated.id])
+        await queryClient.cancelQueries({ queryKey: ["task", updated.id] })
+        const previousTask = queryClient.getQueryData(["task", updated.id])
+        queryClient.setQueryData(
+          ["task", updated.id],
+          (old?: { task: Task }) => {
+            if (!old) {
+              return
+            }
 
-        // Optimistically update to the new value
-        queryClient.setQueryData(["tasks", updated.id], updated)
-
-        // Return a context with the previous and new todo
+            return {
+              task: {
+                ...old.task,
+                ...updated.input,
+              },
+            }
+          }
+        )
         return { previousTask, updated }
       },
       onError: (err, newTodo, context) => {
-        queryClient.setQueryData(["tasks"], context?.previousTask)
+        queryClient.setQueryData(
+          ["task", context?.updated.id],
+          context?.previousTask
+        )
       },
-      onSettled: () => {
+      onSettled: (data) => {
+        queryClient.invalidateQueries({ queryKey: ["task", data.id] })
         queryClient.invalidateQueries({ queryKey: ["tasks"] })
       },
     }

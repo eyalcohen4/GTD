@@ -116,5 +116,41 @@
 }
 
 .ProseMirror {
-  padding: 0 !important;
+  @apply bg-transparent p-4;
+}
+
+.ProseMirror h1 {
+  @apply scroll-m-20 text-2xl font-semibold tracking-tight;
+}
+
+.ProseMirror h2 {
+  @apply scroll-m-20 text-xl font-semibold tracking-tight;
+}
+
+.ProseMirror h3 {
+  @apply scroll-m-20 text-lg font-semibold tracking-tight;
+}
+
+.ProseMirror p {
+  @apply leading-7 [&:not(:first-child)]:mt-2;
+}
+
+.ProseMirror ul {
+  @apply my-6 ml-6 list-disc [&>li]:mt-2;
+}
+
+.dark .ProseMirror-focused {
+  @apply border border-slate-100 outline-none;
+}
+
+.dark .ProseMirror-focused {
+  @apply border border-slate-950 outline-none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: hsl(var(--muted-foreground));
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }

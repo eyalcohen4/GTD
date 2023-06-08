@@ -18,7 +18,11 @@ export const GET = async (
     }
 
     const task = await getTask(id)
-    return NextResponse.json({ task })
+    const formatted = {
+      ...task,
+      contexts: task?.contexts.map((context) => context.id),
+    }
+    return NextResponse.json({ task: formatted })
   } catch (error) {
     console.log(error)
     return error

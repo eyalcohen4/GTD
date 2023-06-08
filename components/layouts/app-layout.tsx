@@ -1,4 +1,5 @@
 import { ReactNode } from "react"
+import { useSession } from "next-auth/react"
 
 import { AppCommand } from "../app-command"
 import { Nav } from "../nav"
@@ -6,7 +7,6 @@ import { ProfilePicture } from "../profile-picture"
 import { ThemeToggle } from "../theme-toggle"
 import { Avatar, AvatarImage } from "../ui/avatar"
 import { Command } from "../ui/command"
-import { useSession } from "next-auth/react"
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -18,14 +18,15 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
             <Nav />
           </div>
         </aside>
-        <div className="h-full">{children}</div>
+        <div className="h-full">
+          <section className="h-full p-10">{children}</section>
+        </div>
       </div>
     </div>
   )
 }
 
 const Header = () => {
-  
   return (
     <div className="h-[80px] border-b flex justify-between items-center px-4">
       <div>

@@ -4,7 +4,6 @@ import * as React from "react"
 import * as SheetPrimitive from "@radix-ui/react-dialog"
 import { cva, type VariantProps } from "class-variance-authority"
 import { X } from "lucide-react"
-import { Resizable } from "react-resizable"
 
 import { cn } from "@/lib/utils"
 
@@ -153,12 +152,12 @@ const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   DialogContentProps
 >(({ position, size, className, children, ...props }, ref) => {
-  const [width, setWidth] = React.useState(0)
+  const [width, setWidth] = React.useState(800)
 
-  React.useEffect(() => {
-    const size = localStorage.getItem("sheet-width")
-    setWidth(Number(size) || 400)
-  }, [open])
+  // React.useEffect(() => {
+  //   const size = localStorage.getItem("sheet-width")
+  //   setWidth(Number(size) || 400)
+  // }, [open])
 
   const handleChangeWidth = (newWidth: number) => {
     setWidth(newWidth)

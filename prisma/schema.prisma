@@ -92,7 +92,7 @@ model Project {
 model Task {
   id          String       @id @default(uuid())
   title       String
-  content     String
+  content     Json
   dueDate     DateTime?
   completed   Boolean      @default(false)
   userId      String

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createTask, getTask, getTasks, updateTask } from "@/backend/task"
+import { createTask, getTasks, updateTask } from "@/backend/task"
+import { CategoryEnum } from "@prisma/client"
 import { getServerSession } from "next-auth"
 
 import {
@@ -17,7 +18,12 @@ export const GET = async (request: NextRequest) => {
       return 401
     }
 
-    const tasks = await getTasks(session?.user?.id)
+    const category = request.nextUrl.searchParams.get(
+      "category"
+    ) as CategoryEnum
+    const tasks = await getTasks(session?.user?.id, {
+      category,
+    })
     return NextResponse.json({ tasks })
   } catch (error) {
     console.log(error)

@@ -37,7 +37,6 @@ export const TasksProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const updateTask = async (input: { id: string; input: UpdateTaskInput }) => {
-    console.log(input)
     await updateTaskMutation(input)
   }
 
