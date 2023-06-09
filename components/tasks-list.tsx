@@ -6,7 +6,7 @@ import { statuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, Loader } from "lucide-react"
 
 import { Task } from "@/types/task"
 import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
@@ -108,20 +108,26 @@ export const TasksList = ({
           </div>
         </CollapsibleTrigger>
         <CollapsibleContent>
-          <DataTable
-            className="text-lg"
-            columns={columns}
-            data={formattedInbox || []}
-            onCheck={(task) => {
-              updateTask({
-                id: task.id,
-                input: {
-                  completed: true,
-                },
-              })
-            }}
-            onCellClick={handleCellClick}
-          />
+          {loadingGetTasks ? (
+            <div className="h-[300px] w-full flex items-center justify-center">
+              <Loader className="h-12 w-12" />
+            </div>
+          ) : (
+            <DataTable
+              className="text-lg"
+              columns={columns}
+              data={formattedInbox || []}
+              onCheck={(task) => {
+                updateTask({
+                  id: task.id,
+                  input: {
+                    completed: true,
+                  },
+                })
+              }}
+              onCellClick={handleCellClick}
+            />
+          )}
         </CollapsibleContent>
       </Collapsible>
     </div>
