@@ -64,6 +64,7 @@ export const getTasks = async (
   userId: string,
   options?: {
     status?: Status
+    projectId?: string
   }
 ) => {
   return prisma.task.findMany({
@@ -72,6 +73,7 @@ export const getTasks = async (
         id: userId,
       },
       status: options?.status || undefined,
+      projectId: options?.projectId || undefined,
     },
     orderBy: {
       createdAt: "desc",

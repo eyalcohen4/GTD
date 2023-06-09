@@ -1,15 +1,15 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createTask, getTasks, updateTask } from "@/backend/task";
-import { Status } from "@prisma/client";
-import { getServerSession } from "next-auth";
+import { NextRequest, NextResponse } from "next/server"
+import { createTask, getTasks, updateTask } from "@/backend/task"
+import { Status } from "@prisma/client"
+import { getServerSession } from "next-auth"
 
-
-
-import { TaskInput, UpdateTaskInput, taskInputSchema, updateTaskInputSchema } from "@/types/task";
-
-
-
-
+import { Project } from "@/types/project"
+import {
+  TaskInput,
+  UpdateTaskInput,
+  taskInputSchema,
+  updateTaskInputSchema,
+} from "@/types/task"
 
 export const GET = async (request: NextRequest) => {
   try {
@@ -20,8 +20,10 @@ export const GET = async (request: NextRequest) => {
     }
 
     const status = request.nextUrl.searchParams.get("status") as Status
+    const projectId = request.nextUrl.searchParams.get("projectId") as string
     const tasks = await getTasks(session?.user?.id, {
       status,
+      projectId,
     })
     return NextResponse.json({ tasks })
   } catch (error) {
