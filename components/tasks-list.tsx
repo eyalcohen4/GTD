@@ -12,6 +12,7 @@ import { Task } from "@/types/task"
 import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
 import { DataTable } from "@/components/ui/data-table"
 
+import { useProjects } from "./providers/projects-provider"
 import {
   Collapsible,
   CollapsibleContent,
@@ -39,10 +40,16 @@ export const TasksList = ({
   projectId?: string
 }) => {
   const router = useRouter()
+  const { projects } = useProjects()
+
   const statusOptions = useMemo(
     () =>
       statuses.find(({ value, slug }) => value === status || slug === status),
     [status]
+  )
+  const projectOptions = useMemo(
+    () => projects?.find(({ id }) => id === projectId),
+    [projects]
   )
 
   // add here a view
@@ -88,7 +95,7 @@ export const TasksList = ({
                   <statusOptions.icon className="text-slate-950 dark:text-white h-5 w-5" />
                 ) : null}
                 <p className="text-lg font-semibold leading-none tracking-tight text-left">
-                  {statusOptions?.label}
+                  {statusOptions?.label || projectOptions?.title}
                 </p>
               </div>
               <p className="text-sm text-muted-foreground text-left">
