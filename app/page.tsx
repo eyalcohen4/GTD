@@ -6,7 +6,6 @@ export default async function IndexPage() {
   return (
     <AppLayout>
       <Inbox />
-      <TasksList status="NEXT_ACTION" />
     </AppLayout>
   )
 }

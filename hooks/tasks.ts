@@ -7,10 +7,7 @@ import {
 
 import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
 
-export function useGetTasks(params?: {
-  status?: string
-  projectId?: string
-}): {
+export function useGetTasks(params?: { status?: string; projectId?: string }): {
   isLoading: boolean
   tasks: Task[]
   refetch: Function
@@ -26,7 +23,7 @@ export function useGetTasks(params?: {
     return url
   }
 
-  const { isLoading, data, refetch } = useQuery(["tasks"], async () => {
+  const { isLoading, data, refetch } = useQuery(["tasks", params], async () => {
     const url = buildUrl()
     const request = await fetch(url)
 
@@ -74,6 +71,7 @@ export function useCreateTask() {
           ...newTask,
           id: Math.random().toString(36),
           completed: false,
+          createdAt: new Date().toISOString(),
         }
 
         queryClient.setQueryData(

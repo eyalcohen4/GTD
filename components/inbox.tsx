@@ -1,21 +1,17 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { statuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
-import { format, formatRelative, subDays } from "date-fns"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 
-import { Context } from "@/types/context"
 import { Task } from "@/types/task"
 import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
 
 import { useContexts } from "./providers/contexts-provider"
 import { useProjects } from "./providers/projects-provider"
-import { useTasks } from "./providers/tasks-provider"
-import { TaskDialog } from "./task-dialog"
 import { DataTable } from "./ui/data-table"
 
 dayjs.extend(relativeTime)
@@ -45,22 +41,11 @@ export const Inbox = () => {
   const formattedInbox = useMemo(
     () =>
       tasks?.map((task) => {
-        const taskContextsIds = task.contexts?.map(
-          (taskContext) => taskContext.id
-        )
-
-        const formattedContexts = contexts
-          ?.filter(({ id }) => taskContextsIds?.includes(id))
-          .map(({ title, color, id }) => ({ title, color, id }))
-
-        const project = projects?.find(({ id }) => task.projectId === id)
         return {
           ...task,
           dueDate: task.dueDate
             ? new Date(task.dueDate).toLocaleDateString()
-            : null,
-          contexts: formattedContexts,
-          project: project?.title,
+            : undefined,
           createdAt: dayjs(task.createdAt).fromNow(),
         }
       }),
@@ -86,23 +71,21 @@ export const Inbox = () => {
           Here you can find everything you captured
         </p>
       </div>
-      <>
-        <DataTable
-          className="text-lg"
-          columns={columns}
-          data={formattedInbox || []}
-          onCheck={(task) => {
-            updateTask({
-              id: task.id,
-              input: {
-                completed: true,
-              },
-            })
-          }}
-          onCellClick={handleCellClick}
-          rowCta="Process"
-        />
-      </>
+      <DataTable
+        className="text-lg"
+        columns={columns}
+        data={formattedInbox || []}
+        onCheck={(task) => {
+          updateTask({
+            id: task.id,
+            input: {
+              completed: true,
+            },
+          })
+        }}
+        onCellClick={handleCellClick}
+        rowCta="Process"
+      />
     </div>
   )
 }

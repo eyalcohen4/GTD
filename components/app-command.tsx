@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { LoaderIcon, PlusCircle } from "lucide-react"
+import { Loader, LoaderIcon, PlusCircle } from "lucide-react"
 import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
@@ -67,7 +67,7 @@ export function AppCommand({ ...props }: any) {
             transform: "translateY(-50%)",
           }}
         >
-          {isLoading ? <LoaderIcon /> : <PlusCircle />}
+          {isLoading ? <Loader /> : <PlusCircle />}
         </div>
       </form>
     </div>

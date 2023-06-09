@@ -4,9 +4,9 @@ import { ReactNode, useCallback, useMemo, useState } from "react"
 import { statuses } from "@/constants/statuses"
 import { OnChangeJSON, ThemeProvider } from "@remirror/react"
 import { WysiwygEditor } from "@remirror/react-editors/wysiwyg"
-import { BoxIcon, CalendarIcon, Flower2Icon, LocateIcon } from "lucide-react"
+import { Box, Calendar, Flower2, Locate } from "lucide-react"
 
-import { Task, UpdateTaskInput } from "@/types/task"
+import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
 import useDebounce from "@/hooks/use-debounce"
 import { Separator } from "@/components/ui/seperator"
 
@@ -18,7 +18,7 @@ import { useGetTask } from "@/hooks/tasks"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useTasks } from "@/components/providers/tasks-provider"
 
-import { ComboboxPopover } from "./combobox"
+import { ComboboxPopover, Option } from "./combobox"
 import { DatePicker } from "./date-picker"
 import { Editor } from "./editor"
 import { useContexts } from "./providers/contexts-provider"
@@ -31,13 +31,15 @@ export const TaskForm = ({ task }: { task: Task }) => {
 
   const [title, setTitle] = useState(task?.title || "")
 
-  const handleChangeContent = (content: Record<string, any>) => {
+  const handleChangeContent = (
+    content: Record<string, unknown> | null | undefined
+  ) => {
     debouncedUpdateTask({
       content: JSON.stringify(content),
     })
   }
 
-  const debouncedUpdateTask = useDebounce((input) => {
+  const debouncedUpdateTask = useDebounce((input: TaskInput) => {
     handleUpdateTask(input)
   }, 1000)
 
@@ -65,8 +67,18 @@ export const TaskForm = ({ task }: { task: Task }) => {
     updateTask({ id: task.id || "", input })
   }
 
-  const selectedStatus = () =>
-    statuses.find(({ value }) => value === task?.status)
+  const getSelectedStatus = () => {
+    const status = statuses.find(({ value }) => value === task?.status)
+
+    return {
+      value: status?.value || "",
+      label: status?.label || "",
+      color: status?.color || "",
+      icon: status?.icon || undefined,
+    }
+  }
+
+  const selectedStatus = useMemo(() => getSelectedStatus(), [task])
 
   const selectedProject = useMemo(
     () => projectsOptions?.find(({ value }) => value === task?.projectId),
@@ -109,7 +121,7 @@ export const TaskForm = ({ task }: { task: Task }) => {
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-8 dark:text-white">
           <TaskProperty>
-            <TaskPropertyLabel label="Status" icon={<BoxIcon />} />
+            <TaskPropertyLabel label="Status" icon={<Box />} />
             <TaskPropertyValue>
               <ComboboxPopover
                 matchContainerSize
@@ -117,14 +129,18 @@ export const TaskForm = ({ task }: { task: Task }) => {
                 items={statuses}
                 value={selectedStatus}
                 name="Status"
-                onChange={(value) => {
-                  handleUpdateTask({ status: value?.value })
+                onChange={(option) => {
+                  if (Array.isArray(option)) {
+                    return
+                  }
+
+                  handleUpdateTask({ status: option?.value })
                 }}
               />
             </TaskPropertyValue>
           </TaskProperty>
           <TaskProperty>
-            <TaskPropertyLabel label="Project" icon={<Flower2Icon />} />
+            <TaskPropertyLabel label="Project" icon={<Flower2 />} />
             <TaskPropertyValue>
               <ComboboxPopover
                 matchContainerSize
@@ -145,7 +161,7 @@ export const TaskForm = ({ task }: { task: Task }) => {
             </TaskPropertyValue>
           </TaskProperty>
           <TaskProperty>
-            <TaskPropertyLabel label="Context" icon={<LocateIcon />} />
+            <TaskPropertyLabel label="Context" icon={<Locate />} />
             <TaskPropertyValue>
               <ComboboxPopover
                 matchContainerSize
@@ -165,7 +181,7 @@ export const TaskForm = ({ task }: { task: Task }) => {
             </TaskPropertyValue>
           </TaskProperty>
           <TaskProperty>
-            <TaskPropertyLabel label="Due Date" icon={<CalendarIcon />} />
+            <TaskPropertyLabel label="Due Date" icon={<Calendar />} />
             <TaskPropertyValue>
               <DatePicker
                 value={task?.dueDate ? new Date(task?.dueDate) : undefined}

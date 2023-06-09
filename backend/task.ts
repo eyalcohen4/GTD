@@ -1,4 +1,4 @@
-import { PrismaClient, Status } from "@prisma/client"
+import { Status } from "@prisma/client"
 
 import { TaskInput, UpdateTaskInput } from "@/types/task"
 import prisma from "@/lib/db"

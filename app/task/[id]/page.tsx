@@ -2,7 +2,6 @@
 
 import { useGetTask } from "@/hooks/tasks"
 import { AppLayout } from "@/components/layouts/app-layout"
-import { TaskDialog } from "@/components/task-dialog"
 import { TaskForm } from "@/components/task-form"
 
 const TaskPage = ({ params: { id } }: { params: { id: string } }) => {

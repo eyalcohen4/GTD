@@ -2,18 +2,7 @@
 
 import * as React from "react"
 import { render } from "@headlessui/react/dist/utils/render"
-import {
-  ArrowUpCircle,
-  CheckCircle2,
-  CheckIcon,
-  Circle,
-  HelpCircle,
-  LoaderIcon,
-  LucideIcon,
-  PlusCircle,
-  XCircle,
-  XIcon,
-} from "lucide-react"
+import { Check, Loader, LucideIcon, PlusCircle, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -239,7 +228,7 @@ export function ComboboxPopover({
                                 selected.value === item.value ||
                                 selected.value === item.value.toUpperCase()
                             ) ? (
-                              <CheckIcon className="h-4 w-4" />
+                              <Check className="h-4 w-4" />
                             ) : null}
                           </span>
                         </CommandItem>
@@ -328,7 +317,7 @@ const Trigger = ({
       size="sm"
       className="min-w-[200px] w-full justify-start"
     >
-      {loading ? <LoaderIcon /> : null}
+      {loading ? <Loader /> : null}
       {multipleSelected ? (
         <div className="flex items-center gap-2 overflow-scroll max-w-full">
           {multipleSelected?.map((item, index) => (
@@ -349,7 +338,7 @@ const Trigger = ({
                 role="button"
                 onClick={() => remove && remove(item.value)}
               >
-                <XIcon className="text-slate-950 dark:text-white text-xs h-4 w-4" />
+                <X className="text-slate-950 dark:text-white text-xs h-4 w-4" />
               </div>
             </div>
           ))}

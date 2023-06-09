@@ -1,11 +1,11 @@
 import {
-  BookmarkIcon,
-  CalendarIcon,
-  Clock1Icon,
+  Bookmark,
+  Calendar,
+  Clock1,
   FastForward,
-  FastForwardIcon,
-  HourglassIcon,
-  InboxIcon,
+  Hourglass,
+  Inbox,
+  LucideProps,
 } from "lucide-react"
 
 export const statuses = [
@@ -15,7 +15,7 @@ export const statuses = [
     description: "Here you can find everything you captured",
     slug: "inbox",
     color: "#007BFF",
-    icon: InboxIcon,
+    icon: Inbox,
   },
   {
     value: "NEXT_ACTION",
@@ -23,7 +23,7 @@ export const statuses = [
     description: "Here you can find all your next actions",
     slug: "next-action",
     color: "#28A745",
-    icon: FastForwardIcon,
+    icon: FastForward,
   },
   {
     value: "WAITING_FOR",
@@ -31,7 +31,7 @@ export const statuses = [
     description: "Here you can find everything you are waiting for",
     slug: "waiting-for",
     color: "#FFC107",
-    icon: HourglassIcon,
+    icon: Hourglass,
   },
   {
     value: "SOMEDAY_MAYBE",
@@ -39,7 +39,7 @@ export const statuses = [
     description: "Here you can find everything that is on hold",
     slug: "someday-maybe",
     color: "#FD7E14",
-    icon: (props) => (
+    icon: (props: LucideProps) => (
       <svg
         width="24"
         height="24"
@@ -66,7 +66,7 @@ export const statuses = [
     description: "Here you can find everything that is scheduled",
     slug: "calendar",
     color: "#DC3545",
-    icon: CalendarIcon,
+    icon: Calendar,
   },
   {
     value: "REFERENCE",
@@ -74,12 +74,12 @@ export const statuses = [
     description: "Here you can find all your reference material",
     slug: "reference",
     color: "#6F42C1",
-    icon: BookmarkIcon,
+    icon: Bookmark,
   },
   {
     value: "REVIEW",
     label: "Review",
-    icon: Clock1Icon,
+    icon: Clock1,
     slug: "review",
   },
 ]

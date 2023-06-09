@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { LoaderIcon } from "lucide-react"
+import { Loader, LoaderIcon } from "lucide-react"
 
 import { useGetTask } from "@/hooks/tasks"
 import {
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sheet"
 import { TaskForm } from "@/components/task-form"
 
-export const Task = ({ params: { id } }: { params: { id: string } }) => {
+const Task = ({ params: { id } }: { params: { id: string } }) => {
   const router = useRouter()
 
   return (
@@ -31,7 +31,7 @@ export const Task = ({ params: { id } }: { params: { id: string } }) => {
 
 export default Task
 
-export const TaskDialog = ({
+const TaskDialog = ({
   taskId,
   open,
   onOpenChange,
@@ -45,7 +45,7 @@ export const TaskDialog = ({
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent>
-        {isLoading ? <LoaderIcon /> : <TaskForm task={task} />}
+        {isLoading ? <Loader /> : <TaskForm task={task} />}
       </SheetContent>
     </Sheet>
   )

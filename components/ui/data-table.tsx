@@ -86,6 +86,7 @@ export function DataTable<TData, TValue>({
                   <Checkbox
                     circle
                     className="h-6 w-6"
+                    // @ts-ignore
                     checked={row.original?.completed}
                     onClick={(e) => {
                       e.stopPropagation()

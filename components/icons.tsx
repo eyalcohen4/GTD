@@ -1,5 +1,5 @@
 import {
-  CalendarIcon,
+  Calendar,
   LucideProps,
   Moon,
   SunMedium,
@@ -13,7 +13,7 @@ export const Icons = {
   sun: SunMedium,
   moon: Moon,
   twitter: Twitter,
-  calendar: CalendarIcon,
+  calendar: Calendar,
   google: (props: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -6,7 +6,7 @@ import { statuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
-import { ChevronDownIcon } from "lucide-react"
+import { ChevronDown } from "lucide-react"
 
 import { Task } from "@/types/task"
 import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
@@ -44,6 +44,8 @@ export const TasksList = ({
       statuses.find(({ value, slug }) => value === status || slug === status),
     [status]
   )
+
+  // add here a view
   const {
     tasks,
     isLoading: loadingGetTasks,
@@ -95,7 +97,7 @@ export const TasksList = ({
               </p>
             </div>
             <div>
-              <ChevronDownIcon />
+              <ChevronDown />
             </div>
           </div>
         </CollapsibleTrigger>

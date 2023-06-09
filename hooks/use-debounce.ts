@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import { useCallback, useRef } from "react"
 
 function useDebounce(callback, delay) {
