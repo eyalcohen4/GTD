@@ -16,7 +16,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
           </div>
         </aside>
         <div className="h-full w-full">
-          <section className="h-full w-full p-2 md:p-10">{children}</section>
+          <section className="h-full w-full mt-8">{children}</section>
         </div>
       </div>
     </div>

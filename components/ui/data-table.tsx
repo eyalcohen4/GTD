@@ -76,7 +76,7 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
                 onClick={() => onCellClick && onCellClick(row.original)}
                 className={`${onCellClick ? "cursor-pointer" : ""} 
-                  text-md animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 data-[state=open]:sm:slide-in-from-bottom-0
+                  text-md animate-in px-8 data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 data-[state=open]:sm:slide-in-from-bottom-0
                 `}
               >
                 <TableCell

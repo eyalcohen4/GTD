@@ -5,7 +5,7 @@ import { TasksList } from "@/components/tasks-list"
 export default async function IndexPage() {
   return (
     <AppLayout>
-      <Inbox />
+      <TasksList status="INBOX" />
     </AppLayout>
   )
 }

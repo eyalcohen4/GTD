@@ -89,7 +89,7 @@ export const TasksList = ({
     <div>
       <Collapsible defaultOpen>
         <CollapsibleTrigger className="w-full">
-          <div className="mb-4 flex gap-2 w-full justify-between">
+          <div className="mb-4 flex gap-2 w-full justify-between px-8">
             <div className="flex-col gap-2 justify-center flex">
               <div className="flex items-center justify-start gap-2">
                 {statusOptions ? (
