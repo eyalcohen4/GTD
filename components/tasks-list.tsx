@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo } from "react"
 import { useRouter } from "next/navigation"
 import { statuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
@@ -58,6 +58,7 @@ export const TasksList = ({
     isLoading: loadingGetTasks,
     refetch,
   } = useGetTasks({
+    status: status || "",
     projectId: projectId || "",
   })
 
