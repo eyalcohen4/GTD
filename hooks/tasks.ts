@@ -13,18 +13,21 @@ export function useGetTasks(params?: { status?: string; projectId?: string }): {
   refetch: Function
 } {
   const buildUrl = () => {
-    let url = `/api/task`
-    if (params?.status) {
-      url = `${url}?status=${params?.status}`
+    const url = new URL(`${global?.window?.location.origin}/api/task`)
+
+    if (!params) {
+      return url.href
     }
-    if (params?.projectId) {
-      url = `${url}?projectId=${params?.projectId}`
-    }
-    return url
+
+    url.searchParams.append("status", params?.status || "")
+    url.searchParams.append("projectId", params?.projectId || "")
+
+    return url.href
   }
 
   const { isLoading, data, refetch } = useQuery(["tasks", params], async () => {
     const url = buildUrl()
+    console.log(url)
     const request = await fetch(url)
 
     return request.json()
