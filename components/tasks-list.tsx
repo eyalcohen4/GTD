@@ -58,7 +58,7 @@ export const TasksList = ({
     isLoading: loadingGetTasks,
     refetch,
   } = useGetTasks({
-    status: status || "",
+    status: statusOptions?.value || "",
     projectId: projectId || "",
   })
 
