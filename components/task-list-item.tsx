@@ -2,7 +2,7 @@ import { ReactNode, useState } from "react"
 import Link from "next/link"
 import { statuses } from "@/constants/statuses"
 import dayjs from "dayjs"
-import { BoxIcon, Calendar, Flower, Flower2, Locate } from "lucide-react"
+import { Box, Calendar, Flower2, Locate } from "lucide-react"
 
 import { TaskPreview } from "@/types/task"
 import { useUpdateTask } from "@/hooks/tasks"
@@ -45,7 +45,7 @@ const TaskBadges = ({ task }: { task: TaskPreview }) => {
   return (
     <div className="flex gap-4 items-center text-sm">
       <TaskBadge>
-        <BoxIcon className="h-4 w-4" />
+        <Box className="h-4 w-4" />
         <p>{statusOption?.label}</p>
       </TaskBadge>
       {task.contexts?.length ? (

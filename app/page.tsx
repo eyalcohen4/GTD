@@ -1,4 +1,3 @@
-import { Inbox } from "@/components/inbox"
 import { AppLayout } from "@/components/layouts/app-layout"
 import { TasksList } from "@/components/tasks-list"
 
