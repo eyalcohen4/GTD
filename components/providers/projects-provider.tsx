@@ -32,7 +32,7 @@ export const ProjectsProvider = ({ children }: { children: ReactNode }) => {
 
   const value = useMemo(
     () => ({
-      projects,
+      projects: projects?.sort((a, b) => a.title.localeCompare(b.title)),
       createProject,
       loadingGetProjects: isLoadingProjects,
       loadingCreateProject,

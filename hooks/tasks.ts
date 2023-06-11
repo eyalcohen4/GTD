@@ -173,7 +173,7 @@ export function useUpdateTask() {
         setTimeout(() => {
           queryClient.invalidateQueries({ queryKey: ["task", data.id] })
           queryClient.invalidateQueries({ queryKey: ["tasks"] })
-        }, 3000)
+        }, 300)
       },
     }
   )

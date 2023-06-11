@@ -73,6 +73,26 @@ export const TasksList = ({
     contextId: contextId || "",
   })
 
+  const sortedTasks = useMemo(
+    () =>
+      tasks?.sort((a, b) => {
+        if (a.dueDate && b.dueDate) {
+          return dayjs(a.dueDate).diff(dayjs(b.dueDate))
+        }
+
+        if (a.dueDate) {
+          return -1
+        }
+
+        if (b.dueDate) {
+          return 1
+        }
+
+        return dayjs(a.createdAt).diff(dayjs(b.createdAt))
+      }),
+    [tasks]
+  )
+
   useEffect(() => {
     refetch()
   }, [status])
@@ -107,7 +127,7 @@ export const TasksList = ({
             </div>
           ) : (
             <div className="flex flex-col">
-              {tasks?.map((task) => (
+              {sortedTasks?.map((task) => (
                 <TaskListItem task={task} key={task.id} />
               ))}
             </div>

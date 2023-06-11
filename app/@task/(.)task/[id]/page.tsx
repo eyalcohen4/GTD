@@ -44,7 +44,7 @@ const TaskDialog = ({
 
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent>
+      <SheetContent className="p-4">
         {isLoading ? <Loader /> : <TaskForm task={task} />}
       </SheetContent>
     </Sheet>

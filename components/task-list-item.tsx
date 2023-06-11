@@ -11,7 +11,7 @@ import { Checkbox } from "./ui/checkbox"
 
 export const TaskListItem = ({ task }: { task: TaskPreview }) => {
   return (
-    <Link href={`/task/${task.id}`} className="h-[50px]">
+    <Link href={`/task/${task.id}`} className="h-[50px] task-list-item">
       <TaskListItemContainer>
         <TaskLead task={task} />
         <div className="w-full flex-1 justify-end hidden md:flex">

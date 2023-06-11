@@ -14,11 +14,9 @@ export default function ProjectPage({
 
   return (
     <div className="flex flex-col gap-32">
-      <h1 className="text-4xl font-bold">{project?.title}</h1>
-      <TasksList projectId={id} status="inbox" />
+      <h1 className="px-8 text-xl md:text-4xl font-bold">{project?.title}</h1>
+      <TasksList projectId={id} />
       <TasksList projectId={id} status="next-action" />
-      <TasksList projectId={id} status="waiting-for" />
-      <TasksList projectId={id} status="someday-maybe" />
     </div>
   )
 }

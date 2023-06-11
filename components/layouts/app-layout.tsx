@@ -1,9 +1,12 @@
 import { ReactNode } from "react"
+import Link from "next/link"
+import { Box, Flower, Flower2, Home, Menu } from "lucide-react"
 
 import { AppCommand } from "../app-command"
 import { Nav } from "../nav"
 import { ProfilePicture } from "../profile-picture"
 import { ThemeToggle } from "../theme-toggle"
+import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
@@ -18,6 +21,16 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
         <div className="h-full w-full">
           <section className="h-full w-full mt-8">{children}</section>
         </div>
+        <footer className="md:hidden h-12 w-12 rounded-full bg-slate-800/50 shadow-lg backdrop-blur-lg fixed flex items-center  bottom-2 right-2 justify-end">
+          <Sheet>
+            <SheetTrigger className="w-full flex h-full justify-center items-center">
+              <Menu />
+            </SheetTrigger>
+            <SheetContent className="flex h-full justify-end flex-col">
+              <Nav />
+            </SheetContent>
+          </Sheet>
+        </footer>
       </div>
     </div>
   )

@@ -4,7 +4,13 @@ import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { statuses } from "@/constants/statuses"
-import { ChevronDown, LucideIcon } from "lucide-react"
+import {
+  ChevronDown,
+  Globe,
+  LucideIcon,
+  Sunrise,
+  SunriseIcon,
+} from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -25,13 +31,27 @@ const statusesNavItems = statuses.map((status) => ({
   icon: status.icon,
 }))
 
-const navItems = [
+const timingNavItems = [
   {
     name: "Today",
     href: "/today",
-    icon: Icons.calendar,
+    icon: Sunrise,
   },
-  ...statusesNavItems,
+  {
+    name: "Weekly",
+    href: "/week",
+    icon: () => <div>07</div>,
+  },
+  {
+    name: "Monthly",
+    href: "/month",
+    icon: () => <div>30</div>,
+  },
+  {
+    name: "All",
+    href: "/all",
+    icon: Globe,
+  },
 ]
 
 type Item = {
@@ -70,9 +90,41 @@ export const Nav = () => {
   return (
     <nav className="flex flex-col gap-4 w-full">
       <ScrollArea>
-        {navItems.map((item) => (
-          <NavItem key={item.name} item={item} />
-        ))}
+        <Collapsible>
+          <CollapsibleTrigger className="w-full">
+            <div
+              className={cn(
+                "flex items-center justify-between w-full gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+              )}
+            >
+              <span>Time</span>
+              <ChevronDown />
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            {timingNavItems.map((item) => (
+              <NavItem key={item.name} item={item} />
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+        <Collapsible>
+          <CollapsibleTrigger className="w-full">
+            <div
+              className={cn(
+                "flex items-center justify-between w-full gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+              )}
+            >
+              <span>Statuses</span>
+              <ChevronDown />
+            </div>
+          </CollapsibleTrigger>
+          <CollapsibleContent>
+            {statusesNavItems.map((item) => (
+              <NavItem key={item.name} item={item} />
+            ))}
+          </CollapsibleContent>
+        </Collapsible>
+
         <div className="flex flex-col gap-2">
           <Collapsible>
             <CollapsibleTrigger className="w-full">

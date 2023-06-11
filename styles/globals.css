@@ -154,3 +154,20 @@
   height: 0;
   pointer-events: none;
 }
+
+.task-list-item {
+  animation: slideIn 0.35s ease-in;
+  will-change: transform opacity;
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0%);
+  }
+}
