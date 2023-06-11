@@ -107,7 +107,7 @@ export const TasksList = ({
             </div>
           ) : (
             <div className="flex flex-col">
-              {tasks.map((task) => (
+              {tasks?.map((task) => (
                 <TaskListItem task={task} key={task.id} />
               ))}
             </div>
