@@ -152,12 +152,8 @@ const SheetContent = React.forwardRef<
   React.ElementRef<typeof SheetPrimitive.Content>,
   DialogContentProps
 >(({ position, size, className, children, ...props }, ref) => {
-  const [width, setWidth] = React.useState(800)
-
-  // React.useEffect(() => {
-  //   const size = localStorage.getItem("sheet-width")
-  //   setWidth(Number(size) || 400)
-  // }, [open])
+  const isMobile = window.matchMedia("(max-width: 640px)").matches
+  const [width, setWidth] = React.useState(isMobile ? "100%" : 800)
 
   const handleChangeWidth = (newWidth: number) => {
     setWidth(newWidth)

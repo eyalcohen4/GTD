@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useMemo } from "react"
+import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { statuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
@@ -10,9 +11,11 @@ import { ChevronDown, Loader } from "lucide-react"
 
 import { Task } from "@/types/task"
 import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
-import { DataTable } from "@/components/ui/data-table"
 
+import { useContexts } from "./providers/contexts-provider"
 import { useProjects } from "./providers/projects-provider"
+import { TaskListItem } from "./task-list-item"
+import { Checkbox } from "./ui/checkbox"
 import {
   Collapsible,
   CollapsibleContent,
@@ -35,12 +38,14 @@ export const columns: ColumnDef<Task>[] = [
 export const TasksList = ({
   status,
   projectId,
+  contextId,
 }: {
   status?: string
   projectId?: string
+  contextId?: string
 }) => {
-  const router = useRouter()
   const { projects } = useProjects()
+  const { contexts } = useContexts()
 
   const statusOptions = useMemo(
     () =>
@@ -52,6 +57,11 @@ export const TasksList = ({
     [projects]
   )
 
+  const contextOptions = useMemo(
+    () => contexts?.find(({ id }) => id === contextId),
+    [contexts]
+  )
+
   // add here a view
   const {
     tasks,
@@ -60,30 +70,12 @@ export const TasksList = ({
   } = useGetTasks({
     status: statusOptions?.value || "",
     projectId: projectId || "",
+    contextId: contextId || "",
   })
 
   useEffect(() => {
     refetch()
   }, [status])
-  const { updateTask } = useUpdateTask()
-
-  const formattedInbox = useMemo(
-    () =>
-      tasks?.map((task) => {
-        return {
-          ...task,
-          dueDate: task.dueDate
-            ? new Date(task.dueDate).toLocaleDateString()
-            : undefined,
-          createdAt: dayjs(task.createdAt).fromNow(),
-        }
-      }),
-    [tasks]
-  )
-
-  const handleCellClick = (task: Task) => {
-    router.push(`/task/${task.id}`)
-  }
 
   return (
     <div>
@@ -114,20 +106,11 @@ export const TasksList = ({
               <Loader className="h-12 w-12" />
             </div>
           ) : (
-            <DataTable
-              className="text-lg"
-              columns={columns}
-              data={formattedInbox || []}
-              onCheck={(task) => {
-                updateTask({
-                  id: task.id,
-                  input: {
-                    completed: true,
-                  },
-                })
-              }}
-              onCellClick={handleCellClick}
-            />
+            <div className="flex flex-col">
+              {tasks.map((task) => (
+                <TaskListItem task={task} key={task.id} />
+              ))}
+            </div>
           )}
         </CollapsibleContent>
       </Collapsible>

@@ -5,11 +5,15 @@ import {
   useQueryClient,
 } from "@tanstack/react-query"
 
-import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
+import { Task, TaskInput, TaskPreview, UpdateTaskInput } from "@/types/task"
 
-export function useGetTasks(params?: { status?: string; projectId?: string }): {
+export function useGetTasks(params?: {
+  status?: string
+  projectId?: string
+  contextId?: string
+}): {
   isLoading: boolean
-  tasks: Task[]
+  tasks: TaskPreview[]
   refetch: Function
 } {
   const buildUrl = () => {
@@ -27,12 +31,15 @@ export function useGetTasks(params?: { status?: string; projectId?: string }): {
       url.searchParams.append("projectId", params?.projectId || "")
     }
 
+    if (params?.contextId) {
+      url.searchParams.append("contextId", params?.contextId || "")
+    }
+
     return url.href
   }
 
   const { isLoading, data, refetch } = useQuery(["tasks", params], async () => {
     const url = buildUrl()
-    console.log(url)
     const request = await fetch(url)
 
     return request.json()
@@ -153,6 +160,7 @@ export function useUpdateTask() {
             }
           }
         )
+
         return { previousTask, updated }
       },
       onError: (err, newTodo, context) => {
@@ -162,8 +170,10 @@ export function useUpdateTask() {
         )
       },
       onSettled: (data) => {
-        queryClient.invalidateQueries({ queryKey: ["task", data.id] })
-        queryClient.invalidateQueries({ queryKey: ["tasks"] })
+        setTimeout(() => {
+          queryClient.invalidateQueries({ queryKey: ["task", data.id] })
+          queryClient.invalidateQueries({ queryKey: ["tasks"] })
+        }, 3000)
       },
     }
   )

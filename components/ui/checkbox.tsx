@@ -30,7 +30,7 @@ const Checkbox = React.forwardRef<
         circle ? "rounded-full" : "rounded-md"
       )}
     >
-      <Check className={`h-6 w-6 dark:text-slate-950 text-white`} />
+      <Check className={`h-full w-full dark:text-slate-950 text-white`} />
     </CheckboxPrimitive.Indicator>
   </CheckboxPrimitive.Root>
 ))

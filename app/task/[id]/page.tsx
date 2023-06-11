@@ -11,7 +11,7 @@ const TaskPage = ({ params: { id } }: { params: { id: string } }) => {
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <div className="h-full md:px-24">
+        <div className="h-full md:px-24 px-8">
           <TaskForm task={task} />
         </div>
       )}

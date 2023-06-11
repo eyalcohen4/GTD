@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from "next/server"
-import { createTask, getTasks, updateTask } from "@/backend/task"
+import { createTask, getTasksPreview, updateTask } from "@/backend/task"
 import { Status } from "@prisma/client"
 import { getServerSession } from "next-auth"
 
-import { Project } from "@/types/project"
 import {
   TaskInput,
   UpdateTaskInput,
@@ -21,10 +20,12 @@ export const GET = async (request: NextRequest) => {
 
     const status = request.nextUrl.searchParams.get("status") as Status
     const projectId = request.nextUrl.searchParams.get("projectId") as string
+    const contextId = request.nextUrl.searchParams.get("contextId") as string
 
-    const tasks = await getTasks(session?.user?.id, {
+    const tasks = await getTasksPreview(session?.user?.id, {
       status,
       projectId,
+      contextId,
     })
     return NextResponse.json({ tasks })
   } catch (error) {

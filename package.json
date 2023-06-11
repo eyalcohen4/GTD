@@ -65,6 +65,7 @@
     "react-resizable": "^3.0.5",
     "react-resizable-panels": "^0.0.48",
     "react-textarea-autosize": "^8.4.1",
+    "react-window": "^1.8.9",
     "remirror": "^2.0.32",
     "sharp": "^0.31.3",
     "tailwind-merge": "^1.12.0",

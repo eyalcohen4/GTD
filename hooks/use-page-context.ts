@@ -1,7 +1,8 @@
 import { usePathname, useRouter } from "next/navigation"
+import { statuses } from "@/constants/statuses"
 
 type PageContext = {
-  type: "project" | "context" | null
+  type: "project" | "context" | "status" | null
   id: string | null
 }
 
@@ -20,6 +21,9 @@ export function usePageContext(): PageContext {
     case "project":
     case "context":
       return { type, id }
+    case "status":
+      const status = statuses.find((status) => status.slug === id)
+      return { type, id: status?.value || "" }
     default:
       return { type: null, id: null }
   }

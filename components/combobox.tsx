@@ -257,47 +257,6 @@ export function ComboboxPopover({
   )
 }
 
-const EmptyState = ({
-  search,
-  createComponent,
-  onCreate,
-}: {
-  search: string
-  createComponent?: React.ReactElement
-  onCreate?: (name: string) => void
-}) => {
-  const [renderCreateComponent, setRenderCreateComponent] =
-    React.useState(false)
-
-  const handleCreate = () => {
-    if (createComponent) {
-      setRenderCreateComponent(true)
-      return
-    }
-
-    onCreate && onCreate(search)
-  }
-
-  return (
-    <div className="flex flex-col items-center p-4 gap-4">
-      {renderCreateComponent ? (
-        <div className="flex items-center p-4 gap-2">{createComponent}</div>
-      ) : null}
-      {(onCreate || createComponent) && !renderCreateComponent ? (
-        <div
-          className="flex items-center gap-2 justify-start"
-          role="button"
-          onClick={handleCreate}
-        >
-          <PlusCircle />
-          Create {search}
-        </div>
-      ) : null}
-      {!onCreate && !createComponent ? <span>No results found.</span> : null}
-    </div>
-  )
-}
-
 const Trigger = ({
   loading,
   selected,

@@ -22,8 +22,6 @@ export function AppCommand({ ...props }: any) {
   const session = useSession()
   const { toast } = useToast()
 
-  console.log(pageContext)
-
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {
       if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
@@ -36,16 +34,33 @@ export function AppCommand({ ...props }: any) {
     return () => document.removeEventListener("keydown", down)
   }, [])
 
+  const getPageBasedParams = (): {
+    projectId?: string
+    status?: string
+    contexts?: string[]
+  } => {
+    const { type, id } = pageContext
+
+    if (type === "project" && id) return { projectId: id }
+    if (type === "status" && id) return { status: id }
+    if (type === "context" && id) return { contexts: [id] }
+
+    return {}
+  }
+
   const handleCreate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     const value = ref.current?.value
     if (!value) return
 
+    const pageBasedParams = getPageBasedParams()
+
     await createTask({
       title: value,
       userId: session.data?.user?.id,
       status: "INBOX",
+      ...pageBasedParams,
     })
     toast({
       variant: "success",

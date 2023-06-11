@@ -9,6 +9,7 @@ export const taskInputSchema = z.object({
   projectId: z.string().optional(),
   dueDate: z.string().optional(),
   status: z.string().optional(),
+  contexts: z.array(z.string()).optional(),
 })
 
 export const updateTaskInputSchema = z.object({
@@ -38,3 +39,33 @@ export const taskSchema = z.object({
 })
 
 export type Task = z.infer<typeof taskSchema>
+
+export const taskPreviewSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  completed: z.boolean(),
+  userId: z.string(),
+  contexts: z
+    .array(
+      z.object({
+        id: z.string(),
+        title: z.string(),
+        color: z.string(),
+      })
+    )
+    .optional()
+    .nullable(),
+  project: z
+    .object({
+      id: z.string(),
+      title: z.string(),
+      color: z.string(),
+    })
+    .optional()
+    .nullable(),
+  dueDate: z.string().optional().nullable(),
+  status: z.string().optional().nullable(),
+  createdAt: z.string(),
+})
+
+export type TaskPreview = z.infer<typeof taskPreviewSchema>

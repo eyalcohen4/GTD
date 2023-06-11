@@ -1,6 +1,6 @@
 import { Status } from "@prisma/client"
 
-import { TaskInput, UpdateTaskInput } from "@/types/task"
+import { TaskInput, TaskPreview, UpdateTaskInput } from "@/types/task"
 import prisma from "@/lib/db"
 
 export const createTask = async (input: TaskInput) => {
@@ -9,13 +9,14 @@ export const createTask = async (input: TaskInput) => {
       title: input.title,
       content: input.content || "",
       dueDate: input.dueDate,
-      user: {
-        connect: {
-          id: input.userId,
-        },
-      },
-
-      status: "INBOX",
+      projectId: input.projectId || undefined,
+      userId: input.userId,
+      contexts: input.contexts
+        ? {
+            connect: input.contexts.map((contextId) => ({ id: contextId })),
+          }
+        : undefined,
+      status: (input.status as Status) || "INBOX",
     },
   })
 }
@@ -69,13 +70,16 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
   }
 }
 
-export const getTasks = async (
+export const getTasksPreview = async (
   userId: string,
   options?: {
     status?: Status
     projectId?: string
+    contextId?: string
   }
-) => {
+): Promise<Array<TaskPreview>> => {
+  console.log(options)
+  // @ts-expect-error
   return prisma.task.findMany({
     where: {
       user: {
@@ -84,6 +88,9 @@ export const getTasks = async (
       completed: options?.status === "ARCHIVE" ? true : false,
       status: options?.status || undefined,
       projectId: options?.projectId || undefined,
+      contexts: options?.contextId
+        ? { some: { id: options?.contextId } }
+        : undefined,
     },
     orderBy: {
       createdAt: "desc",
@@ -92,6 +99,14 @@ export const getTasks = async (
       contexts: {
         select: {
           id: true,
+          title: true,
+          color: true,
+        },
+      },
+      project: {
+        select: {
+          id: true,
+          title: true,
         },
       },
     },
