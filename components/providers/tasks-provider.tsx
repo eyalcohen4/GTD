@@ -2,12 +2,12 @@ import React, { ReactNode, createContext, useContext, useMemo } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { useSession } from "next-auth/react"
 
-import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
+import { Task, TaskInput, TaskPreview, UpdateTaskInput } from "@/types/task"
 import { useCreateTask, useGetTasks, useUpdateTask } from "@/hooks/tasks"
 
 type TaskContextValue = {
-  tasks: Task[]
-  inbox: Task[]
+  tasks: TaskPreview[]
+  inbox: TaskPreview[]
   loadingGetTasks: boolean
   loadingCreateTask: boolean
   loadingUpdateTask: boolean

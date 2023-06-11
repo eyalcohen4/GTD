@@ -190,7 +190,7 @@ const SheetDrag = ({
   initialWidth,
 }: {
   onChange: (newWidth: number) => void
-  initialWidth: number
+  initialWidth: number | string
 }) => {
   const handleMouseDown = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -198,6 +198,7 @@ const SheetDrag = ({
     const startX = e.pageX
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (typeof initialWidth === "string") return
       const newWidth = initialWidth - (e.pageX - startX)
       onChange(newWidth > 0 ? newWidth : 0)
     }
