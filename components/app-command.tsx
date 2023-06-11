@@ -7,17 +7,22 @@ import { useSession } from "next-auth/react"
 
 import { cn } from "@/lib/utils"
 import { useCreateTask } from "@/hooks/tasks"
+import { usePageContext } from "@/hooks/use-page-context"
 import { useToast } from "@/hooks/use-toast"
 
 import { useTasks } from "./providers/tasks-provider"
 import { Input } from "./ui/input"
 
 export function AppCommand({ ...props }: any) {
-  const router = useRouter()
   const ref = React.useRef<HTMLInputElement>(null)
   const { createTask, loadingCreateTask: isLoading } = useTasks()
+  const pageContext = usePageContext()
+  console.log(pageContext)
+
   const session = useSession()
   const { toast } = useToast()
+
+  console.log(pageContext)
 
   React.useEffect(() => {
     const down = (e: KeyboardEvent) => {

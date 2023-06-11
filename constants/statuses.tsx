@@ -1,4 +1,5 @@
 import {
+  Archive,
   Bookmark,
   Calendar,
   Clock1,
@@ -81,5 +82,11 @@ export const statuses = [
     label: "Review",
     icon: Clock1,
     slug: "review",
+  },
+  {
+    value: "ARCHIVE",
+    label: "Archive",
+    icon: Archive,
+    slug: "archive",
   },
 ]

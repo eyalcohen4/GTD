@@ -23,14 +23,23 @@ export const createTask = async (input: TaskInput) => {
 export const updateTask = async (id: string, input: UpdateTaskInput) => {
   const { projectId, status, contexts, ...rest } = input
 
+  const getStatus = (): Status | undefined => {
+    if (input.completed) {
+      return "ARCHIVE"
+    }
+
+    return (status as Status) || undefined
+  }
+
   try {
+    const statusToSave = getStatus()
     const instance = await prisma.task.update({
       where: {
         id,
       },
       data: {
         ...rest,
-        status: status ? (status as Status) : undefined,
+        status: statusToSave ? (statusToSave as Status) : undefined,
         project: projectId
           ? {
               connect: {
@@ -72,6 +81,7 @@ export const getTasks = async (
       user: {
         id: userId,
       },
+      completed: options?.status === "ARCHIVE" ? true : false,
       status: options?.status || undefined,
       projectId: options?.projectId || undefined,
     },

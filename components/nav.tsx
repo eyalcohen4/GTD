@@ -7,8 +7,6 @@ import { statuses } from "@/constants/statuses"
 import { ChevronDown, LucideIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { useGetContexts } from "@/hooks/contexts"
-import { useGetProjects } from "@/hooks/projects"
 
 import { Icons } from "./icons"
 import { useContexts } from "./providers/contexts-provider"

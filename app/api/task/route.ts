@@ -19,10 +19,8 @@ export const GET = async (request: NextRequest) => {
       return 401
     }
 
-    console.log(request.nextUrl)
     const status = request.nextUrl.searchParams.get("status") as Status
     const projectId = request.nextUrl.searchParams.get("projectId") as string
-    console.log(status, projectId)
 
     const tasks = await getTasks(session?.user?.id, {
       status,

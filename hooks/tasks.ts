@@ -19,8 +19,13 @@ export function useGetTasks(params?: { status?: string; projectId?: string }): {
       return url.href
     }
 
-    url.searchParams.append("status", params?.status || "")
-    url.searchParams.append("projectId", params?.projectId || "")
+    if (params?.status) {
+      url.searchParams.append("status", params?.status || "")
+    }
+
+    if (params?.projectId) {
+      url.searchParams.append("projectId", params?.projectId || "")
+    }
 
     return url.href
   }

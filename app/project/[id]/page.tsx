@@ -1,4 +1,4 @@
-import { statuses } from "@/constants/statuses"
+"use client"
 
 import { useProjects } from "@/components/providers/projects-provider"
 import { TasksList } from "@/components/tasks-list"
