@@ -1,3 +1,4 @@
+import { NextApiRequest, NextApiResponse } from "next"
 import { NextRequest, NextResponse } from "next/server"
 import { createTask, getTasksPreview, updateTask } from "@/backend/task"
 import { Status } from "@prisma/client"
@@ -9,23 +10,19 @@ import {
   taskInputSchema,
   updateTaskInputSchema,
 } from "@/types/task"
-import { getUser } from "@/lib/server/get-user"
+import { getSessionUser } from "@/lib/server/get-session-user"
+
+import { authOptions } from "../auth/[...nextauth]/route"
 
 export const GET = async (request: NextRequest) => {
   try {
-    const session = await getServerSession()
-
-    if (!session || !session?.user?.email) {
-      return 401
-    }
-
-    const user = await getUser(session)
+    const session = await getServerSession(authOptions)
 
     const status = request.nextUrl.searchParams.get("status") as Status
     const projectId = request.nextUrl.searchParams.get("projectId") as string
     const contextId = request.nextUrl.searchParams.get("contextId") as string
 
-    const tasks = await getTasksPreview(user?.id, {
+    const tasks = await getTasksPreview(session?.user?.id, {
       status,
       projectId,
       contextId,

@@ -1,14 +1,16 @@
-import { NextResponse } from "next/server"
+import { NextRequest, NextResponse } from "next/server"
 import { createProject, getProjects } from "@/backend/project"
 import { createTask } from "@/backend/task"
 import { getServerSession } from "next-auth"
 
 import { ProjectInput, projectInputSchema } from "@/types/project"
-import { getUser } from "@/lib/server/get-user"
+import { getSessionUser } from "@/lib/server/get-session-user"
+
+import { authOptions } from "../auth/[...nextauth]/route"
 
 export const POST = async (request: Request) => {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
 
     if (!session) {
       return 401
@@ -28,14 +30,9 @@ export const POST = async (request: Request) => {
   }
 }
 
-export const GET = async (request: Request) => {
+export const GET = async () => {
   try {
-    const session = await getServerSession()
-
-    if (!session) {
-      return 401
-    }
-
+    const session = await getServerSession(authOptions)
     const projects = await getProjects(session?.user?.id)
     return NextResponse.json({ projects })
   } catch (error) {

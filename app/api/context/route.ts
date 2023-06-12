@@ -4,9 +4,11 @@ import { getServerSession } from "next-auth"
 
 import { ContextInput, contextInputSchema } from "@/types/context"
 
+import { authOptions } from "../auth/[...nextauth]/route"
+
 export const POST = async (request: Request) => {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
 
     if (!session) {
       return 401
@@ -28,7 +30,7 @@ export const POST = async (request: Request) => {
 
 export const GET = async (request: Request) => {
   try {
-    const session = await getServerSession()
+    const session = await getServerSession(authOptions)
 
     if (!session) {
       return 401
