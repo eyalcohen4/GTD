@@ -4,6 +4,7 @@ import { createTask } from "@/backend/task"
 import { getServerSession } from "next-auth"
 
 import { ProjectInput, projectInputSchema } from "@/types/project"
+import { getUser } from "@/lib/server/get-user"
 
 export const POST = async (request: Request) => {
   try {
