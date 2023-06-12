@@ -94,7 +94,6 @@ export function ComboboxPopover({
         (item) => item.value === value || item.value === value.toUpperCase()
       ) || null
 
-    console.log(value, item)
     if (!item) return
 
     const isSelected = multipleSelected.find(

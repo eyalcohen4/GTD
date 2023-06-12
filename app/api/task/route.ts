@@ -21,11 +21,14 @@ export const GET = async (request: NextRequest) => {
     const status = request.nextUrl.searchParams.get("status") as Status
     const projectId = request.nextUrl.searchParams.get("projectId") as string
     const contextId = request.nextUrl.searchParams.get("contextId") as string
+    const statuses = request.nextUrl.searchParams.get("statuses") as string
+    const contexts = request.nextUrl.searchParams.get("contexts") as string
 
     const tasks = await getTasksPreview(session?.user?.id, {
       status,
       projectId,
-      contextId,
+      contexts: contexts ? contexts.split(",") : undefined,
+      statuses: statuses ? statuses.split(",") : undefined,
     })
     return NextResponse.json({ tasks })
   } catch (error) {

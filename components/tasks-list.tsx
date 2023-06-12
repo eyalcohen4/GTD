@@ -39,13 +39,14 @@ export const TasksList = ({
   status,
   projectId,
   contextId,
+  showStatusDescription = true,
 }: {
   status?: string
   projectId?: string
   contextId?: string
+  showStatusDescription?: boolean
 }) => {
   const { projects } = useProjects()
-  const { contexts } = useContexts()
 
   const statusOptions = useMemo(
     () =>
@@ -57,20 +58,15 @@ export const TasksList = ({
     [projects]
   )
 
-  const contextOptions = useMemo(
-    () => contexts?.find(({ id }) => id === contextId),
-    [contexts]
-  )
-
   // add here a view
   const {
     tasks,
     isLoading: loadingGetTasks,
     refetch,
   } = useGetTasks({
-    status: statusOptions?.value || "",
+    statuses: statusOptions?.value ? [statusOptions?.value] : [],
     projectId: projectId || "",
-    contextId: contextId || "",
+    contexts: contextId ? [contextId] : [],
   })
 
   const sortedTasks = useMemo(
@@ -100,20 +96,22 @@ export const TasksList = ({
   return (
     <div>
       <Collapsible defaultOpen>
-        <CollapsibleTrigger className="w-full">
-          <div className="mb-4 flex gap-2 w-full justify-between px-8">
+        <CollapsibleTrigger className="w-full mb-2">
+          <div className="flex gap-2 w-full justify-between px-8">
             <div className="flex-col gap-2 justify-center flex">
               <div className="flex items-center justify-start gap-2">
-                {statusOptions ? (
+                {statusOptions?.icon ? (
                   <statusOptions.icon className="text-slate-950 dark:text-white h-5 w-5" />
                 ) : null}
                 <p className="text-lg font-semibold leading-none tracking-tight text-left">
                   {statusOptions?.label || projectOptions?.title}
                 </p>
               </div>
-              <p className="text-sm text-muted-foreground text-left">
-                {statusOptions?.description}
-              </p>
+              {showStatusDescription ? (
+                <p className="text-sm text-muted-foreground text-left">
+                  {statusOptions?.description}
+                </p>
+              ) : null}
             </div>
             <div>
               <ChevronDown />

@@ -15,8 +15,10 @@ import {
 
 export function DatePicker({
   value,
+  placeholder,
   onChange,
 }: {
+  placeholder?: string
   value: Date | undefined
   onChange: (date?: Date) => void
 }) {
@@ -38,7 +40,11 @@ export function DatePicker({
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {date ? (
+            format(date, "PPP")
+          ) : (
+            <span>{placeholder || "Pick a Date"}</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

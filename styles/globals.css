@@ -116,7 +116,7 @@
 }
 
 .ProseMirror {
-  @apply bg-transparent p-4;
+  @apply bg-transparent;
 }
 
 .ProseMirror h1 {

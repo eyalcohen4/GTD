@@ -6,13 +6,16 @@ import { usePathname } from "next/navigation"
 import { statuses } from "@/constants/statuses"
 import {
   ChevronDown,
+  Filter,
   Globe,
+  Home,
   LucideIcon,
   Sunrise,
   SunriseIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import { usePageContext } from "@/hooks/use-page-context"
 
 import { Icons } from "./icons"
 import { useContexts } from "./providers/contexts-provider"
@@ -64,6 +67,7 @@ type Item = {
 export const Nav = () => {
   const { contexts } = useContexts()
   const { projects } = useProjects()
+  const pageContext = usePageContext()
 
   const projectMenu = React.useMemo(
     () =>
@@ -90,52 +94,43 @@ export const Nav = () => {
   return (
     <nav className="flex flex-col gap-4 w-full">
       <ScrollArea>
+        <div
+          className={
+            "flex px-6 mb-12 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+          }
+        >
+          <Home className="h-4 w-4" />
+          <span className="rounded-md text-lg font-semibold py-1">Home</span>
+        </div>
+
+        <div className="flex items-center gap-2 mb-2 px-6">
+          <Filter className="h-4 w-4" />
+          <span className="font-semibold">Filters</span>
+        </div>
         <Collapsible>
           <CollapsibleTrigger className="w-full">
-            <div
-              className={cn(
-                "flex items-center justify-between w-full gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
-              )}
-            >
-              <span>Time</span>
-              <ChevronDown />
-            </div>
+            <FilterTrigger>Time</FilterTrigger>
           </CollapsibleTrigger>
           <CollapsibleContent>
             {timingNavItems.map((item) => (
-              <NavItem key={item.name} item={item} />
+              <NavItem isSubItem key={item.name} item={item} />
             ))}
           </CollapsibleContent>
         </Collapsible>
-        <Collapsible>
+        <Collapsible defaultOpen={pageContext?.type === "status"}>
           <CollapsibleTrigger className="w-full">
-            <div
-              className={cn(
-                "flex items-center justify-between w-full gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
-              )}
-            >
-              <span>Statuses</span>
-              <ChevronDown />
-            </div>
+            <FilterTrigger>Status</FilterTrigger>
           </CollapsibleTrigger>
           <CollapsibleContent>
             {statusesNavItems.map((item) => (
-              <NavItem key={item.name} item={item} />
+              <NavItem isSubItem key={item.name} item={item} />
             ))}
           </CollapsibleContent>
         </Collapsible>
-
         <div className="flex flex-col gap-2">
-          <Collapsible>
+          <Collapsible defaultOpen={pageContext?.type === "project"}>
             <CollapsibleTrigger className="w-full">
-              <div
-                className={cn(
-                  "flex items-center justify-between w-full gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
-                )}
-              >
-                <span>Projects</span>
-                <ChevronDown />
-              </div>
+              <FilterTrigger>Project</FilterTrigger>
             </CollapsibleTrigger>
             <CollapsibleContent>
               {projectMenu?.map((project) => (
@@ -145,16 +140,9 @@ export const Nav = () => {
           </Collapsible>
         </div>
         <div className="flex flex-col gap-2">
-          <Collapsible>
+          <Collapsible defaultOpen={pageContext?.type === "context"}>
             <CollapsibleTrigger className="w-full">
-              <div
-                className={cn(
-                  "flex items-center justify-between w-full gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
-                )}
-              >
-                <span>Contexts</span>
-                <ChevronDown />
-              </div>
+              <FilterTrigger>Context</FilterTrigger>
             </CollapsibleTrigger>
             <CollapsibleContent>
               {contextsMenu?.map((context) => (
@@ -181,11 +169,12 @@ export const NavItem = ({
   return (
     <Link
       className={cn(
-        "flex items-center w-full text-sm gap-2 px-4 py-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800",
+        `gap-2 cursor-pointer hover:bg-slate-200 px-6 
+        dark:hover:bg-slate-800 group flex w-full items-center border border-transparent py-1 hover:underline text-muted-foreground`,
+        isSubItem ? "text-sm text-muted-foreground" : "",
         isActive
-          ? "text-primary-foreground font-bold dark:bg-slate-800 bg-slate-200"
-          : "text-slate-950 dark:text-white",
-        isSubItem ? "pl-8 text-sm" : ""
+          ? "text-slate-950 dark:text-white bg-slate-800 font-bold rounded-none"
+          : ""
       )}
       href={item.href}
     >
@@ -195,10 +184,23 @@ export const NavItem = ({
           style={{ background: item.color }}
         ></div>
       ) : null}
-      {item.icon ? (
-        <item.icon className="text-slate-950 dark:text-white h-5 w-5" />
-      ) : null}
-      <span className="text-slate-950 dark:text-white">{item.name}</span>
+      {item.icon ? <item.icon className={"h-4 w-4"} /> : null}
+      <span>{item.name}</span>
     </Link>
+  )
+}
+
+const FilterTrigger = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <div
+      className={cn(
+        "flex px-4 items-center justify-between w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+      )}
+    >
+      <span className="mb-1 rounded-md px-2 py-1 text-sm font-semibold">
+        {children}
+      </span>
+      <ChevronDown />
+    </div>
   )
 }

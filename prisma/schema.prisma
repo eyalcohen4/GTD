@@ -80,6 +80,7 @@ model Project {
   dueDate             DateTime?
   color               String?
   completed           Boolean   @default(false)
+  status              Status?   @default(INBOX)
   userId              String
   user                User      @relation(fields: [userId], references: [id])
   tasks               Task[]

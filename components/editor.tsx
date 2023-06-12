@@ -7,9 +7,13 @@ import { EditorContent, useEditor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 
 export const Editor = ({
+  className,
   content,
   onChange,
+  placeholder,
 }: {
+  className?: string
+  placeholder?: string
   content?: any
   onChange: (content: Record<string, unknown> | null | undefined) => void
 }) => {
@@ -19,7 +23,7 @@ export const Editor = ({
       Highlight,
       Typography,
       Placeholder.configure({
-        placeholder: "Say something...",
+        placeholder: placeholder || "Say something...",
       }),
     ],
     content: content,
@@ -28,5 +32,5 @@ export const Editor = ({
     },
   })
 
-  return <EditorContent editor={editor} />
+  return <EditorContent editor={editor} className={className} />
 }

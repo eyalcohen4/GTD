@@ -9,7 +9,17 @@ import {
   LucideProps,
 } from "lucide-react"
 
-export const statuses = [
+export type StatusConfig = {
+  value: string
+  label: string
+  description?: string
+  slug: string
+  color?: string
+  icon?: (props: LucideProps) => JSX.Element
+  order: number
+}
+
+export const statuses: Array<StatusConfig> = [
   {
     value: "INBOX",
     label: "Inbox",
@@ -17,6 +27,7 @@ export const statuses = [
     slug: "inbox",
     color: "#007BFF",
     icon: Inbox,
+    order: 1,
   },
   {
     value: "NEXT_ACTION",
@@ -25,6 +36,7 @@ export const statuses = [
     slug: "next-action",
     color: "#28A745",
     icon: FastForward,
+    order: 2,
   },
   {
     value: "WAITING_FOR",
@@ -33,6 +45,7 @@ export const statuses = [
     slug: "waiting-for",
     color: "#FFC107",
     icon: Hourglass,
+    order: 3,
   },
   {
     value: "SOMEDAY_MAYBE",
@@ -60,6 +73,7 @@ export const statuses = [
         <path d="M8 21h8" />
       </svg>
     ),
+    order: 4,
   },
   {
     value: "CALENDAR",
@@ -68,6 +82,7 @@ export const statuses = [
     slug: "calendar",
     color: "#DC3545",
     icon: Calendar,
+    order: 5,
   },
   {
     value: "REFERENCE",
@@ -76,17 +91,20 @@ export const statuses = [
     slug: "reference",
     color: "#6F42C1",
     icon: Bookmark,
+    order: 6,
   },
   {
     value: "REVIEW",
     label: "Review",
     icon: Clock1,
     slug: "review",
+    order: 7,
   },
   {
     value: "ARCHIVE",
     label: "Archive",
     icon: Archive,
     slug: "archive",
+    order: 8,
   },
 ]

@@ -75,22 +75,44 @@ export const getTasksPreview = async (
   options?: {
     status?: Status
     projectId?: string
-    contextId?: string
+    contexts?: string[]
+    statuses?: string[]
   }
 ): Promise<Array<TaskPreview>> => {
-  console.log(options)
   // @ts-expect-error
   return prisma.task.findMany({
     where: {
       user: {
         id: userId,
       },
-      completed: options?.status === "ARCHIVE" ? true : false,
-      status: options?.status || undefined,
+      completed:
+        options?.status === "ARCHIVE" && !options?.statuses?.length
+          ? true
+          : undefined,
       projectId: options?.projectId || undefined,
-      contexts: options?.contextId
-        ? { some: { id: options?.contextId } }
-        : undefined,
+      OR:
+        options?.statuses || options?.contexts
+          ? [
+              {
+                status: options?.status
+                  ? options.status
+                  : options?.statuses
+                  ? { in: options.statuses as Status[] }
+                  : undefined,
+              },
+              {
+                contexts: options?.contexts
+                  ? {
+                      some: {
+                        id: {
+                          in: options.contexts,
+                        },
+                      },
+                    }
+                  : undefined,
+              },
+            ]
+          : undefined,
     },
     orderBy: {
       createdAt: "desc",

@@ -25,7 +25,7 @@ export const TaskListItem = ({ task }: { task: TaskPreview }) => {
 const TaskListItemContainer = ({ children }: { children: ReactNode }) => {
   return (
     <div className="border-b hover:bg-slate-200 dark:hover:bg-slate-900 h-full">
-      <div className="px-8 flex items-center justify-between h-full">
+      <div className="px-8 flex items-center justify-between h-full gap-4">
         {children}
       </div>
     </div>
@@ -33,7 +33,7 @@ const TaskListItemContainer = ({ children }: { children: ReactNode }) => {
 }
 const TaskTitle = ({ children }: { children: ReactNode }) => {
   return (
-    <p className="font-medium leading-none tracking-tight text-left">
+    <p className="font-medium leading-none tracking-tight text-left truncate text-sm md:text-md md:max-w-lg max-w-full">
       {children}
     </p>
   )
@@ -97,7 +97,7 @@ const TaskLead = ({ task }: { task: TaskPreview }) => {
   }
 
   return (
-    <div className="flex gap-4 items-center">
+    <div className="flex gap-4 items-center max-w-full">
       <Checkbox
         circle
         className="h-6 w-6"

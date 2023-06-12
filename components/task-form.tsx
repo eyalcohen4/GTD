@@ -1,9 +1,7 @@
 "use client"
 
-import { ReactNode, useCallback, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { statuses } from "@/constants/statuses"
-import { OnChangeJSON, ThemeProvider } from "@remirror/react"
-import { WysiwygEditor } from "@remirror/react-editors/wysiwyg"
 import { Box, Calendar, Flower2, Locate } from "lucide-react"
 
 import { Task, TaskInput, UpdateTaskInput } from "@/types/task"
@@ -11,16 +9,17 @@ import useDebounce from "@/hooks/use-debounce"
 import { Separator } from "@/components/ui/seperator"
 
 import "remirror/styles/all.css"
-import { useTheme } from "next-themes"
-import { RemirrorJSON } from "remirror"
-
-import { useGetTask } from "@/hooks/tasks"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useTasks } from "@/components/providers/tasks-provider"
 
 import { ComboboxPopover, Option } from "./combobox"
 import { DatePicker } from "./date-picker"
 import { Editor } from "./editor"
+import {
+  FormProperty,
+  FormPropertyLabel,
+  FormPropertyValue,
+} from "./form-properties"
 import { useContexts } from "./providers/contexts-provider"
 import { useProjects } from "./providers/projects-provider"
 
@@ -120,9 +119,9 @@ export const TaskForm = ({ task }: { task: Task }) => {
       <Separator />
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-8 dark:text-white">
-          <TaskProperty>
-            <TaskPropertyLabel label="Status" icon={<Box />} />
-            <TaskPropertyValue>
+          <FormProperty>
+            <FormPropertyLabel label="Status" icon={<Box />} />
+            <FormPropertyValue>
               <ComboboxPopover
                 matchContainerSize
                 type="status"
@@ -137,11 +136,11 @@ export const TaskForm = ({ task }: { task: Task }) => {
                   handleUpdateTask({ status: option?.value })
                 }}
               />
-            </TaskPropertyValue>
-          </TaskProperty>
-          <TaskProperty>
-            <TaskPropertyLabel label="Project" icon={<Flower2 />} />
-            <TaskPropertyValue>
+            </FormPropertyValue>
+          </FormProperty>
+          <FormProperty>
+            <FormPropertyLabel label="Project" icon={<Flower2 />} />
+            <FormPropertyValue>
               <ComboboxPopover
                 matchContainerSize
                 items={projectsOptions}
@@ -158,11 +157,11 @@ export const TaskForm = ({ task }: { task: Task }) => {
                   })
                 }}
               />
-            </TaskPropertyValue>
-          </TaskProperty>
-          <TaskProperty>
-            <TaskPropertyLabel label="Context" icon={<Locate />} />
-            <TaskPropertyValue>
+            </FormPropertyValue>
+          </FormProperty>
+          <FormProperty>
+            <FormPropertyLabel label="Context" icon={<Locate />} />
+            <FormPropertyValue>
               <ComboboxPopover
                 matchContainerSize
                 multiple
@@ -178,24 +177,24 @@ export const TaskForm = ({ task }: { task: Task }) => {
                   }
                 }}
               />
-            </TaskPropertyValue>
-          </TaskProperty>
-          <TaskProperty>
-            <TaskPropertyLabel label="Due Date" icon={<Calendar />} />
-            <TaskPropertyValue>
+            </FormPropertyValue>
+          </FormProperty>
+          <FormProperty>
+            <FormPropertyLabel label="Due Date" icon={<Calendar />} />
+            <FormPropertyValue>
               <DatePicker
                 value={task?.dueDate ? new Date(task?.dueDate) : undefined}
                 onChange={(date) => {
                   handleUpdateTask({ dueDate: date?.toISOString() })
                 }}
               />
-            </TaskPropertyValue>
-          </TaskProperty>
+            </FormPropertyValue>
+          </FormProperty>
         </div>
       </div>
       <div>
         <Separator />
-        <div className="flex flex-col gap-8 py-2 outline-none">
+        <div className="flex flex-col gap-8 py-2 outline-none mt-4">
           <Editor
             content={task?.content ? JSON.parse(task.content) : ""}
             onChange={handleChangeContent}
@@ -204,27 +203,4 @@ export const TaskForm = ({ task }: { task: Task }) => {
       </div>
     </div>
   )
-}
-
-const TaskProperty = ({ children }: { children: ReactNode }) => {
-  return <div className="flex items-center justify-start gap-4">{children}</div>
-}
-
-const TaskPropertyLabel = ({
-  label,
-  icon,
-}: {
-  label: string
-  icon?: ReactNode
-}) => {
-  return (
-    <div className="flex gap-2 w-[200px] items-center text-lg">
-      <span>{icon}</span>
-      <p>{label}</p>
-    </div>
-  )
-}
-
-const TaskPropertyValue = ({ children }: { children: ReactNode }) => {
-  return <div className="w-full">{children}</div>
 }

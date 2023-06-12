@@ -11,6 +11,8 @@ export function useGetTasks(params?: {
   status?: string
   projectId?: string
   contextId?: string
+  statuses?: string[]
+  contexts?: string[]
 }): {
   isLoading: boolean
   tasks: TaskPreview[]
@@ -33,6 +35,14 @@ export function useGetTasks(params?: {
 
     if (params?.contextId) {
       url.searchParams.append("contextId", params?.contextId || "")
+    }
+
+    if (params?.statuses?.length) {
+      url.searchParams.append("statuses", params?.statuses.join(",") || "")
+    }
+
+    if (params?.contexts?.length) {
+      url.searchParams.append("contexts", params?.contexts.join(",") || "")
     }
 
     return url.href
@@ -103,6 +113,7 @@ export function useCreateTask() {
       },
       onSettled: () => {
         queryClient.invalidateQueries({ queryKey: ["tasks"] })
+        queryClient.invalidateQueries({ queryKey: ["project"] })
       },
     }
   )
@@ -173,6 +184,7 @@ export function useUpdateTask() {
         setTimeout(() => {
           queryClient.invalidateQueries({ queryKey: ["task", data.id] })
           queryClient.invalidateQueries({ queryKey: ["tasks"] })
+          queryClient.invalidateQueries({ queryKey: ["project"] })
         }, 300)
       },
     }

@@ -10,20 +10,39 @@ export const projectInputSchema = z.object({
   reviewFrequencyDays: z.number().optional(),
 })
 
+export const updateProjectInputSchema = z.object({
+  title: z.string().optional(),
+  content: z.string().optional(),
+  status: z.string().optional(),
+  dueDate: z.string().optional(),
+  color: z.string().optional(),
+  completed: z.boolean().optional(),
+  reviewFrequencyDays: z.number().optional(),
+})
+
 export type ProjectInput = z.infer<typeof projectInputSchema>
+export type UpdateProjectInput = z.infer<typeof updateProjectInputSchema>
 
 export const projectSchema = z.object({
   id: z.string(),
   title: z.string(),
   content: z.string(),
-  dueDate: z.date(),
+  dueDate: z.string(),
   color: z.string().optional(),
+  status: z.string(),
   completed: z.boolean(),
   userId: z.string(),
-  createdAt: z.date(),
-  updatedAt: z.date(),
-  lastReview: z.date().optional(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  lastReview: z.string().optional(),
   reviewFrequencyDays: z.number().optional(),
+  progress: z.object({
+    all: z.number(),
+    completed: z.number(),
+    inbox: z.number(),
+    waitingFor: z.number(),
+    nextAction: z.number(),
+  }),
 })
 
 export type Project = z.infer<typeof projectSchema>
