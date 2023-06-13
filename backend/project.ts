@@ -32,6 +32,7 @@ export const updateProject = async (id: string, input: UpdateProjectInput) => {
       content: input.content || "",
       dueDate: input.dueDate,
       reviewFrequencyDays: DEFAULT_FREQUENCY_DAYS,
+      isDeleted: input.isDeleted,
       color: input.color,
       completed: input.completed,
     },
@@ -44,6 +45,18 @@ export const getProjects = async (userId: string) => {
       user: {
         id: userId,
       },
+      isDeleted: false,
+    },
+  })
+}
+
+export const deleteProject = async (id: string) => {
+  return prisma.project.update({
+    where: {
+      id,
+    },
+    data: {
+      isDeleted: false,
     },
   })
 }

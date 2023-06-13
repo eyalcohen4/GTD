@@ -89,7 +89,10 @@ export const getTasksPreview = async (
         options?.status === "ARCHIVE" && !options?.statuses?.length
           ? true
           : undefined,
-      projectId: options?.projectId || undefined,
+      project: {
+        id: options?.projectId || undefined,
+        isDeleted: false,
+      },
       OR:
         options?.statuses || options?.contexts
           ? [

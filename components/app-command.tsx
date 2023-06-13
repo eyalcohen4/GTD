@@ -75,20 +75,21 @@ export function AppCommand({ ...props }: any) {
           ref={ref}
           variant="outline"
           className={cn(
-            "relative h-9 w-full justify-start rounded-[0.5rem] text-sm sm:pr-12 md:w-40 lg:w-[500px]"
+            "relative h-9 w-full justify-start rounded-[0.5rem] sm:pr-12 md:w-40 lg:w-[500px]"
           )}
           placeholder="Create new task"
           {...props}
         />
-        <div
+        <button
           className="absolute right-2 text-muted-foreground"
           style={{
             top: "50%",
             transform: "translateY(-50%)",
           }}
+          type="submit"
         >
           {isLoading ? <Loader /> : <PlusCircle />}
-        </div>
+        </button>
       </form>
     </div>
   )

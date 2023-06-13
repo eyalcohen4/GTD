@@ -16,6 +16,7 @@ export const updateProjectInputSchema = z.object({
   status: z.string().optional(),
   dueDate: z.string().optional(),
   color: z.string().optional(),
+  isDeleted: z.boolean().optional(),
   completed: z.boolean().optional(),
   reviewFrequencyDays: z.number().optional(),
 })

@@ -1,6 +1,7 @@
 "use client"
 
 import { useContext, useMemo, useState } from "react"
+import { useRouter } from "next/navigation"
 import { updateProject } from "@/backend/project"
 import { StatusConfig, statuses } from "@/constants/statuses"
 import dayjs from "dayjs"
@@ -17,9 +18,14 @@ import {
 
 import { Project, ProjectInput, UpdateProjectInput } from "@/types/project"
 import { TaskPreview } from "@/types/task"
-import { useGetProject, useUpdateProject } from "@/hooks/projects"
+import {
+  useDeleteProject,
+  useGetProject,
+  useUpdateProject,
+} from "@/hooks/projects"
 import { useGetTasks } from "@/hooks/tasks"
 import useDebounce from "@/hooks/use-debounce"
+import { toast } from "@/hooks/use-toast"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
@@ -28,6 +34,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
 import { SelectSeparator } from "@/components/ui/select"
@@ -261,7 +274,9 @@ const TaskGroup = ({
 
 const ProjectHeader = ({ project }: { project: Project }) => {
   const { updateProject } = useUpdateProject()
+  const { deleteProject } = useDeleteProject()
   const [title, setTitle] = useState(project?.title || "")
+  const router = useRouter()
 
   const debouncedUpdateProject = useDebounce((input: UpdateProjectInput) => {
     handleUpdateProject(input)
@@ -269,6 +284,15 @@ const ProjectHeader = ({ project }: { project: Project }) => {
 
   const handleUpdateProject = (input: Omit<UpdateProjectInput, "id">) => {
     updateProject({ id: project.id || "", input })
+  }
+
+  const handleDeleteProject = async () => {
+    await deleteProject({ id: project.id })
+    toast({
+      title: "Project deleted",
+      description: `Project ${project.title} has been deleted`,
+    })
+    router.push(`/`)
   }
 
   const progressPercentage = useMemo(() => {
@@ -282,7 +306,7 @@ const ProjectHeader = ({ project }: { project: Project }) => {
   return (
     <div className="md:px-8 px-4 flex flex-col gap-4">
       <div className="flex flex-col gap-4">
-        <div className="flex flex-col items-start gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex gap-4 items-center justify-between">
           <div className="flex gap-4 items-center">
             <ColorPicker
               color={project?.color || ""}
@@ -293,7 +317,7 @@ const ProjectHeader = ({ project }: { project: Project }) => {
               }}
             />
             <Input
-              className="text-3xl font-bold tracking-tight border-none w-full"
+              className="md:text-3xl font-bold tracking-tight border-none w-full"
               value={title}
               onChange={(event) => {
                 setTitle(event.target.value)
@@ -301,12 +325,23 @@ const ProjectHeader = ({ project }: { project: Project }) => {
               }}
             />
           </div>
-          <div>
-            <Badge>
-              Created: {dayjs(project?.createdAt).format("D MMM YY")}
-            </Badge>
+          <div className="flex">
+            <DropdownMenu>
+              <DropdownMenuTrigger>
+                <MoreHorizontal />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuItem
+                  onClick={handleDeleteProject}
+                  className="cursor-pointer"
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
+
         <div className="w-1/2">
           <Editor
             className="p-0"

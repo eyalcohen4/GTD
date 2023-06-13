@@ -161,3 +161,42 @@ export function useUpdateProject() {
     reset,
   }
 }
+
+export function useDeleteProject() {
+  const queryClient = useQueryClient()
+
+  const {
+    mutate: deleteProject,
+    isLoading,
+    data,
+    isSuccess,
+    reset,
+  } = useMutation(
+    async ({ id }: { id: string }) => {
+      const request = await fetch(`/api/project/${id}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+
+      return request.json()
+    },
+    {
+      onSettled: (data) => {
+        setTimeout(() => {
+          queryClient.invalidateQueries({ queryKey: ["project", data.id] })
+          queryClient.invalidateQueries({ queryKey: ["projects"] })
+        }, 300)
+      },
+    }
+  )
+
+  return {
+    deleteProject,
+    isSuccess,
+    data,
+    isLoading,
+    reset,
+  }
+}

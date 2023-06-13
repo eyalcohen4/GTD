@@ -88,6 +88,7 @@ model Project {
   updatedAt           DateTime  @updatedAt
   lastReview          DateTime?
   reviewFrequencyDays Int?
+  isDeleted           Boolean   @default(false)
 }
 
 model Task {

@@ -4,6 +4,7 @@ import {
   getProject,
   getProjectTasksCount,
   getProjects,
+  updateProject,
 } from "@/backend/project"
 import { createTask } from "@/backend/task"
 import { getServerSession } from "next-auth"
@@ -30,6 +31,29 @@ export const GET = async (
         progress,
       },
     })
+  } catch (error) {
+    console.log(error)
+    return error
+  }
+}
+
+export const DELETE = async (
+  request: Request,
+  { params: { id } }: { params: { id: string } }
+) => {
+  try {
+    const session = await getServerSession(authOptions)
+
+    const project = await getProject(id)
+
+    if (project?.userId !== session?.user?.id) {
+      return 403
+    }
+
+    const updated = await updateProject(id, {
+      isDeleted: true,
+    })
+    return NextResponse.json({ project: updated })
   } catch (error) {
     console.log(error)
     return error
