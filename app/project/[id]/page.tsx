@@ -7,6 +7,7 @@ import { StatusConfig, statuses } from "@/constants/statuses"
 import dayjs from "dayjs"
 import {
   Check,
+  ChevronDown,
   FastForward,
   Hourglass,
   Inbox,
@@ -260,14 +261,24 @@ const TaskGroup = ({
 }) => {
   return (
     <div key={status.label} className="flex flex-col">
-      <div className="flex h-[50px] px-4 md:px-8 items-center gap-2 bg-secondary w-full">
-        {status?.icon ? <status.icon /> : null}
-        <h3 className="text-md font-semibold tracking-tight">{status.label}</h3>
-      </div>
-
-      {tasks.map((task) => (
-        <TaskListItem task={task} key={task.id} />
-      ))}
+      <Collapsible>
+        <CollapsibleTrigger className="h-[40px] w-full">
+          <div className="flex h-[40px] px-4 md:px-8 items-center justify-between bg-secondary w-full">
+            <div className="flex gap-2 items-center">
+              {status?.icon ? <status.icon /> : null}
+              <h3 className="text-md font-semibold tracking-tight">
+                {status.label}
+              </h3>
+            </div>
+            <ChevronDown />
+          </div>
+        </CollapsibleTrigger>
+        <CollapsibleContent className="h-full">
+          {tasks.map((task) => (
+            <TaskListItem task={task} key={task.id} />
+          ))}
+        </CollapsibleContent>
+      </Collapsible>
     </div>
   )
 }
