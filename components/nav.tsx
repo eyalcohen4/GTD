@@ -11,7 +11,6 @@ import {
   Home,
   LucideIcon,
   Sunrise,
-  SunriseIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -94,62 +93,87 @@ export const Nav = () => {
   return (
     <nav className="flex flex-col gap-4 w-full">
       <ScrollArea>
-        <div
-          className={
-            "flex px-6 mb-12 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
-          }
-        >
-          <Home className="h-4 w-4" />
-          <span className="rounded-md text-lg font-semibold py-1">Home</span>
-        </div>
+        <div className="flex flex-col gap-4">
+          <div
+            className={
+              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+            }
+          >
+            <Home className="h-4 w-4" />
+            <span className="rounded-md text-lg font-semibold py-1">Home</span>
+          </div>
+          <div
+            className={
+              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+            }
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              className="lucide lucide-goal h-4 w-4"
+            >
+              <path d="M12 13V2l8 4-8 4" />
+              <path d="M20.55 10.23A9 9 0 1 1 8 4.94" />
+              <path d="M8 10a5 5 0 1 0 8.9 2.02" />
+            </svg>
+            <span className="rounded-md text-lg font-semibold py-1">Goals</span>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-2 px-4">
+              <Filter className="h-4 w-4" />
+              <span className="rounded-md text-lg font-semibold py-1">
+                Filters
+              </span>
+            </div>
+            <div>
+              <Collapsible>
+                <CollapsibleTrigger className="w-full">
+                  <FilterTrigger>Time</FilterTrigger>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  {timingNavItems.map((item) => (
+                    <NavItem isSubItem key={item.name} item={item} />
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
+              <Collapsible defaultOpen={pageContext?.type === "status"}>
+                <CollapsibleTrigger className="w-full">
+                  <FilterTrigger>Status</FilterTrigger>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  {statusesNavItems.map((item) => (
+                    <NavItem isSubItem key={item.name} item={item} />
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
 
-        <div className="flex items-center gap-2 mb-2 px-6">
-          <Filter className="h-4 w-4" />
-          <span className="font-semibold">Filters</span>
-        </div>
-        <Collapsible>
-          <CollapsibleTrigger className="w-full">
-            <FilterTrigger>Time</FilterTrigger>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            {timingNavItems.map((item) => (
-              <NavItem isSubItem key={item.name} item={item} />
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-        <Collapsible defaultOpen={pageContext?.type === "status"}>
-          <CollapsibleTrigger className="w-full">
-            <FilterTrigger>Status</FilterTrigger>
-          </CollapsibleTrigger>
-          <CollapsibleContent>
-            {statusesNavItems.map((item) => (
-              <NavItem isSubItem key={item.name} item={item} />
-            ))}
-          </CollapsibleContent>
-        </Collapsible>
-        <div className="flex flex-col gap-2">
-          <Collapsible defaultOpen={pageContext?.type === "project"}>
-            <CollapsibleTrigger className="w-full">
-              <FilterTrigger>Project</FilterTrigger>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              {projectMenu?.map((project) => (
-                <NavItem isSubItem key={project.name} item={project} />
-              ))}
-            </CollapsibleContent>
-          </Collapsible>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Collapsible defaultOpen={pageContext?.type === "context"}>
-            <CollapsibleTrigger className="w-full">
-              <FilterTrigger>Context</FilterTrigger>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              {contextsMenu?.map((context) => (
-                <NavItem isSubItem key={context.id} item={context} />
-              ))}
-            </CollapsibleContent>
-          </Collapsible>
+              <Collapsible defaultOpen={pageContext?.type === "project"}>
+                <CollapsibleTrigger className="w-full">
+                  <FilterTrigger>Project</FilterTrigger>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  {projectMenu?.map((project) => (
+                    <NavItem isSubItem key={project.name} item={project} />
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
+              <Collapsible defaultOpen={pageContext?.type === "context"}>
+                <CollapsibleTrigger className="w-full">
+                  <FilterTrigger>Context</FilterTrigger>
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                  {contextsMenu?.map((context) => (
+                    <NavItem isSubItem key={context.id} item={context} />
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
+            </div>
+          </div>
         </div>
       </ScrollArea>
     </nav>
@@ -169,9 +193,9 @@ export const NavItem = ({
   return (
     <Link
       className={cn(
-        `gap-2 cursor-pointer hover:bg-slate-200 px-6 
+        `gap-2 cursor-pointer hover:bg-slate-200
         dark:hover:bg-slate-800 group flex w-full items-center border border-transparent py-1 hover:underline text-muted-foreground`,
-        isSubItem ? "text-sm text-muted-foreground" : "",
+        isSubItem ? "text-sm text-muted-foreground pl-8" : "",
         isActive
           ? "text-slate-950 dark:text-white bg-slate-800 font-bold rounded-none"
           : ""
@@ -194,7 +218,7 @@ const FilterTrigger = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={cn(
-        "flex px-4 items-center justify-between w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+        "flex px-6 items-center justify-between w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
       )}
     >
       <span className="mb-1 rounded-md px-2 py-1 text-sm font-semibold">
