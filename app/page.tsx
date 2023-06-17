@@ -12,19 +12,17 @@ export default async function IndexPage() {
       <div className="flex flex-col gap-12 px-8 w-full justify-between">
         <Greeting />
         <Goals />
-        <div className="flex w-full gap-8">
-          <TasksList
-            fullWidth
-            statuses={statuses
-              .filter(({ value }) => value !== "COMPLETED")
-              .map(({ value }) => value)}
-            title="Today"
-            timeRange={{
-              to: dayjs().startOf("day").toISOString(),
-            }}
-          />
-          <TasksList fullWidth statuses={["INBOX"]} title="Inbox" />
-        </div>
+        <TasksList
+          fullWidth
+          statuses={statuses
+            .filter(({ value }) => value !== "COMPLETED")
+            .map(({ value }) => value)}
+          title="Today"
+          timeRange={{
+            to: dayjs().startOf("day").toISOString(),
+          }}
+        />
+        <TasksList fullWidth statuses={["INBOX"]} title="Inbox" />
       </div>
     </AppLayout>
   )
