@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import { Analytics } from "@vercel/analytics/react"
 import { getSession, useSession } from "next-auth/react"
 
 import { siteConfig } from "@/config/site"
@@ -57,6 +58,7 @@ export default function RootLayout({ children, task }: RootLayoutProps) {
               </ClientProvider>
             </UserProvider>
           </ThemeProvider>
+          <Analytics />
         </body>
       </html>
     </>
