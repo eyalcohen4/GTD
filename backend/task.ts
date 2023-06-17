@@ -90,7 +90,8 @@ export const getTasksPreview = async (
       },
       completed: options?.hideCompleted
         ? false
-        : options?.status === "ARCHIVE" && !options?.statuses?.length
+        : options?.status === "ARCHIVE" ||
+          options?.statuses?.includes("ARCHIVE")
         ? true
         : undefined,
       projectId: options?.projectId || undefined,
