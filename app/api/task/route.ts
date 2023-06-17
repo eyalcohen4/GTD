@@ -18,15 +18,20 @@ export const GET = async (request: NextRequest) => {
   try {
     const session = await getServerSession(authOptions)
 
+    const from = request.nextUrl.searchParams.get("from") as string
+    const to = request.nextUrl.searchParams.get("to") as string
+    const completed = request.nextUrl.searchParams.get("completed") as string
     const status = request.nextUrl.searchParams.get("status") as Status
     const projectId = request.nextUrl.searchParams.get("projectId") as string
-    const contextId = request.nextUrl.searchParams.get("contextId") as string
     const statuses = request.nextUrl.searchParams.get("statuses") as string
     const contexts = request.nextUrl.searchParams.get("contexts") as string
 
     const tasks = await getTasksPreview(session?.user?.id, {
       status,
       projectId,
+      from: from || undefined,
+      to: to || undefined,
+      hideCompleted: completed === "false",
       contexts: contexts ? contexts.split(",") : undefined,
       statuses: statuses ? statuses.split(",") : undefined,
     })

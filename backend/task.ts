@@ -73,6 +73,9 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
 export const getTasksPreview = async (
   userId: string,
   options?: {
+    from?: string
+    to?: string
+    hideCompleted?: boolean
     status?: Status
     projectId?: string
     contexts?: string[]
@@ -85,11 +88,17 @@ export const getTasksPreview = async (
       user: {
         id: userId,
       },
-      completed:
-        options?.status === "ARCHIVE" && !options?.statuses?.length
-          ? true
-          : undefined,
+      completed: options?.hideCompleted
+        ? false
+        : options?.status === "ARCHIVE" && !options?.statuses?.length
+        ? true
+        : undefined,
       projectId: options?.projectId || undefined,
+      dueDate: {
+        gte: options?.from || undefined,
+        lte: options?.to || undefined,
+      },
+
       OR:
         options?.statuses || options?.contexts
           ? [

@@ -1,27 +1,28 @@
-"use client"
+"use client";
 
-import { useEffect, useMemo } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { statuses as defaultStatuses } from "@/constants/statuses"
-import { ColumnDef } from "@tanstack/react-table"
-import dayjs from "dayjs"
-import relativeTime from "dayjs/plugin/relativeTime"
-import { ChevronDown, Loader } from "lucide-react"
+import { useEffect, useMemo } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { statuses as defaultStatuses } from "@/constants/statuses";
+import { ColumnDef } from "@tanstack/react-table";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { ChevronDown, Loader } from "lucide-react";
 
-import { Task } from "@/types/task"
-import { cn } from "@/lib/utils"
-import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
 
-import { useContexts } from "./providers/contexts-provider"
-import { useProjects } from "./providers/projects-provider"
-import { TaskListItem } from "./task-list-item"
-import { Checkbox } from "./ui/checkbox"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "./ui/collapsible"
+
+import { Task } from "@/types/task";
+import { cn } from "@/lib/utils";
+import { useGetTasks, useUpdateTask } from "@/hooks/tasks";
+
+
+
+import { useContexts } from "./providers/contexts-provider";
+import { useProjects } from "./providers/projects-provider";
+import { TaskListItem } from "./task-list-item";
+import { Checkbox } from "./ui/checkbox";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
+
 
 dayjs.extend(relativeTime)
 
@@ -44,6 +45,7 @@ export const TasksList = ({
   projectId,
   contextId,
   timeRange,
+  includeCompleted,
   showStatusDescription = true,
 }: {
   statuses?: string[]
@@ -52,6 +54,7 @@ export const TasksList = ({
   status?: string
   projectId?: string
   contextId?: string
+  includeCompleted?: boolean,
   timeRange?: {
     from?: string
     to?: string
@@ -83,6 +86,7 @@ export const TasksList = ({
       : statusOptions?.value
       ? [statusOptions?.value]
       : [],
+    includeCompleted,
     projectId: projectId || "",
     contexts: contextId ? [contextId] : [],
     timeRange,

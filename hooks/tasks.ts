@@ -13,6 +13,7 @@ export function useGetTasks(params?: {
   contextId?: string
   statuses?: string[]
   contexts?: string[]
+  includeCompleted?: boolean
   timeRange?: {
     from?: string
     to?: string
@@ -55,6 +56,10 @@ export function useGetTasks(params?: {
 
     if (params?.timeRange?.to) {
       url.searchParams.append("from", params?.timeRange?.to)
+    }
+
+    if (!params?.includeCompleted) {
+      url.searchParams.append("completed", "false")
     }
 
     return url.href
