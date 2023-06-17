@@ -9,7 +9,7 @@ export default function WeekPage() {
       <TasksList
         title="Week"
         timeRange={{
-          to: dayjs().startOf("week").toISOString(),
+          to: dayjs().endOf("week").toISOString(),
         }}
         statuses={statuses
           .filter(({ value }) => value !== "COMPLETED")
