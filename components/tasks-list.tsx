@@ -3,13 +3,14 @@
 import { useEffect, useMemo } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { statuses } from "@/constants/statuses"
+import { statuses as defaultStatuses } from "@/constants/statuses"
 import { ColumnDef } from "@tanstack/react-table"
 import dayjs from "dayjs"
 import relativeTime from "dayjs/plugin/relativeTime"
 import { ChevronDown, Loader } from "lucide-react"
 
 import { Task } from "@/types/task"
+import { cn } from "@/lib/utils"
 import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
 
 import { useContexts } from "./providers/contexts-provider"
@@ -21,7 +22,6 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible"
-import { cn } from "@/lib/utils"
 
 dayjs.extend(relativeTime)
 
@@ -40,11 +40,13 @@ export const TasksList = ({
   fullWidth,
   title,
   status,
+  statuses,
   projectId,
   contextId,
   timeRange,
   showStatusDescription = true,
 }: {
+  statuses?: string[]
   fullWidth?: boolean
   title?: string
   status?: string
@@ -60,7 +62,9 @@ export const TasksList = ({
 
   const statusOptions = useMemo(
     () =>
-      statuses.find(({ value, slug }) => value === status || slug === status),
+      defaultStatuses.find(
+        ({ value, slug }) => value === status || slug === status
+      ),
     [status]
   )
   const projectOptions = useMemo(
@@ -74,7 +78,11 @@ export const TasksList = ({
     isLoading: loadingGetTasks,
     refetch,
   } = useGetTasks({
-    statuses: statusOptions?.value ? [statusOptions?.value] : [],
+    statuses: statuses
+      ? statuses
+      : statusOptions?.value
+      ? [statusOptions?.value]
+      : [],
     projectId: projectId || "",
     contexts: contextId ? [contextId] : [],
     timeRange,

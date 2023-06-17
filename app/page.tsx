@@ -1,3 +1,4 @@
+import { statuses } from "@/constants/statuses"
 import dayjs from "dayjs"
 
 import { Goals } from "@/components/goals"
@@ -13,6 +14,9 @@ export default async function IndexPage() {
         <Goals />
         <TasksList
           fullWidth
+          statuses={statuses
+            .filter(({ value }) => value !== "COMPLETED")
+            .map(({ value }) => value)}
           title="Today"
           timeRange={{
             to: dayjs().startOf("day").toISOString(),

@@ -1,12 +1,9 @@
+import { statuses } from "@/constants/statuses"
 import dayjs from "dayjs"
 
 import { TasksList } from "@/components/tasks-list"
 
-export default function TodayPage({
-  params: { status },
-}: {
-  params: { status: string }
-}) {
+export default function TodayPage() {
   return (
     <div>
       <TasksList
@@ -14,7 +11,9 @@ export default function TodayPage({
         timeRange={{
           to: dayjs().startOf("day").toISOString(),
         }}
-        status={status}
+        statuses={statuses
+          .filter(({ value }) => value !== "COMPLETED")
+          .map(({ value }) => value)}
       />
     </div>
   )
