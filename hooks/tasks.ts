@@ -55,7 +55,7 @@ export function useGetTasks(params?: {
     }
 
     if (params?.timeRange?.to) {
-      url.searchParams.append("from", params?.timeRange?.to)
+      url.searchParams.append("to", params?.timeRange?.to)
     }
 
     if (!params?.includeCompleted) {
