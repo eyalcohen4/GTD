@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { StatusConfig, goalsStatuses, statuses } from "@/constants/statuses"
+import dayjs from "dayjs"
 import {
   Check,
   ChevronDown,
@@ -48,6 +49,7 @@ import { Filter } from "@/components/filter"
 import { useContexts } from "@/components/providers/contexts-provider"
 import { useGoals } from "@/components/providers/goals-provider"
 import { TaskListItem } from "@/components/task-list-item"
+import { TimeLeft } from "@/components/time-left"
 
 export default function ProjectPage({
   params: { id },
@@ -248,7 +250,7 @@ const TaskGroup = ({
 }) => {
   return (
     <div key={status.label} className="flex flex-col">
-      <Collapsible>
+      <Collapsible defaultOpen>
         <CollapsibleTrigger className="h-[40px] w-full">
           <div className="flex h-[40px] px-4 md:px-8 items-center justify-between bg-secondary w-full">
             <div className="flex gap-2 items-center">
@@ -256,6 +258,7 @@ const TaskGroup = ({
               <h3 className="text-md font-semibold tracking-tight">
                 {status.label}
               </h3>
+              <Badge className="ml-4">{tasks?.length}</Badge>
             </div>
             <ChevronDown />
           </div>
@@ -379,7 +382,7 @@ const ProjectHeader = ({ project }: { project: Project }) => {
         </div>
         <Separator />
       </div>
-      <div className="w-full flex flex-col justify-between items-center md:flex-row gap-8">
+      <div className="w-full flex flex-col justify-between md:flex-row gap-8">
         <div className="flex flex-col gap-2 w-full">
           <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
             Goal
@@ -424,16 +427,15 @@ const ProjectHeader = ({ project }: { project: Project }) => {
           <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
             Due Date
           </h3>
-          <div className="">
-            <DatePicker
-              value={project?.dueDate ? new Date(project?.dueDate) : undefined}
-              onChange={(value) => {
-                handleUpdateProject({
-                  dueDate: value?.toISOString(),
-                })
-              }}
-            />
-          </div>
+          <DatePicker
+            value={project?.dueDate ? new Date(project?.dueDate) : undefined}
+            onChange={(value) => {
+              handleUpdateProject({
+                dueDate: value?.toISOString(),
+              })
+            }}
+          />
+          <TimeLeft date={project.dueDate} />
         </div>
       </div>
       <div className="flex flex-col gap-2 w-full">

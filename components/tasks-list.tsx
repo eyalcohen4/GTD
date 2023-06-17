@@ -1,28 +1,27 @@
-"use client";
+"use client"
 
-import { useEffect, useMemo } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { statuses as defaultStatuses } from "@/constants/statuses";
-import { ColumnDef } from "@tanstack/react-table";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { ChevronDown, Loader } from "lucide-react";
+import { useEffect, useMemo } from "react"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { statuses as defaultStatuses } from "@/constants/statuses"
+import { ColumnDef } from "@tanstack/react-table"
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+import { ChevronDown, Loader } from "lucide-react"
 
+import { Task } from "@/types/task"
+import { cn } from "@/lib/utils"
+import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
 
-
-import { Task } from "@/types/task";
-import { cn } from "@/lib/utils";
-import { useGetTasks, useUpdateTask } from "@/hooks/tasks";
-
-
-
-import { useContexts } from "./providers/contexts-provider";
-import { useProjects } from "./providers/projects-provider";
-import { TaskListItem } from "./task-list-item";
-import { Checkbox } from "./ui/checkbox";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "./ui/collapsible";
-
+import { useContexts } from "./providers/contexts-provider"
+import { useProjects } from "./providers/projects-provider"
+import { TaskListItem } from "./task-list-item"
+import { Checkbox } from "./ui/checkbox"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible"
 
 dayjs.extend(relativeTime)
 
@@ -54,7 +53,7 @@ export const TasksList = ({
   status?: string
   projectId?: string
   contextId?: string
-  includeCompleted?: boolean,
+  includeCompleted?: boolean
   timeRange?: {
     from?: string
     to?: string
@@ -117,8 +116,8 @@ export const TasksList = ({
   }, [status])
 
   return (
-    <div>
-      <Collapsible defaultOpen>
+    <div className="w-full">
+      <Collapsible defaultOpen className="w-full">
         <CollapsibleTrigger className="w-full mb-2">
           <div
             className={cn("flex gap-2 w-full justify-between px-8", {
@@ -145,7 +144,7 @@ export const TasksList = ({
             </div>
           </div>
         </CollapsibleTrigger>
-        <CollapsibleContent>
+        <CollapsibleContent className="w-full">
           {loadingGetTasks ? (
             <div className="h-[300px] w-full flex items-center justify-center">
               <Loader className="h-12 w-12" />

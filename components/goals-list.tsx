@@ -91,15 +91,7 @@ const GoalListItem = ({ goal }: { goal: GoalPreview }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div>
-        <span className="text-sm mb-2 block">Progress</span>
-        <div className="flex items-center gap-2">
-          <Progress value={goal.progress} />
-          <span className="font-bold">{goal?.progress}%</span>
-        </div>
-      </div>
-      <div className="flex gap-2 flex-col mt-4">
-        <GoalListItemDates goal={goal} />
+      <div className="flex gap-4 flex-col mt-4">
         <div onClick={(e) => e.preventDefault}>
           <ComboboxPopover
             matchContainerSize
@@ -118,6 +110,7 @@ const GoalListItem = ({ goal }: { goal: GoalPreview }) => {
             }}
           />
         </div>
+        <GoalListItemDates goal={goal} />
       </div>
       <div>
         <div className="flex gap-2">
@@ -157,7 +150,7 @@ const GoalListItemDates = ({ goal }: { goal: GoalPreview }) => {
   }
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="flex md:items-center justify-between flex-col md:flex-row">
       <div>
         <DatePicker
           value={goal?.dueDate ? new Date(goal?.dueDate) : undefined}
@@ -168,7 +161,7 @@ const GoalListItemDates = ({ goal }: { goal: GoalPreview }) => {
           }}
         />
       </div>
-      <p className={color}>{diffCopy}</p>
+      <p className={cn(color, "mt-1")}>{diffCopy}</p>
     </div>
   )
 }

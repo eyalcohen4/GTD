@@ -46,6 +46,7 @@ import { FormProperty } from "@/components/form-properties"
 import { useProjects } from "@/components/providers/projects-provider"
 import { TaskListItem } from "@/components/task-list-item"
 import { TasksList } from "@/components/tasks-list"
+import { TimeLeft } from "@/components/time-left"
 
 export default function GoalPage({
   params: { id },
@@ -123,11 +124,6 @@ const GoalHeader = ({ goal }: { goal: Goal }) => {
     return goalsStatuses.find((status) => status.value === goal?.status)
   }, [goal])
 
-  const difference = dayjs(goal.dueDate).diff(dayjs(), "day")
-  const diffCopy =
-    difference > 0
-      ? `${difference} days left`
-      : `${Math.abs(difference)} days overdue`
   return (
     <div className="md:px-8 px-4 flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -173,6 +169,7 @@ const GoalHeader = ({ goal }: { goal: Goal }) => {
                 })
               }}
             />
+            <TimeLeft date={goal?.dueDate} />
           </div>
         </div>
         <div className="flex flex-col gap-2 w-full">

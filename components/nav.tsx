@@ -184,7 +184,18 @@ export const NavItem = ({
           style={{ background: item.color }}
         ></div>
       ) : null}
-      {item.icon ? <item.icon className={"h-4 w-4"} /> : null}
+      {item.icon ? (
+        <item.icon
+          className={"h-4 w-4"}
+          style={
+            item.color
+              ? {
+                  color: item.color,
+                }
+              : {}
+          }
+        />
+      ) : null}
       <span>{item.name}</span>
     </Link>
   )
