@@ -1,7 +1,4 @@
-import { PrismaClient } from "@prisma/client"
-
-import { ContextInput } from "@/types/context"
-import { ProjectInput } from "@/types/project"
+import { ContextInput, UpdateContextInput } from "@/types/context"
 import prisma from "@/lib/db"
 
 export const createContext = async (input: ContextInput) => {
@@ -25,5 +22,22 @@ export const getContexts = async (userId: string) => {
         id: userId,
       },
     },
+  })
+}
+
+export const getContext = async (id: string) => {
+  return prisma.context.findUnique({
+    where: {
+      id,
+    },
+  })
+}
+
+export const updateContext = async (id: string, data: UpdateContextInput) => {
+  return prisma.context.update({
+    where: {
+      id,
+    },
+    data,
   })
 }

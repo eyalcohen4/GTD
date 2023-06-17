@@ -17,4 +17,10 @@ export const contextSchema = z.object({
   updatedAt: z.date(),
 })
 
+export const updateContextInputSchema = z.object({
+  title: z.string().optional(),
+  color: z.string().optional(),
+})
+
+export type UpdateContextInput = z.infer<typeof updateContextInputSchema>
 export type Context = z.infer<typeof contextSchema>

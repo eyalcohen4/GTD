@@ -46,6 +46,7 @@ export const TasksList = ({
   timeRange,
   includeCompleted,
   showStatusDescription = true,
+  groupBy,
 }: {
   statuses?: string[]
   fullWidth?: boolean
@@ -59,8 +60,10 @@ export const TasksList = ({
     to?: string
   }
   showStatusDescription?: boolean
+  groupBy?: "project" | "context"
 }) => {
   const { projects } = useProjects()
+  const { contexts } = useContexts()
 
   const statusOptions = useMemo(
     () =>
@@ -72,6 +75,11 @@ export const TasksList = ({
   const projectOptions = useMemo(
     () => projects?.find(({ id }) => id === projectId),
     [projects]
+  )
+
+  const contextOptions = useMemo(
+    () => contexts?.find(({ id }) => id === contextId),
+    [contexts]
   )
 
   // add here a view
@@ -130,7 +138,10 @@ export const TasksList = ({
                   <statusOptions.icon className="text-slate-950 dark:text-white h-5 w-5" />
                 ) : null}
                 <p className="text-lg font-semibold leading-none tracking-tight text-left">
-                  {title || statusOptions?.label || projectOptions?.title}
+                  {title ||
+                    statusOptions?.label ||
+                    projectOptions?.title ||
+                    contextOptions?.title}
                 </p>
               </div>
               {showStatusDescription ? (

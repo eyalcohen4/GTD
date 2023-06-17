@@ -48,6 +48,7 @@ import { Editor } from "@/components/editor"
 import { Filter } from "@/components/filter"
 import { useContexts } from "@/components/providers/contexts-provider"
 import { useGoals } from "@/components/providers/goals-provider"
+import { TaskGroup } from "@/components/task-group"
 import { TaskListItem } from "@/components/task-list-item"
 import { TimeLeft } from "@/components/time-left"
 
@@ -237,38 +238,6 @@ const ProjectTasksList = ({
       {sortedTasksGroupedByStatus?.map(({ status, tasks }) => (
         <TaskGroup status={status} tasks={tasks} />
       ))}
-    </div>
-  )
-}
-
-const TaskGroup = ({
-  status,
-  tasks,
-}: {
-  status: StatusConfig
-  tasks: TaskPreview[]
-}) => {
-  return (
-    <div key={status.label} className="flex flex-col">
-      <Collapsible defaultOpen>
-        <CollapsibleTrigger className="h-[40px] w-full">
-          <div className="flex h-[40px] px-4 md:px-8 items-center justify-between bg-secondary w-full">
-            <div className="flex gap-2 items-center">
-              {status?.icon ? <status.icon /> : null}
-              <h3 className="text-md font-semibold tracking-tight">
-                {status.label}
-              </h3>
-              <Badge className="ml-4">{tasks?.length}</Badge>
-            </div>
-            <ChevronDown />
-          </div>
-        </CollapsibleTrigger>
-        <CollapsibleContent className="h-full">
-          {tasks.map((task) => (
-            <TaskListItem task={task} key={task.id} />
-          ))}
-        </CollapsibleContent>
-      </Collapsible>
     </div>
   )
 }
