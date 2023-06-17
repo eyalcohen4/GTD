@@ -9,7 +9,7 @@ export default function StatusPage({
 }) {
   return (
     <div>
-      <TasksList status={status} groupBy="project" />
+      <TasksList status={status} includeCompleted />
     </div>
   )
 }
