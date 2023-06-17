@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 
 import { ContextsProvider } from "./providers/contexts-provider"
+import { GoalsProvider } from "./providers/goals-provider"
 import { ProjectsProvider } from "./providers/projects-provider"
 import { TasksProvider } from "./providers/tasks-provider"
 
@@ -24,9 +25,11 @@ export default function ClientProvider({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <ReactQueryDevtools initialIsOpen={false} />
       <ContextsProvider>
-        <ProjectsProvider>
-          <TasksProvider>{children}</TasksProvider>
-        </ProjectsProvider>
+        <GoalsProvider>
+          <ProjectsProvider>
+            <TasksProvider>{children}</TasksProvider>
+          </ProjectsProvider>
+        </GoalsProvider>
       </ContextsProvider>
     </QueryClientProvider>
   )

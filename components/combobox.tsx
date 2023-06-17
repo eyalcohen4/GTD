@@ -45,14 +45,16 @@ export function ComboboxPopover({
   name,
   type,
   matchContainerSize,
+  iconWithColor = true,
 }: {
   value?: Option | Option[] | null
   name: string
-  type: "project" | "context" | "status"
+  type: "project" | "context" | "status" | "goal"
   items: Option[]
   loading?: boolean
   multiple?: boolean
   matchContainerSize?: boolean
+  iconWithColor?: boolean
   onChange: (option: Option | Option[] | null) => void
 }) {
   const [open, setOpen] = React.useState(false)
@@ -135,6 +137,7 @@ export function ComboboxPopover({
             selected={selected}
             multipleSelected={multipleSelected}
             name={name}
+            iconWithColor={iconWithColor}
             remove={(value) => handleMultipleSelect(value || "")}
           />
         </PopoverTrigger>
@@ -195,7 +198,12 @@ export function ComboboxPopover({
                         >
                           <div className="flex items-center">
                             {item?.icon ? (
-                              <item.icon className={cn("mr-2 h-4 w-4")} />
+                              <item.icon
+                                className={cn("mr-2 h-4 w-4")}
+                                style={
+                                  iconWithColor ? { color: item.color } : {}
+                                }
+                              />
                             ) : null}
                             {item?.color && !item?.icon ? (
                               <div className="flex items-center justify-center w-6 h-6 rounded-full mr-2">
@@ -261,12 +269,14 @@ const Trigger = ({
   selected,
   multipleSelected,
   remove,
+  iconWithColor,
   name,
 }: {
   loading?: boolean
   selected?: Option | null
   multipleSelected?: Option[]
   name: string
+  iconWithColor?: boolean
   remove?: (value?: string) => void
 }) => {
   return (
@@ -313,7 +323,12 @@ const Trigger = ({
             </div>
           ) : null}
           {selected.icon ? (
-            <selected.icon className="mr-2 h-4 w-4 shrink-0 text-slate-950 dark:text-white" />
+            <selected.icon
+              className="mr-2 h-4 w-4 shrink-0 text-slate-950 dark:text-white"
+              style={
+                iconWithColor ? { color: selected.color || "text-white" } : {}
+              }
+            />
           ) : null}
           <span className="text-slate-950 dark:text-white">
             {selected.label}

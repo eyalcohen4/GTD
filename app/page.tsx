@@ -1,10 +1,15 @@
+import { Goals } from "@/components/goals"
+import { Greeting } from "@/components/greeting"
 import { AppLayout } from "@/components/layouts/app-layout"
 import { TasksList } from "@/components/tasks-list"
 
 export default async function IndexPage() {
   return (
     <AppLayout>
-      <TasksList status="INBOX" />
+      <div className="flex flex-col gap-12 px-8">
+        <Greeting />
+        <Goals />
+      </div>
     </AppLayout>
   )
 }

@@ -13,9 +13,12 @@ export const projectInputSchema = z.object({
 export const updateProjectInputSchema = z.object({
   title: z.string().optional(),
   content: z.string().optional(),
-  status: z.string().optional(),
+  status: z
+    .enum(["NOT_STARTED", "IN_PROGRESS", "ON_HOLD", "COMPLETED"])
+    .optional(),
   dueDate: z.string().optional(),
   color: z.string().optional(),
+  goal: z.string().optional(),
   isDeleted: z.boolean().optional(),
   completed: z.boolean().optional(),
   reviewFrequencyDays: z.number().optional(),
@@ -37,6 +40,7 @@ export const projectSchema = z.object({
   updatedAt: z.string(),
   lastReview: z.string().optional(),
   reviewFrequencyDays: z.number().optional(),
+  goalId: z.string().optional(),
   progress: z.object({
     all: z.number(),
     completed: z.number(),

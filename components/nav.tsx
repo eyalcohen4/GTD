@@ -94,35 +94,16 @@ export const Nav = () => {
     <nav className="flex flex-col gap-4 w-full">
       <ScrollArea>
         <div className="flex flex-col gap-4">
-          <div
+          <Link
+            href="/"
             className={
               "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <Home className="h-4 w-4" />
             <span className="rounded-md text-lg font-semibold py-1">Home</span>
-          </div>
-          <div
-            className={
-              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
-            }
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              className="lucide lucide-goal h-4 w-4"
-            >
-              <path d="M12 13V2l8 4-8 4" />
-              <path d="M20.55 10.23A9 9 0 1 1 8 4.94" />
-              <path d="M8 10a5 5 0 1 0 8.9 2.02" />
-            </svg>
-            <span className="rounded-md text-lg font-semibold py-1">Goals</span>
-          </div>
+          </Link>
+
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
               <Filter className="h-4 w-4" />

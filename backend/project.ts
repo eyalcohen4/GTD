@@ -35,6 +35,8 @@ export const updateProject = async (id: string, input: UpdateProjectInput) => {
       isDeleted: input.isDeleted,
       color: input.color,
       completed: input.completed,
+      goalId: input.goal,
+      status: input.status,
     },
   })
 }

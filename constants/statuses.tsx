@@ -2,11 +2,16 @@ import {
   Archive,
   Bookmark,
   Calendar,
+  Check,
+  Circle,
   Clock1,
   FastForward,
   Hourglass,
   Inbox,
   LucideProps,
+  Pause,
+  PlayCircle,
+  XCircle,
 } from "lucide-react"
 
 export type StatusConfig = {
@@ -18,6 +23,51 @@ export type StatusConfig = {
   icon?: (props: LucideProps) => JSX.Element
   order: number
 }
+
+export const goalsStatuses: Array<StatusConfig> = [
+  {
+    value: "NOT_STARTED",
+    label: "Not Started",
+    description: "Here you can find everything you captured",
+    slug: "not-started",
+    color: "#7C83FD",
+    icon: Circle,
+    order: 1,
+  },
+  {
+    value: "IN_PROGRESS",
+    label: "In Progress",
+    slug: "in-progress",
+    color: "#FFB703",
+    icon: PlayCircle,
+    order: 2,
+  },
+  {
+    value: "COMPLETED",
+    label: "Completed",
+    slug: "completed",
+    color: "#009F5D",
+    icon: Check,
+    order: 3,
+  },
+
+  {
+    value: "ON_HOLD",
+    label: "On Hold",
+    slug: "on-hold",
+    color: "#FF6B69",
+    icon: Pause,
+    order: 4,
+  },
+  {
+    value: "CANCELLED",
+    label: "Cancelled",
+    slug: "cancelled",
+    color: "#FF0000",
+    icon: XCircle,
+    order: 5,
+  },
+]
 
 export const statuses: Array<StatusConfig> = [
   {

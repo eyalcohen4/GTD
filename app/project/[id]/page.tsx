@@ -3,7 +3,7 @@
 import { useContext, useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
 import { updateProject } from "@/backend/project"
-import { StatusConfig, statuses } from "@/constants/statuses"
+import { StatusConfig, goalsStatuses, statuses } from "@/constants/statuses"
 import dayjs from "dayjs"
 import {
   Check,
@@ -58,6 +58,7 @@ import {
   FormPropertyValue,
 } from "@/components/form-properties"
 import { useContexts } from "@/components/providers/contexts-provider"
+import { useGoals } from "@/components/providers/goals-provider"
 import { useProjects } from "@/components/providers/projects-provider"
 import { TaskListItem } from "@/components/task-list-item"
 import { TasksList } from "@/components/tasks-list"
@@ -286,6 +287,7 @@ const TaskGroup = ({
 const ProjectHeader = ({ project }: { project: Project }) => {
   const { updateProject } = useUpdateProject()
   const { deleteProject } = useDeleteProject()
+  const { goals } = useGoals()
   const [title, setTitle] = useState(project?.title || "")
   const router = useRouter()
 
@@ -306,12 +308,37 @@ const ProjectHeader = ({ project }: { project: Project }) => {
     router.push(`/`)
   }
 
+  const goalsOptions = useMemo(
+    () =>
+      goals?.map((goal) => ({
+        value: goal.id,
+        label: goal.title,
+      })),
+    [goals]
+  )
+
+  const selectedGoal = useMemo(() => {
+    if (!project?.goalId) {
+      return null
+    }
+
+    return goalsOptions?.find((goal) => goal.value === project.goalId)
+  }, [project, goalsOptions])
+
   const progressPercentage = useMemo(() => {
     if (project?.progress?.all && project?.progress?.completed) {
       const num = (project.progress.completed / project.progress.all) * 100
       return Math.round(num)
     }
     return 0 // or any other default value you want
+  }, [project])
+
+  const selectedStatus = useMemo(() => {
+    if (!project?.status) {
+      return null
+    }
+
+    return goalsStatuses?.find((status) => status.value === project.status)
   }, [project])
 
   return (
@@ -366,20 +393,52 @@ const ProjectHeader = ({ project }: { project: Project }) => {
         </div>
         <Separator />
       </div>
-      <div className="w-full flex flex-col md:flex-row gap-8">
-        {/* <div className="flex flex-col gap-2">
+      <div className="w-full flex flex-col justify-between items-center md:flex-row gap-8">
+        <div className="flex flex-col gap-2 w-full">
           <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
             Goal
           </h3>
           <div className="flex flex-col gap-2">
-            <ComboboxPopover />
+            <ComboboxPopover
+              items={goalsOptions}
+              onChange={(option) =>
+                // @ts-ignore
+                handleUpdateProject({ goal: option?.value as string })
+              }
+              value={selectedGoal}
+              name="goal"
+              type="goal"
+            />
           </div>
-        </div> */}
-        <div className="flex flex-col gap-2">
+        </div>
+
+        <div className="flex flex-col gap-2 w-full">
+          <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
+            Status
+          </h3>
+          <div className="">
+            <ComboboxPopover
+              matchContainerSize
+              type="status"
+              items={goalsStatuses}
+              value={selectedStatus}
+              name="Status"
+              onChange={(option) => {
+                if (Array.isArray(option)) {
+                  return
+                }
+
+                // @ts-ignore
+                handleUpdateProject({ status: option?.value || "NOT_STARTED" })
+              }}
+            />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2 w-full">
           <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
             Due Date
           </h3>
-          <div className="w-48">
+          <div className="">
             <DatePicker
               value={project?.dueDate ? new Date(project?.dueDate) : undefined}
               onChange={(value) => {
@@ -390,39 +449,39 @@ const ProjectHeader = ({ project }: { project: Project }) => {
             />
           </div>
         </div>
-        <div className="flex flex-col gap-2 w-full">
-          <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
-            Progress
-          </h3>
-          <div className="flex flex-col gap-2">
-            <div className="flex gap-4 items-center">
-              <Progress value={progressPercentage} />
-              <span className="text-lg font-medium">
-                {isNaN(progressPercentage) ? 0 : progressPercentage}%
-              </span>
-            </div>
-            <div className="flex gap-2 flex-wrap">
-              <Badge className="flex gap-2">
-                <span>Tasks</span>
-                {project?.progress?.all}
-              </Badge>
-              <Badge className="flex gap-2">
-                <Check className="h-4 w-4" />
-                {project?.progress?.completed}
-              </Badge>
-              <Badge className="flex gap-2">
-                <Inbox className="h-4 w-4" />
-                {project?.progress?.inbox}
-              </Badge>
-              <Badge className="flex gap-2">
-                <Hourglass className="h-4 w-4" />
-                {project?.progress?.waitingFor}
-              </Badge>
-              <Badge className="flex gap-2">
-                <FastForward className="h-4 w-4" />
-                {project?.progress?.nextAction}
-              </Badge>
-            </div>
+      </div>
+      <div className="flex flex-col gap-2 w-full">
+        <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
+          Progress
+        </h3>
+        <div className="flex flex-col gap-2">
+          <div className="flex gap-4 items-center">
+            <Progress value={progressPercentage} />
+            <span className="text-lg font-medium">
+              {isNaN(progressPercentage) ? 0 : progressPercentage}%
+            </span>
+          </div>
+          <div className="flex gap-2 flex-wrap">
+            <Badge className="flex gap-2">
+              <span>Tasks</span>
+              {project?.progress?.all}
+            </Badge>
+            <Badge className="flex gap-2">
+              <Check className="h-4 w-4" />
+              {project?.progress?.completed}
+            </Badge>
+            <Badge className="flex gap-2">
+              <Inbox className="h-4 w-4" />
+              {project?.progress?.inbox}
+            </Badge>
+            <Badge className="flex gap-2">
+              <Hourglass className="h-4 w-4" />
+              {project?.progress?.waitingFor}
+            </Badge>
+            <Badge className="flex gap-2">
+              <FastForward className="h-4 w-4" />
+              {project?.progress?.nextAction}
+            </Badge>
           </div>
         </div>
       </div>
