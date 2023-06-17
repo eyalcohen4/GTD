@@ -13,6 +13,10 @@ export function useGetTasks(params?: {
   contextId?: string
   statuses?: string[]
   contexts?: string[]
+  timeRange?: {
+    from?: string
+    to?: string
+  }
 }): {
   isLoading: boolean
   tasks: TaskPreview[]
@@ -43,6 +47,14 @@ export function useGetTasks(params?: {
 
     if (params?.contexts?.length) {
       url.searchParams.append("contexts", params?.contexts.join(",") || "")
+    }
+
+    if (params?.timeRange?.from) {
+      url.searchParams.append("from", params?.timeRange?.from)
+    }
+
+    if (params?.timeRange?.to) {
+      url.searchParams.append("from", params?.timeRange?.to)
     }
 
     return url.href

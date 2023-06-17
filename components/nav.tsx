@@ -36,23 +36,18 @@ const statusesNavItems = statuses.map((status) => ({
 const timingNavItems = [
   {
     name: "Today",
-    href: "/today",
+    href: "/time/today",
     icon: Sunrise,
   },
   {
     name: "Weekly",
-    href: "/week",
+    href: "/time/week",
     icon: () => <div>07</div>,
   },
   {
     name: "Monthly",
-    href: "/month",
+    href: "/time/month",
     icon: () => <div>30</div>,
-  },
-  {
-    name: "All",
-    href: "/all",
-    icon: Globe,
   },
 ]
 
@@ -178,7 +173,7 @@ export const NavItem = ({
         dark:hover:bg-slate-800 group flex w-full items-center border border-transparent py-1 hover:underline text-muted-foreground`,
         isSubItem ? "text-sm text-muted-foreground pl-8" : "",
         isActive
-          ? "text-slate-950 dark:text-white bg-slate-800 font-bold rounded-none"
+          ? "text-slate-950 dark:text-white bg-slate-200 dark:bg-slate-800 font-bold rounded-none"
           : ""
       )}
       href={item.href}

@@ -5,14 +5,21 @@ import dayjs from "dayjs"
 import { Box, Calendar, Flower2, Locate } from "lucide-react"
 
 import { TaskPreview } from "@/types/task"
+import { cn } from "@/lib/utils"
 import { useUpdateTask } from "@/hooks/tasks"
 
 import { Checkbox } from "./ui/checkbox"
 
-export const TaskListItem = ({ task }: { task: TaskPreview }) => {
+export const TaskListItem = ({
+  task,
+  fullWidth,
+}: {
+  task: TaskPreview
+  fullWidth?: boolean
+}) => {
   return (
     <Link href={`/task/${task.id}`} className="h-[50px] task-list-item block">
-      <TaskListItemContainer>
+      <TaskListItemContainer fullWidth={fullWidth}>
         <TaskLead task={task} />
         <div className="w-full flex-1 justify-end hidden md:flex">
           <TaskBadges task={task} />
@@ -22,10 +29,20 @@ export const TaskListItem = ({ task }: { task: TaskPreview }) => {
   )
 }
 
-const TaskListItemContainer = ({ children }: { children: ReactNode }) => {
+const TaskListItemContainer = ({
+  children,
+  fullWidth,
+}: {
+  children: ReactNode
+  fullWidth?: boolean
+}) => {
   return (
     <div className="border-b hover:bg-slate-200 dark:hover:bg-slate-900 h-full">
-      <div className="px-8 flex items-center justify-between h-full gap-4">
+      <div
+        className={cn("px-8 flex items-center justify-between h-full gap-4", {
+          "px-0": fullWidth,
+        })}
+      >
         {children}
       </div>
     </div>

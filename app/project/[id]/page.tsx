@@ -1,10 +1,8 @@
 "use client"
 
-import { useContext, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { useRouter } from "next/navigation"
-import { updateProject } from "@/backend/project"
 import { StatusConfig, goalsStatuses, statuses } from "@/constants/statuses"
-import dayjs from "dayjs"
 import {
   Check,
   ChevronDown,
@@ -13,11 +11,10 @@ import {
   Inbox,
   Loader,
   MoreHorizontal,
-  SeparatorVertical,
   X,
 } from "lucide-react"
 
-import { Project, ProjectInput, UpdateProjectInput } from "@/types/project"
+import { Project, UpdateProjectInput } from "@/types/project"
 import { TaskPreview } from "@/types/task"
 import {
   useDeleteProject,
@@ -29,7 +26,6 @@ import useDebounce from "@/hooks/use-debounce"
 import { toast } from "@/hooks/use-toast"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
 import {
   Collapsible,
   CollapsibleContent,
@@ -39,29 +35,19 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
 import { Progress } from "@/components/ui/progress"
-import { SelectSeparator } from "@/components/ui/select"
 import { Separator } from "@/components/ui/seperator"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Color, ColorPicker } from "@/components/color-picker"
+import { ColorPicker } from "@/components/color-picker"
 import { ComboboxPopover, Option } from "@/components/combobox"
 import { DatePicker } from "@/components/date-picker"
 import { Editor } from "@/components/editor"
 import { Filter } from "@/components/filter"
-import {
-  FormProperty,
-  FormPropertyLabel,
-  FormPropertyValue,
-} from "@/components/form-properties"
 import { useContexts } from "@/components/providers/contexts-provider"
 import { useGoals } from "@/components/providers/goals-provider"
-import { useProjects } from "@/components/providers/projects-provider"
 import { TaskListItem } from "@/components/task-list-item"
-import { TasksList } from "@/components/tasks-list"
 
 export default function ProjectPage({
   params: { id },

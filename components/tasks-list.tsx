@@ -21,6 +21,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible"
+import { cn } from "@/lib/utils"
 
 dayjs.extend(relativeTime)
 
@@ -36,14 +37,23 @@ export const columns: ColumnDef<Task>[] = [
 ]
 
 export const TasksList = ({
+  fullWidth,
+  title,
   status,
   projectId,
   contextId,
+  timeRange,
   showStatusDescription = true,
 }: {
+  fullWidth?: boolean
+  title?: string
   status?: string
   projectId?: string
   contextId?: string
+  timeRange?: {
+    from?: string
+    to?: string
+  }
   showStatusDescription?: boolean
 }) => {
   const { projects } = useProjects()
@@ -67,6 +77,7 @@ export const TasksList = ({
     statuses: statusOptions?.value ? [statusOptions?.value] : [],
     projectId: projectId || "",
     contexts: contextId ? [contextId] : [],
+    timeRange,
   })
 
   const sortedTasks = useMemo(
@@ -97,14 +108,18 @@ export const TasksList = ({
     <div>
       <Collapsible defaultOpen>
         <CollapsibleTrigger className="w-full mb-2">
-          <div className="flex gap-2 w-full justify-between px-8">
+          <div
+            className={cn("flex gap-2 w-full justify-between px-8", {
+              "px-0": fullWidth,
+            })}
+          >
             <div className="flex-col gap-2 justify-center flex">
               <div className="flex items-center justify-start gap-2">
                 {statusOptions?.icon ? (
                   <statusOptions.icon className="text-slate-950 dark:text-white h-5 w-5" />
                 ) : null}
                 <p className="text-lg font-semibold leading-none tracking-tight text-left">
-                  {statusOptions?.label || projectOptions?.title}
+                  {title || statusOptions?.label || projectOptions?.title}
                 </p>
               </div>
               {showStatusDescription ? (
@@ -126,7 +141,7 @@ export const TasksList = ({
           ) : (
             <div className="flex flex-col">
               {sortedTasks?.map((task) => (
-                <TaskListItem task={task} key={task.id} />
+                <TaskListItem task={task} key={task.id} fullWidth={fullWidth} />
               ))}
             </div>
           )}
