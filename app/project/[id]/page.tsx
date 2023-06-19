@@ -166,6 +166,7 @@ const ProjectTasksList = ({
   const { isLoading, tasks } = useGetTasks({
     projectId: id,
     statuses: statusesFilter,
+    includeCompleted: true,
   })
 
   const tasksGroupedByStatus = useMemo(() => {

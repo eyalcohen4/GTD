@@ -16,6 +16,7 @@ export const updateProjectInputSchema = z.object({
   status: z
     .enum(["NOT_STARTED", "IN_PROGRESS", "ON_HOLD", "COMPLETED"])
     .optional(),
+
   dueDate: z.string().optional(),
   color: z.string().optional(),
   goal: z.string().optional(),

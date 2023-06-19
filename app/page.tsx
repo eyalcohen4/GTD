@@ -9,9 +9,18 @@ import { TasksList } from "@/components/tasks-list"
 export default async function IndexPage() {
   return (
     <AppLayout>
-      <div className="flex flex-col gap-12 px-8 w-full justify-between">
-        <Greeting />
-        <Goals />
+      <div className="flex flex-col gap-12 w-full justify-between">
+        <div className="px-8">
+          <Greeting />
+          <Goals />
+        </div>
+        <TasksList
+          fullWidth
+          title="Today"
+          timeRange={{
+            to: dayjs().startOf("day").toISOString(),
+          }}
+        />
         <TasksList
           fullWidth
           statuses={statuses
