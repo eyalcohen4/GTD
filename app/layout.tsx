@@ -40,7 +40,7 @@ export default function RootLayout({ children, task }: RootLayoutProps) {
   return (
     <>
       <HighlightInit
-        projectId={"odz6x4ep"}
+        projectId={"2d12z3er"}
         tracingOrigins
         networkRecording={{
           enabled: true,
