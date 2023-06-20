@@ -1,5 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
+import { HighlightInit } from "@highlight-run/next/highlight-init"
 import { Analytics } from "@vercel/analytics/react"
 import { getSession, useSession } from "next-auth/react"
 
@@ -38,6 +39,15 @@ interface RootLayoutProps {
 export default function RootLayout({ children, task }: RootLayoutProps) {
   return (
     <>
+      <HighlightInit
+        projectId={"odz6x4ep"}
+        tracingOrigins
+        networkRecording={{
+          enabled: true,
+          recordHeadersAndBody: true,
+          urlBlocklist: [],
+        }}
+      />
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
