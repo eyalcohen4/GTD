@@ -284,14 +284,6 @@ const ProjectHeader = ({ project }: { project: Project }) => {
     return goalsOptions?.find((goal) => goal.value === project.goalId)
   }, [project, goalsOptions])
 
-  const progressPercentage = useMemo(() => {
-    if (project?.progress?.all && project?.progress?.completed) {
-      const num = (project.progress.completed / project.progress.all) * 100
-      return Math.round(num)
-    }
-    return 0 // or any other default value you want
-  }, [project])
-
   const selectedStatus = useMemo(() => {
     if (!project?.status) {
       return null
@@ -410,15 +402,9 @@ const ProjectHeader = ({ project }: { project: Project }) => {
       </div>
       <div className="flex flex-col gap-2 w-full">
         <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
-          Progress
+          Summary
         </h3>
         <div className="flex flex-col gap-2">
-          <div className="flex gap-4 items-center">
-            <Progress value={progressPercentage} />
-            <span className="text-lg font-medium">
-              {isNaN(progressPercentage) ? 0 : progressPercentage}%
-            </span>
-          </div>
           <div className="flex gap-2 flex-wrap">
             <Badge className="flex gap-2">
               <span>Tasks</span>

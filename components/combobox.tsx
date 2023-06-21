@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/popover"
 
 import { CreateContext } from "./create-context"
-import { CreateProject } from "./create-project"
+import { ProjectForm } from "./project-form"
 import { ScrollArea } from "./ui/scroll-area"
 
 export type Option = {
@@ -32,7 +32,7 @@ export type Option = {
 }
 
 const CREATE_COMPONENTS = {
-  project: CreateProject,
+  project: ProjectForm,
   context: CreateContext,
 }
 

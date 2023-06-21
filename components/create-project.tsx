@@ -1,73 +1,35 @@
+"use client"
+
 import { useState } from "react"
-import { Loader } from "lucide-react"
-import { useSession } from "next-auth/react"
 
-import { cn } from "@/lib/utils"
-import { useCreateContext, useGetContexts } from "@/hooks/contexts"
-import { useCreateProject } from "@/hooks/projects"
+import { toast } from "@/hooks/use-toast"
 
-import { ColorPicker } from "./color-picker"
+import { ProjectForm } from "./project-form"
 import { Button } from "./ui/button"
-import { Input } from "./ui/input"
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog"
 
-export const CreateProject = ({
-  onCreated,
-  onCancel,
-}: {
-  onCreated?: () => void
-  onCancel?: () => void
-}) => {
-  const session = useSession()
-  const [color, setColor] = useState("#000000")
-  const [title, setTitle] = useState("")
-  const [error, setError] = useState("")
+export const CreateProject = () => {
+  const [open, setOpen] = useState(false)
 
-  const { createProject, isLoading } = useCreateProject()
-
-  const handleColorChange = (color: string) => {
-    setColor(color)
-  }
-
-  const handleCreate = async () => {
-    if (!title) {
-      setError("Please enter a name")
-    }
-
-    await createProject({
-      title,
-      color,
-      content: "",
-      userId: session?.data?.user.id,
+  const handleCreated = () => {
+    setOpen(false)
+    toast({
+      title: "Project created",
+      description: "Your project has been created",
+      variant: "success",
     })
-
-    onCreated && onCreated()
   }
 
   return (
-    <div className="flex items-center flex-col gap-4">
-      <div className="flex gap-2">
-        <ColorPicker color={color} onChange={handleColorChange} />
-        <Input
-          placeholder="New project"
-          className={cn(`h-8 w-full`, {
-            "border-red-500": error,
-          })}
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-      </div>
-      <p className="text-red-500">{error}</p>
-      <div className="flex gap-2 items-center justify-between">
-        <Button
-          className="h-8 w-full bg-transparent dark:text-white text-slate-950"
-          onClick={onCancel}
-        >
-          Cancel
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger>
+        <Button>
+          <span className="text-sm font-semibold">New Project</span>
         </Button>
-        <Button className="h-8 w-full" onClick={handleCreate}>
-          Create
-        </Button>
-      </div>
-    </div>
+      </DialogTrigger>
+      <DialogContent>
+        <ProjectForm onCreated={handleCreated} />
+      </DialogContent>
+    </Dialog>
   )
 }

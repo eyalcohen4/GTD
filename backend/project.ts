@@ -42,7 +42,7 @@ export const updateProject = async (id: string, input: UpdateProjectInput) => {
 }
 
 export const getProjects = async (userId: string) => {
-  return prisma.project.findMany({
+  const projects = await prisma.project.findMany({
     where: {
       user: {
         id: userId,
@@ -50,6 +50,18 @@ export const getProjects = async (userId: string) => {
       isDeleted: false,
     },
   })
+
+  const projectsWithProgress = await Promise.all(
+    projects.map(async (project) => {
+      const progress = await getProjectTasksCount(project.id)
+      return {
+        ...project,
+        progress,
+      }
+    })
+  )
+
+  return projectsWithProgress
 }
 
 export const deleteProject = async (id: string) => {
