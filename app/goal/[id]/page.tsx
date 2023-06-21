@@ -65,15 +65,15 @@ export default function GoalPage({
         <GoalHeader goal={goal} />
       ) : null}
       <div>
-        <Projects />
+        <Projects goalId={id} />
       </div>
     </div>
   )
 }
 
-const Projects = () => {
+const Projects = ({ goalId }: { goalId: string }) => {
   const { projects } = useProjects()
-  const goalProjects = projects?.filter((project) => project.goalId)
+  const goalProjects = projects?.filter((project) => project.goalId === goalId)
 
   return (
     <div className="md:px-8 px-4 flex flex-col gap-4 mb-2 overflow-scroll">
