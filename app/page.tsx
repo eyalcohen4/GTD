@@ -29,7 +29,7 @@ export default async function IndexPage() {
             .map(({ value }) => value)}
           title="Today"
           timeRange={{
-            to: dayjs().startOf("day").toISOString(),
+            to: dayjs().endOf("day").toISOString(),
           }}
         />
         <TasksList statuses={["INBOX"]} title="Inbox" />

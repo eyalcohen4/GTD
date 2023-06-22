@@ -9,7 +9,7 @@ export default function TodayPage() {
       <TasksList
         title="Today"
         timeRange={{
-          to: dayjs().startOf("day").toISOString(),
+          to: dayjs().endOf("day").toISOString(),
         }}
         statuses={statuses
           .filter(({ value }) => value !== "COMPLETED")
