@@ -53,6 +53,7 @@ export const GET = async (request: Request) => {
     return error
   }
 }
+
 export const PATCH = async (request: Request) => {
   try {
     const session = await getServerSession(authOptions)

@@ -20,7 +20,7 @@ export default async function IndexPage() {
         <TasksList
           title="Overdue"
           timeRange={{
-            to: dayjs().startOf("day").add(-1, "day").toISOString(),
+            to: dayjs().endOf("day").subtract(1, "day").toISOString(),
           }}
         />
         <TasksList
