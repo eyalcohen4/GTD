@@ -119,6 +119,9 @@ const GoalListItem = ({ project }: { project: Project }) => {
             }}
           />
         </div>
+        <div className="my-2">
+          <ProjectListItemDates project={project} />
+        </div>
         <div className="flex flex-col gap-2">
           <div className="flex gap-2 flex-wrap">
             <Badge className="flex gap-2">
@@ -144,6 +147,41 @@ const GoalListItem = ({ project }: { project: Project }) => {
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+const ProjectListItemDates = ({ project }: { project: Project }) => {
+  const { updateProject } = useUpdateProject()
+  const difference = dayjs(project.dueDate).diff(dayjs(), "day")
+  const diffCopy =
+    difference > 0
+      ? `${difference} days left`
+      : `${Math.abs(difference)} days overdue`
+  const color = difference > 0 ? "text-green-800" : "text-red-800"
+
+  const handleUpdateProject = async (input: UpdateGoalInput) => {
+    await updateProject({ id: project.id, input })
+    toast({
+      title: "Project updated",
+      description: "Your project has been updated",
+      variant: "success",
+    })
+  }
+
+  return (
+    <div className="flex md:items-center justify-between flex-col md:flex-row">
+      <div>
+        <DatePicker
+          value={project?.dueDate ? new Date(project?.dueDate) : undefined}
+          onChange={(value) => {
+            handleUpdateProject({
+              dueDate: value?.toISOString(),
+            })
+          }}
+        />
+      </div>
+      <p className={cn(color, "mt-1")}>{diffCopy}</p>
     </div>
   )
 }
