@@ -9,6 +9,7 @@ import {
   Filter,
   Globe,
   Home,
+  LineChart,
   LucideIcon,
   Sunrise,
 } from "lucide-react"
@@ -88,7 +89,7 @@ export const Nav = () => {
   return (
     <nav className="flex flex-col gap-4 w-full">
       <ScrollArea>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <Link
             href="/"
             className={
@@ -105,17 +106,8 @@ export const Nav = () => {
               "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
-            <Home className="h-4 w-4" />
-            <span className="rounded-md text-lg font-semibold py-1">Home</span>
-          </Link>
-          <Link
-            href="/experiments"
-            className={
-              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
-            }
-          >
-            <Home className="h-4 w-4" />
-            <span className="rounded-md text-lg font-semibold py-1">Home</span>
+            <LineChart className="h-4 w-4" />
+            <span className="rounded-md text-lg font-semibold py-1">KPIs</span>
           </Link>
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">

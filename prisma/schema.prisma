@@ -180,8 +180,23 @@ model Kpi {
   project     Project?     @relation(fields: [projectId], references: [id])
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+  isDeleted   Boolean      @default(false)
   entries     KpiEntry[]
   experiments Experiment[]
+  targets     KpiTarget[]
+}
+
+model KpiTarget {
+  id        String  @id @default(uuid())
+  value     Float
+  kpiId     String
+  isDeleted Boolean @default(false)
+
+  kpi       Kpi      @relation(fields: [kpiId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+
+  targetDate DateTime
 }
 
 model KpiEntry {
@@ -189,8 +204,11 @@ model KpiEntry {
   date      DateTime
   value     Float
   kpiId     String
+  isDeleted Boolean  @default(false)
+
   kpi       Kpi      @relation(fields: [kpiId], references: [id])
   createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 model Experiment {
