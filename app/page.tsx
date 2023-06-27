@@ -14,9 +14,9 @@ export default async function IndexPage() {
         <div className="px-8 flex flex-col gap-6">
           <Greeting />
           <Goals />
-          <Projects />
         </div>
 
+        <Projects />
         <TasksList
           title="Overdue"
           timeRange={{

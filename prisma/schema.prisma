@@ -40,9 +40,9 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(uuid())
+  id            String       @id @default(uuid())
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
   accounts      Account[]
@@ -51,8 +51,11 @@ model User {
   Project       Project[]
   Task          Task[]
   Context       Context[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  kpis          Kpi[]
+  experiments   Experiment[]
+  Note          Note[]
 }
 
 model VerificationToken {
@@ -89,24 +92,39 @@ model Goal {
   tasks    Task[]
 }
 
+model Note {
+  id        String   @id @default(uuid())
+  title     String
+  content   String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  project   Project? @relation(fields: [projectId], references: [id])
+  projectId String?
+}
+
 model Project {
-  id                  String      @id @default(uuid())
+  id                  String       @id @default(uuid())
   title               String
   content             String
   dueDate             DateTime?
   color               String?
-  completed           Boolean     @default(false)
+  completed           Boolean      @default(false)
   status              GoalStatus?
   userId              String
-  user                User        @relation(fields: [userId], references: [id])
+  user                User         @relation(fields: [userId], references: [id])
   tasks               Task[]
-  goal                Goal?       @relation(fields: [goalId], references: [id])
+  goal                Goal?        @relation(fields: [goalId], references: [id])
   goalId              String?
-  createdAt           DateTime    @default(now())
-  updatedAt           DateTime    @updatedAt
+  createdAt           DateTime     @default(now())
+  updatedAt           DateTime     @updatedAt
   lastReview          DateTime?
   reviewFrequencyDays Int?
-  isDeleted           Boolean     @default(false)
+  isDeleted           Boolean      @default(false)
+  kpis                Kpi[]
+  experiments         Experiment[]
+  notes               Note[]
 }
 
 model Task {
@@ -150,4 +168,45 @@ model Context {
   tasks     Task[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Kpi {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  projectId   String?
+  project     Project?     @relation(fields: [projectId], references: [id])
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  entries     KpiEntry[]
+  experiments Experiment[]
+}
+
+model KpiEntry {
+  id        String   @id @default(uuid())
+  date      DateTime
+  value     Float
+  kpiId     String
+  kpi       Kpi      @relation(fields: [kpiId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Experiment {
+  id        String    @id @default(uuid())
+  title     String
+  thesis    String
+  goal      String
+  test      String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  projectId String?
+  project   Project?  @relation(fields: [projectId], references: [id])
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  startDate DateTime?
+  endDate   DateTime?
+  kpiId     String?
+  kpi       Kpi?      @relation(fields: [kpiId], references: [id])
 }

@@ -99,6 +99,24 @@ export const Nav = () => {
             <span className="rounded-md text-lg font-semibold py-1">Home</span>
           </Link>
 
+          <Link
+            href="/kpis"
+            className={
+              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+            }
+          >
+            <Home className="h-4 w-4" />
+            <span className="rounded-md text-lg font-semibold py-1">Home</span>
+          </Link>
+          <Link
+            href="/experiments"
+            className={
+              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+            }
+          >
+            <Home className="h-4 w-4" />
+            <span className="rounded-md text-lg font-semibold py-1">Home</span>
+          </Link>
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
               <Filter className="h-4 w-4" />

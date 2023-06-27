@@ -4,6 +4,7 @@ import { HighlightInit } from "@highlight-run/next/highlight-init"
 import { Analytics } from "@vercel/analytics/react"
 import { getSession, useSession } from "next-auth/react"
 
+import "cal-sans"
 import { siteConfig } from "@/config/site"
 import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"

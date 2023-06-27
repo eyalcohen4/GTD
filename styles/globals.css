@@ -72,6 +72,7 @@
 
 @layer base {
   * {
+    font-family: "Cal Sans";
     @apply border-border;
   }
   body {

@@ -1,10 +1,12 @@
 "use client"
 
+import { ReactNode } from "react"
 import Link from "next/link"
 import { updateProject } from "@/backend/project"
 import { goalsStatuses } from "@/constants/statuses"
 import dayjs from "dayjs"
 import {
+  Calendar,
   Check,
   FastForward,
   Hourglass,
@@ -24,7 +26,6 @@ import { ComboboxPopover } from "./combobox"
 import { DatePicker } from "./date-picker"
 import { useGoals } from "./providers/goals-provider"
 import { useProjects } from "./providers/projects-provider"
-import { Badge } from "./ui/badge"
 import { Card, CardTitle } from "./ui/card"
 import {
   DropdownMenu,
@@ -37,20 +38,17 @@ export const ProjectsList = () => {
   const { projects, loadingGetProjects } = useProjects()
 
   return (
-    <ul
-      role="list"
-      className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-    >
+    <ul role="list" className="flex flex-col">
       {loadingGetProjects ? (
         <Loader className="animate-spin" />
       ) : (
-        projects?.map((project) => <GoalListItem project={project} />)
+        projects?.map((project) => <ProjectListItem project={project} />)
       )}
     </ul>
   )
 }
 
-const GoalListItem = ({ project }: { project: Project }) => {
+const ProjectListItem = ({ project }: { project: Project }) => {
   const { projects } = useProjects()
   const { deleteProject } = useDeleteProject()
   const { updateProject } = useUpdateProject()
@@ -78,14 +76,113 @@ const GoalListItem = ({ project }: { project: Project }) => {
   )
 
   return (
-    <div
+    <Link
+      href={`/project/${project.id}`}
+      className="h-[50px] task-list-item block"
+    >
+      <div className="border-b hover:bg-slate-200 dark:hover:bg-slate-900 h-full px-8">
+        <div className={cn("flex items-center justify-between h-full gap-4")}>
+          <div className="flex gap-4 items-center max-w-full">
+            {project.title}
+          </div>
+
+          <div className="w-full flex-1 justify-end hidden md:flex">
+            <div className="flex gap-4 items-center text-sm">
+              {project?.status ? (
+                <Badge>
+                  <span
+                    className="flex items-center gap"
+                    style={{
+                      color: selectedStatus?.color || "",
+                    }}
+                  >
+                    {selectedStatus?.icon ? (
+                      <selectedStatus.icon className={cn("mr-2 h-4 w-4")} />
+                    ) : null}
+                    {selectedStatus?.label || ""}
+                  </span>
+                </Badge>
+              ) : null}
+              {project.dueDate ? (
+                <>
+                  <Badge>
+                    <Calendar className="h-4 w-4" />
+                    <p>{dayjs(project.dueDate).format("D MMM")}</p>
+                  </Badge>
+                </>
+              ) : null}
+              <Badge>
+                <div className="flex items-center gap-2">
+                  {project?.progress?.completed}
+                  <Check className="h-4 w-4" />
+                </div>
+                <div className="flex items-center gap-2">
+                  {project?.progress?.inbox}
+                  <Inbox className="h-4 w-4" />
+                </div>
+                <div className="flex items-center gap-2">
+                  {project?.progress?.nextAction}
+                  <FastForward className="h-4 w-4" />
+                </div>
+              </Badge>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+}
+
+const Badge = ({ children }: { children: ReactNode }) => {
+  return (
+    <div className="border rounded-md h-full flex items-center gap-2 px-2 py-1 text-xs">
+      {children}
+    </div>
+  )
+}
+
+const ProjectListItemDates = ({ project }: { project: Project }) => {
+  const { updateProject } = useUpdateProject()
+  const difference = dayjs(project.dueDate).diff(dayjs(), "day")
+  const diffCopy =
+    difference > 0
+      ? `${difference} days left`
+      : `${Math.abs(difference)} days overdue`
+  const color = difference > 0 ? "text-green-800" : "text-red-800"
+
+  const handleUpdateProject = async (input: UpdateGoalInput) => {
+    await updateProject({ id: project.id, input })
+    toast({
+      title: "Project updated",
+      description: "Your project has been updated",
+      variant: "success",
+    })
+  }
+
+  return (
+    <div className="flex md:items-center justify-between flex-col md:flex-row">
+      <div>
+        <DatePicker
+          value={project?.dueDate ? new Date(project?.dueDate) : undefined}
+          onChange={(value) => {
+            handleUpdateProject({
+              dueDate: value?.toISOString(),
+            })
+          }}
+        />
+      </div>
+      <p className={cn(color, "mt-1")}>{diffCopy}</p>
+    </div>
+  )
+}
+
+/** 
+ * 
+ * <div
       key={project.title}
       className="rounded-lg border bg-card text-card-foreground shadow-sm p-6"
     >
       <div className="flex items-center justify-between mb-4">
-        <Link href={`/project/${project.id}`} className="text-lg">
-          {project.title}
-        </Link>
         <DropdownMenu>
           <DropdownMenuTrigger>
             <MoreHorizontal />
@@ -148,40 +245,5 @@ const GoalListItem = ({ project }: { project: Project }) => {
         </div>
       </div>
     </div>
-  )
-}
-
-const ProjectListItemDates = ({ project }: { project: Project }) => {
-  const { updateProject } = useUpdateProject()
-  const difference = dayjs(project.dueDate).diff(dayjs(), "day")
-  const diffCopy =
-    difference > 0
-      ? `${difference} days left`
-      : `${Math.abs(difference)} days overdue`
-  const color = difference > 0 ? "text-green-800" : "text-red-800"
-
-  const handleUpdateProject = async (input: UpdateGoalInput) => {
-    await updateProject({ id: project.id, input })
-    toast({
-      title: "Project updated",
-      description: "Your project has been updated",
-      variant: "success",
-    })
-  }
-
-  return (
-    <div className="flex md:items-center justify-between flex-col md:flex-row">
-      <div>
-        <DatePicker
-          value={project?.dueDate ? new Date(project?.dueDate) : undefined}
-          onChange={(value) => {
-            handleUpdateProject({
-              dueDate: value?.toISOString(),
-            })
-          }}
-        />
-      </div>
-      <p className={cn(color, "mt-1")}>{diffCopy}</p>
-    </div>
-  )
-}
+ * 
+*/
