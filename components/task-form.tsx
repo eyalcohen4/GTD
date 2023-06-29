@@ -185,7 +185,8 @@ export const TaskForm = ({ task }: { task: Task }) => {
               <DatePicker
                 value={task?.dueDate ? new Date(task?.dueDate) : undefined}
                 onChange={(date) => {
-                  handleUpdateTask({ dueDate: date?.toISOString() })
+                  console.log(date)
+                  handleUpdateTask({ dueDate: date?.toISOString() || "" })
                 }}
               />
             </FormPropertyValue>

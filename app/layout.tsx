@@ -37,18 +37,22 @@ interface RootLayoutProps {
   task: any
 }
 
+const isLocalHost = (host: string) => host?.includes("localhost")
+
 export default function RootLayout({ children, task }: RootLayoutProps) {
   return (
     <>
-      <HighlightInit
-        projectId={"2d12z3er"}
-        tracingOrigins
-        networkRecording={{
-          enabled: true,
-          recordHeadersAndBody: true,
-          urlBlocklist: [],
-        }}
-      />
+      {isLocalHost(global?.location?.hostname) ? (
+        <HighlightInit
+          projectId={"2d12z3er"}
+          tracingOrigins
+          networkRecording={{
+            enabled: true,
+            recordHeadersAndBody: true,
+            urlBlocklist: [],
+          }}
+        />
+      ) : null}
       <html lang="en" suppressHydrationWarning>
         <head />
         <body

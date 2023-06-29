@@ -40,6 +40,7 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
       },
       data: {
         ...rest,
+        dueDate: input.dueDate === "" ? null : input.dueDate ?? undefined,
         status: statusToSave ? (statusToSave as Status) : undefined,
         project: projectId
           ? {
