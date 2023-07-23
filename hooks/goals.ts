@@ -108,7 +108,7 @@ export const useUpdateGoal = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ input: updatedGoal }),
+        body: JSON.stringify({ input: updatedGoal, id }),
       })
       return response.json()
     }
