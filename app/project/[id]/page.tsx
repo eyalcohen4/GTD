@@ -330,7 +330,6 @@ const ProjectHeader = ({ project }: { project: Project }) => {
             </DropdownMenu>
           </div>
         </div>
-
         <div className="w-1/2">
           <Editor
             className="p-0"

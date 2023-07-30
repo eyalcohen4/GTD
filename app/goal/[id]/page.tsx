@@ -62,10 +62,48 @@ export default function GoalPage({
           <Loader className="w-8 h-8" />
         </div>
       ) : goal ? (
-        <GoalHeader goal={goal} />
+        <>
+          <GoalHeader goal={goal} />
+          <div>
+            <Projects goalId={id} />
+          </div>
+          <div>
+            <Notes goal={goal} />
+          </div>
+        </>
       ) : null}
-      <div>
-        <Projects goalId={id} />
+    </div>
+  )
+}
+
+const Notes = ({ goal }: { goal: Goal }) => {
+  const [content, setContent] = useState(
+    goal?.content ? JSON.parse(goal.content) : null
+  )
+  console.log(content)
+  const { updateGoal } = useUpdateGoal()
+
+  const debouncedUpdateGoal = useDebounce((input: UpdateGoalInput) => {
+    handleUpdateGoal(input)
+  }, 1000)
+
+  const handleUpdateGoal = (input: Omit<UpdateGoalInput, "id">) => {
+    updateGoal({ id: goal.id || "", input })
+  }
+
+  return (
+    <div className="md:px-8 px-4 flex flex-col gap-4 mb-2 overflow-scroll">
+      <h3 className="scroll-m-20 text-xl font-semibold tracking-tight">
+        Notes
+      </h3>
+      <div className="bg-card rounded-lg shadow-sm p-6">
+        <Editor
+          content={content}
+          onChange={(updated) => {
+            setContent(updated)
+            debouncedUpdateGoal({ content: JSON.stringify(updated) })
+          }}
+        />
       </div>
     </div>
   )
