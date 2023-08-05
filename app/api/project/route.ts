@@ -41,6 +41,11 @@ export const POST = async (request: Request) => {
 export const GET = async () => {
   try {
     const session = await getServerSession(authOptions)
+
+    if (!session) {
+      return 401
+    }
+
     const projects = await getProjects(session?.user?.id)
     return NextResponse.json({ projects })
   } catch (error) {
