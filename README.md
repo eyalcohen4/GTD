@@ -1,5 +1,5 @@
 <a href="https://github.com/eyalcohen4/ai-gtd">
-  <img width="1745" alt="Screenshot 2023-07-07 at 15 19 15" src="https://github.com/eyalcohen4/ai-gtd/assets/16276358/a38dd54d-2bd5-4db5-a4c2-0a898f1a4151" alt="The App">
+  <img width="1745" alt="Screenshot 2023-07-07 at 15 19 15" src="https://i.imgur.com/xruQn7P.png" alt="The App">
   <h1 align="center">Getting Things Done App</h1>
 </a>
 
