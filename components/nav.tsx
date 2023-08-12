@@ -9,6 +9,7 @@ import {
   Filter,
   Globe,
   Home,
+  Layers,
   LineChart,
   LucideIcon,
   Sunrise,
@@ -98,6 +99,18 @@ export const Nav = () => {
           >
             <Home className="h-4 w-4" />
             <span className="rounded-md text-lg font-semibold py-1">Home</span>
+          </Link>
+
+          <Link
+            href="/boards"
+            className={
+              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+            }
+          >
+            <Layers className="h-4 w-4" />
+            <span className="rounded-md text-lg font-semibold py-1">
+              Boards
+            </span>
           </Link>
 
           <Link

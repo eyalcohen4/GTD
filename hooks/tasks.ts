@@ -13,6 +13,7 @@ export function useGetTasks(params?: {
   contextId?: string
   statuses?: string[]
   contexts?: string[]
+  search?: string
   includeCompleted?: boolean
   timeRange?: {
     from?: string
@@ -28,6 +29,10 @@ export function useGetTasks(params?: {
 
     if (!params) {
       return url.href
+    }
+
+    if (params?.search) {
+      url.searchParams.append("search", params?.search || "")
     }
 
     if (params?.status) {

@@ -5,7 +5,8 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
 }
 
 model Account {
@@ -55,7 +56,8 @@ model User {
   updatedAt     DateTime     @updatedAt
   kpis          Kpi[]
   experiments   Experiment[]
-  Note          Note[]
+  notes         Note[]
+  boards        Board[]
 }
 
 model VerificationToken {
@@ -128,22 +130,35 @@ model Project {
 }
 
 model Task {
-  id          String    @id @default(uuid())
+  id          String       @id @default(uuid())
   title       String
   content     Json
   dueDate     DateTime?
-  completed   Boolean   @default(false)
+  completed   Boolean      @default(false)
   userId      String
-  user        User      @relation(fields: [userId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
   projectId   String?
-  project     Project?  @relation(fields: [projectId], references: [id])
+  project     Project?     @relation(fields: [projectId], references: [id])
   contexts    Context[]
-  goal        Goal?     @relation(fields: [goalId], references: [id])
+  goal        Goal?        @relation(fields: [goalId], references: [id])
   goalId      String?
   status      Status
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   completedAt DateTime?
+  taskColumns TaskColumn[]
+}
+
+model TaskColumn {
+  id        String   @id @default(uuid())
+  taskId    String
+  task      Task     @relation(fields: [taskId], references: [id])
+  columnId  String
+  column    Column   @relation(fields: [columnId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([taskId, columnId])
 }
 
 enum Status {
@@ -227,4 +242,27 @@ model Experiment {
   endDate   DateTime?
   kpiId     String?
   kpi       Kpi?      @relation(fields: [kpiId], references: [id])
+}
+
+model Board {
+  id        String    @id @default(uuid())
+  title     String
+  userId    String
+  user      User      @relation(fields: [userId], references: [id])
+  columns   Column[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+}
+
+model Column {
+  id        String       @id @default(uuid())
+  title     String
+  boardId   String
+  board     Board        @relation(fields: [boardId], references: [id])
+  tasks     TaskColumn[]
+  order     Int
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  color     String?
 }

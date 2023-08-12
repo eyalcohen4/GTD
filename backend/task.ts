@@ -74,6 +74,7 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
 export const getTasksPreview = async (
   userId: string,
   options?: {
+    search?: string
     from?: string
     to?: string
     hideCompleted?: boolean
@@ -89,6 +90,11 @@ export const getTasksPreview = async (
       user: {
         id: userId,
       },
+      title: options?.search
+        ? {
+            search: options.search,
+          }
+        : undefined,
       completed: options?.hideCompleted
         ? false
         : options?.status === "ARCHIVE" ||

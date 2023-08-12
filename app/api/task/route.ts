@@ -22,6 +22,7 @@ export const GET = async (request: NextRequest) => {
       return 401
     }
 
+    const search = request.nextUrl.searchParams.get("search") as string
     const from = request.nextUrl.searchParams.get("from") as string
     const to = request.nextUrl.searchParams.get("to") as string
     const completed = request.nextUrl.searchParams.get("completed") as string
@@ -33,6 +34,7 @@ export const GET = async (request: NextRequest) => {
     const tasks = await getTasksPreview(session?.user?.id, {
       status,
       projectId,
+      search: search || undefined,
       from: from || undefined,
       to: to || undefined,
       hideCompleted: completed === "false",

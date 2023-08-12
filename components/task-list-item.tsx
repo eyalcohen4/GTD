@@ -13,14 +13,30 @@ import { Checkbox } from "./ui/checkbox"
 export const TaskListItem = ({
   task,
   fullWidth,
+  hideComplete,
+  onClick,
 }: {
   task: TaskPreview
   fullWidth?: boolean
+  hideComplete?: boolean
+  onClick?: () => void
 }) => {
-  return (
+  return onClick ? (
+    <div
+      onClick={onClick}
+      className="h-[50px] task-list-item block cursor-pointer"
+    >
+      <TaskListItemContainer fullWidth={fullWidth}>
+        <TaskLead task={task} hideComplete={hideComplete} />
+        <div className="w-full flex-1 justify-end hidden md:flex">
+          <TaskBadges task={task} />
+        </div>
+      </TaskListItemContainer>
+    </div>
+  ) : (
     <Link href={`/task/${task.id}`} className="h-[50px] task-list-item block">
       <TaskListItemContainer fullWidth={fullWidth}>
-        <TaskLead task={task} />
+        <TaskLead task={task} hideComplete={hideComplete} />
         <div className="w-full flex-1 justify-end hidden md:flex">
           <TaskBadges task={task} />
         </div>
@@ -56,16 +72,22 @@ const TaskTitle = ({ children }: { children: ReactNode }) => {
   )
 }
 
-const TaskBadges = ({ task }: { task: TaskPreview }) => {
+export const TaskBadges = ({
+  task,
+  hideContext,
+}: {
+  task: TaskPreview
+  hideContext?: boolean
+}) => {
   const statusOption = statuses.find(({ value, slug }) => value === task.status)
 
   return (
-    <div className="flex gap-4 items-center text-sm">
+    <div className="flex gap-4 items-center text-sm flex-wrap">
       <TaskBadge>
         <Box className="h-4 w-4" />
         <p>{statusOption?.label}</p>
       </TaskBadge>
-      {task.contexts?.length ? (
+      {task.contexts?.length && !hideContext ? (
         <TaskBadge>
           <Locate className="h-4 w-4" />
           {task?.contexts?.map((context) => (
@@ -100,7 +122,13 @@ const TaskBadges = ({ task }: { task: TaskPreview }) => {
   )
 }
 
-const TaskLead = ({ task }: { task: TaskPreview }) => {
+const TaskLead = ({
+  task,
+  hideComplete,
+}: {
+  task: TaskPreview
+  hideComplete?: boolean
+}) => {
   const { updateTask } = useUpdateTask()
 
   const [checked, setChecked] = useState(task.completed)
@@ -115,12 +143,14 @@ const TaskLead = ({ task }: { task: TaskPreview }) => {
 
   return (
     <div className="flex gap-4 items-center max-w-full">
-      <Checkbox
-        circle
-        className="h-6 w-6"
-        checked={checked}
-        onClick={onCheck}
-      />
+      {!hideComplete ? (
+        <Checkbox
+          circle
+          className="h-6 w-6"
+          checked={checked}
+          onClick={onCheck}
+        />
+      ) : null}
       <TaskTitle>{task.title}</TaskTitle>
     </div>
   )
