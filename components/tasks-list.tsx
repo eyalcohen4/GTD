@@ -15,7 +15,7 @@ import { useGetTasks, useUpdateTask } from "@/hooks/tasks"
 
 import { useContexts } from "./providers/contexts-provider"
 import { useProjects } from "./providers/projects-provider"
-import { TaskListItem } from "./task-list-item"
+import { TaskListItem, TaskListItemSkeleton } from "./task-list-item"
 import { Checkbox } from "./ui/checkbox"
 import {
   Collapsible,
@@ -158,7 +158,7 @@ export const TasksList = ({
         <CollapsibleContent className="w-full">
           {loadingGetTasks ? (
             <div className="h-[300px] w-full flex items-center justify-center">
-              <Loader className="h-12 w-12" />
+              <TaskListItemSkeleton />
             </div>
           ) : (
             <div className="flex flex-col">

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import { useUpdateTask } from "@/hooks/tasks"
 
 import { Checkbox } from "./ui/checkbox"
+import { Skeleton } from "./ui/skeleton"
 
 export const TaskListItem = ({
   task,
@@ -158,6 +159,23 @@ const TaskBadge = ({ children }: { children: ReactNode }) => {
   return (
     <div className="border rounded-md h-full flex items-center gap-2 px-2 py-1 text-xs">
       {children}
+    </div>
+  )
+}
+
+export const TaskListItemSkeleton = ({
+  fullWidth,
+}: {
+  fullWidth?: boolean
+}) => {
+  return (
+    <div className="h-[50px] task-list-item block cursor-pointer">
+      <TaskListItemContainer fullWidth={fullWidth}>
+        <Skeleton />
+        <div className="w-full flex-1 justify-end hidden md:flex">
+          <Skeleton />
+        </div>
+      </TaskListItemContainer>
     </div>
   )
 }

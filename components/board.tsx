@@ -28,6 +28,7 @@ import { Column, ColumnInput } from "@/types/board";
 import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import { Filter } from "./filter";
 
 const skeleton = new Array(3).fill("");
 export const Board = ({ boardId }: { boardId: string }) => {
@@ -98,7 +99,7 @@ export const Board = ({ boardId }: { boardId: string }) => {
 
 const Column = ({ column, boardId }: { column: Column; boardId: string }) => {
   const { mutate } = useUpdateColumn(boardId);
-  
+
   const handleColumnTitleChange = (e: any) => {
     mutate({
       id: column.id,
@@ -221,7 +222,7 @@ const SelectTask = ({
   };
 
   return (
-    <div>
+    <div className="overflow-scroll h-[800px] mt-8">
       <div className="p-4 flex items-center gap-4">
         <Search />
         <Input

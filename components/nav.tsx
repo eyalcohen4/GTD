@@ -3,7 +3,7 @@
 import * as React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { statuses } from "@/constants/statuses"
+import { StatusConfig, goalsStatuses, statuses } from "@/constants/statuses"
 import {
   ChevronDown,
   Filter,
@@ -56,6 +56,7 @@ const timingNavItems = [
 type Item = {
   href: string
   name: string
+  suffixIcon?: LucideIcon
   icon?: LucideIcon
   color?: string
 }
@@ -65,16 +66,24 @@ export const Nav = () => {
   const { projects } = useProjects()
   const pageContext = usePageContext()
 
-  const projectMenu = React.useMemo(
-    () =>
-      projects?.map((project) => ({
+  const groupedProjectsByStatus: Record<
+    string,
+    Array<Item>
+  > = React.useMemo(() => {
+    return projects?.reduce((acc, project) => {
+      const status = project.status || "No Status"
+      // @ts-ignore
+      if (!acc[status]) acc[status] = []
+      // @ts-ignore
+      acc[status].push({
         id: project.id,
         href: `/project/${project.id}`,
         name: project.title,
         color: project.color,
-      })),
-    [projects]
-  )
+      })
+      return acc
+    }, {})
+  }, [projects])
 
   const contextsMenu = React.useMemo(
     () =>
@@ -156,9 +165,22 @@ export const Nav = () => {
                   <FilterTrigger>Project</FilterTrigger>
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                  {projectMenu?.map((project) => (
-                    <NavItem isSubItem key={project.name} item={project} />
-                  ))}
+                  {groupedProjectsByStatus
+                    ? Object.keys(groupedProjectsByStatus).map((status) => (
+                        <div>
+                          <StatusGroup status={status} />
+                          <div className="ml-4">
+                            {groupedProjectsByStatus[status].map((project) => (
+                              <NavItem
+                                isSubItem
+                                key={project.name}
+                                item={project}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))
+                    : null}
                 </CollapsibleContent>
               </Collapsible>
               <Collapsible defaultOpen={pageContext?.type === "context"}>
@@ -235,6 +257,43 @@ const FilterTrigger = ({ children }: { children: React.ReactNode }) => {
         {children}
       </span>
       <ChevronDown />
+    </div>
+  )
+}
+
+const StatusGroup = ({ status }: { status: string }) => {
+  const instance = goalsStatuses.find((s) => s.value === status)
+
+  console.log(status)
+  if (status === "No Status") {
+    return (
+      <div className="flex items-center gap-2 mb-2 px-4 dark:bg-gray-800 bg-gray-100">
+        <div className={`h-2 w-2 rounded-full bg-gray-400`} />
+        <span className="font-semibold py-1">{status}</span>
+      </div>
+    )
+  }
+
+  if (!instance) {
+    return null
+  }
+
+  return (
+    <div className="flex items-center gap-2 mb-2 px-4 dark:bg-gray-800 bg-gray-100">
+      <div className={`h-2 w-2 rounded-full bg-${instance?.color}`} />
+      {instance.icon ? (
+        <instance.icon
+          className={"h-4 w-4"}
+          style={
+            instance.color
+              ? {
+                  color: instance.color,
+                }
+              : {}
+          }
+        />
+      ) : null}
+      <span className="font-semibold py-1">{instance.label}</span>
     </div>
   )
 }

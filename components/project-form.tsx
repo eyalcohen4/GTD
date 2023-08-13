@@ -20,7 +20,7 @@ export const ProjectForm = ({
   onCancel?: () => void
 }) => {
   const session = useSession()
-  const [color, setColor] = useState("#000000")
+  const [color, setColor] = useState("#0693e3")
   const [title, setTitle] = useState("")
   const [error, setError] = useState("")
 
