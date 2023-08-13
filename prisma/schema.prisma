@@ -157,6 +157,7 @@ model TaskColumn {
   column    Column   @relation(fields: [columnId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  order     Int
 
   @@unique([taskId, columnId])
 }

@@ -91,17 +91,15 @@ export const TaskBadges = ({
         <TaskBadge>
           <Locate className="h-4 w-4" />
           {task?.contexts?.map((context) => (
-            <>
-              <div
-                className="flex items-center gap-2 rounded"
-                key={context.title}
-                style={{
-                  color: `${context.color}`,
-                }}
-              >
-                <span className="">{context.title}</span>
-              </div>
-            </>
+            <div
+              className="flex items-center gap-2 rounded"
+              key={context.title}
+              style={{
+                color: `${context.color}`,
+              }}
+            >
+              <span className="">{context.title}</span>
+            </div>
           ))}
         </TaskBadge>
       ) : null}

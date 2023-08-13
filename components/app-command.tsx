@@ -17,7 +17,6 @@ export function AppCommand({ ...props }: any) {
   const ref = React.useRef<HTMLInputElement>(null)
   const { createTask, loadingCreateTask: isLoading } = useTasks()
   const pageContext = usePageContext()
-  console.log(pageContext)
 
   const session = useSession()
   const { toast } = useToast()

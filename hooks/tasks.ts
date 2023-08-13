@@ -207,6 +207,7 @@ export function useUpdateTask() {
           queryClient.invalidateQueries({ queryKey: ["task", data.id] })
           queryClient.invalidateQueries({ queryKey: ["tasks"] })
           queryClient.invalidateQueries({ queryKey: ["project"] })
+          queryClient.invalidateQueries({ queryKey: ["column-tasks"] })
         }, 300)
       },
     }

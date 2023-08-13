@@ -98,7 +98,7 @@ export function useCreateColumn(boardId: string) {
       return request.json()
     },
     {
-      onSuccess: () => queryClient.invalidateQueries(["columns", boardId]),
+      onSuccess: () => queryClient.invalidateQueries(["boards", boardId]),
     }
   )
 }
@@ -191,10 +191,12 @@ export function useUpdateColumnTask() {
   return useMutation(
     async ({
       from,
+      index,
       id,
       input,
     }: {
       from?: string
+      index: number
       id: string
       input: TaskColumnInput
     }) => {
@@ -212,6 +214,8 @@ export function useUpdateColumnTask() {
           return
         }
 
+        console.log(updated)
+
         const previousContext = queryClient.getQueryData([
           "column-tasks",
           updated.from,
@@ -222,14 +226,49 @@ export function useUpdateColumnTask() {
           // @ts-ignore
           (task) => task.id === updated.id
         )
-        console.log(actualTask)
+
+        if (updated.from === updated.input.columnId) {
+          console.log("index", updated.index)
+          const reordered = reorder({
+            // @ts-ignore
+            items: previousContext?.tasks || [],
+            input: updated,
+          })
+
+          console.log(reordered)
+
+          queryClient.setQueryData(
+            ["column-tasks", updated.from],
+            // @ts-ignore
+            (old: { tasks?: Array<TaskColumn> }) => {
+              return {
+                tasks: reordered,
+              }
+            }
+          )
+
+          return
+        }
 
         queryClient.setQueryData(
           ["column-tasks", updated.input.columnId],
           // @ts-ignore
           (old?: { tasks?: Array<TaskColumn> }) => {
             if (old?.tasks) {
-              return { tasks: [actualTask, ...old.tasks] }
+              if (updated.index === 0) {
+                return { tasks: [actualTask, ...old.tasks] }
+              }
+
+              if (updated.index === old.tasks.length - 1) {
+                return { tasks: [...old.tasks, actualTask] }
+              }
+
+              const tasks = old.tasks
+                .slice(0, updated.index)
+                .concat([actualTask])
+                .concat(old.tasks.slice(updated.index))
+
+              return { tasks }
             }
 
             return { tasks: [actualTask] }
@@ -250,4 +289,37 @@ export function useUpdateColumnTask() {
       },
     }
   )
+}
+function reorder({
+  items,
+  input,
+}: {
+  items: Array<any>
+  input: {
+    from?: string
+    index: number
+    id: string
+    input: TaskColumnInput
+  }
+}) {
+  const { index: order, id } = input
+
+  const itemToMove = items.find((item) => item.id === id)
+  if (!itemToMove) {
+    throw new Error("Item with the given id not found")
+  }
+
+  if (order < 0 || order >= items.length) {
+    throw new Error("Order index out of bounds")
+  }
+
+  const itemsWithoutMovedItem = items.filter((item) => item.id !== id)
+  const reorderedItems = [
+    ...itemsWithoutMovedItem.slice(0, order),
+    { ...itemToMove, order }, // Update the order of the moved item
+    ...itemsWithoutMovedItem.slice(order),
+  ]
+
+  // Update the order properties
+  return reorderedItems.map((item, index) => ({ ...item, order: index }))
 }

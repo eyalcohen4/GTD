@@ -45,6 +45,7 @@ export type Column = z.infer<typeof columnSchema>
 export const taskColumnInputSchema = z.object({
   taskId: z.string().optional(),
   columnId: z.string(),
+  order: z.number().optional(),
 })
 
 export type TaskColumnInput = z.infer<typeof taskColumnInputSchema>

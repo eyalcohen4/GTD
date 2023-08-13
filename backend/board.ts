@@ -171,11 +171,18 @@ export const deleteColumn = async (id: string): Promise<Column> => {
 export const createTaskColumn = async (
   input: TaskColumnInput
 ): Promise<TaskColumn> => {
+  const order = await prisma.taskColumn.count({
+    where: {
+      columnId: input.columnId,
+    },
+  })
+
   return prisma.taskColumn.create({
     // @ts-ignore
     data: {
       taskId: input.taskId,
       columnId: input.columnId,
+      order: order + 1,
     },
   })
 }
@@ -199,6 +206,7 @@ export const updateTaskColumn = async (
     data: {
       taskId: input?.taskId ? input.taskId : undefined,
       columnId: input.columnId,
+      order: input?.order ? input.order : undefined,
     },
   })
 }
