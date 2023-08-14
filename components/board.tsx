@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDebounce } from "@uidotdev/usehooks";
-import { Plus, Search } from "lucide-react";
+import { Calendar, Plus, Search } from "lucide-react";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 
 import { Task } from "@/types/task";
@@ -29,6 +29,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import { Filter } from "./filter";
+import dayjs from "dayjs";
 
 const skeleton = new Array(3).fill("");
 export const Board = ({ boardId }: { boardId: string }) => {
@@ -187,7 +188,7 @@ const ColumnTasks = ({
                           : "",
                       )}
                     >
-                      <p className="md:text-lg">{task.task.title}</p>
+                      <p className="text-sm">{task.task.title}</p>
                       <TaskBadges task={task.task} />
                     </Card>
                     {provided.placeholder}
