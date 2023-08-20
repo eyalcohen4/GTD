@@ -41,7 +41,7 @@ export const TaskListItem = ({
         <div className="w-full flex-1 justify-end hidden md:flex">
           <TaskBadges task={task} />
         </div>
-      </div>
+      </TaskListItemContainer>
     </Link>
   )
 }
