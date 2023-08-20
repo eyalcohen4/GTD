@@ -42,7 +42,7 @@ async function sendMorningEmail() {
     })
 
     const data = await resend.emails.send({
-      from: "Stay Current <onboarding@resend.dev>",
+      from: "Stay Current <morning@staycurrent.app>",
       to: ["eyalcohen4.ec@gmail.com"],
       subject: `Your Current Summary: ${dayjs().format(
         "MMMM D, YYYY"

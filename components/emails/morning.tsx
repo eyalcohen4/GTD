@@ -52,7 +52,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
     <Preview>Remember To Be Current</Preview>
     <Body style={main}>
       <Img
-        src="https://staycurrent.app/icon.png"
+        src="https://staycurrent.app/logo.png"
         alt="Remember To Be Current"
       />
       <Container style={container}>
