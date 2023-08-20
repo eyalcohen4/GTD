@@ -19,6 +19,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
           </div>
         </aside>
         <div className="h-full w-full overflow-x-hidden">
+          <Header />
           <section className="h-full w-full mt-8">{children}</section>
         </div>
         <footer className="md:hidden h-12 w-12 rounded-full bg-slate-200/50 dark:bg-slate-800/50 dark:text-white shadow-lg backdrop-blur-lg fixed flex items-center  bottom-2 right-2 justify-end">
