@@ -40,6 +40,7 @@ export const updateTask = async (id: string, input: UpdateTaskInput) => {
       },
       data: {
         ...rest,
+        completedAt: input.completed ? new Date() : undefined,
         dueDate: input.dueDate === "" ? null : input.dueDate ?? undefined,
         status: statusToSave ? (statusToSave as Status) : undefined,
         project: projectId
@@ -82,6 +83,8 @@ export const getTasksPreview = async (
     projectId?: string
     contexts?: string[]
     statuses?: string[]
+    completedFrom?: string
+    completedTo?: string
   }
 ): Promise<Array<TaskPreview>> => {
   // @ts-expect-error
@@ -101,6 +104,13 @@ export const getTasksPreview = async (
           options?.statuses?.includes("ARCHIVE")
         ? true
         : undefined,
+      completedAt:
+        options?.completedFrom || options?.completedTo
+          ? {
+              gte: options?.completedFrom || undefined,
+              lte: options?.completedTo || undefined,
+            }
+          : undefined,
       projectId: options?.projectId || undefined,
       dueDate: {
         gte: options?.from || undefined,

@@ -1,7 +1,4 @@
-import { PrismaClient } from "@prisma/client"
-
 import { ProjectInput, UpdateProjectInput } from "@/types/project"
-import { TaskInput } from "@/types/task"
 import prisma from "@/lib/db"
 
 const DEFAULT_FREQUENCY_DAYS = 7
@@ -104,11 +101,16 @@ export const getProjectTasksCount = async (id: string) => {
     where: { projectId: id, status: "NEXT_ACTION" },
   })
 
+  const somedayMaybe = await prisma.task.count({
+    where: { projectId: id, status: "SOMEDAY_MAYBE" },
+  })
+
   return {
     all: all,
     completed: completed,
     inbox: inbox,
     waitingFor: waitingFor,
     nextAction: nextAction,
+    somedayMaybe: somedayMaybe,
   }
 }

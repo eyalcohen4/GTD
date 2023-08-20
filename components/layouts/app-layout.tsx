@@ -11,7 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="h-screen">
-      <Header />
+      {/* <Header /> */}
       <div className="md:grid md:grid-cols-[200px_1fr] h-[calc(100vh-81px)] w-full">
         <aside className="h-full border-r md:block hidden">
           <div className="flex flex-col items-center gap-4 mt-8">

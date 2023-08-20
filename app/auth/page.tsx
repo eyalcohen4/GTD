@@ -11,8 +11,8 @@ import { buttonVariants } from "@/components/ui/button"
 import { UserAuthForm } from "@/components/user-auth"
 
 export const metadata: Metadata = {
-  title: "GTD",
-  description: "AI Based GTD App",
+  title: "Current | Getting It Done",
+  description: "Be Current.",
 }
 
 export default async function AuthenticationPage() {

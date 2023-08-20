@@ -34,7 +34,7 @@ export const projectSchema = z.object({
   content: z.string(),
   dueDate: z.string(),
   color: z.string().optional(),
-  status: z.string(),
+  status: z.string().optional(),
   completed: z.boolean(),
   userId: z.string(),
   createdAt: z.string(),
