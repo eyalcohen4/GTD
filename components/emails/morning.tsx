@@ -56,27 +56,26 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
         alt="Remember To Be Current"
       />
       <Container style={container}>
-        <Heading style={h1}>{dayjs().format("dddd, MMMM DD")}</Heading>
-        <Text style={text}>
-          Good Morning {firstName}, rember to be current today.
-        </Text>
         <Section>
+          <Heading style={h1}>{dayjs().format("dddd, MMMM DD")}</Heading>
+          <Text style={text}>Good Morning {firstName} ☀️</Text>
           <Text style={text}>
-            Here are the tasks you wanted to complete today:
+            Here is your morning report so you can be current today.
           </Text>
-          <Section>
-            {today.length > 0 ? (
-              today.map((task) => (
-                <Row>
-                  <Link href={`https://staycurrent.app/task/${task.id}`}>
-                    <Body>{task.title}</Body>
-                  </Link>
-                </Row>
-              ))
-            ) : (
-              <Text style={text}>You have no tasks due today.</Text>
-            )}
-          </Section>
+        </Section>
+        <Section>
+          <Text>Tasks you wanted to complete today</Text>
+          {today.length > 0 ? (
+            today.map((task) => (
+              <Row>
+                <Link href={`https://staycurrent.app/task/${task.id}`}>
+                  <Body>{task.title}</Body>
+                </Link>
+              </Row>
+            ))
+          ) : (
+            <Text style={text}>You have no tasks due today.</Text>
+          )}
         </Section>
       </Container>
     </Body>
