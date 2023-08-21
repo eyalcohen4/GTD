@@ -37,12 +37,23 @@ import {
 export const ProjectsList = () => {
   const { projects, loadingGetProjects } = useProjects()
 
+  const sorted = projects?.sort((a, b) => {
+    const statusA = goalsStatuses.find((status) => status.value === a.status)
+    const statusB = goalsStatuses.find((status) => status.value === b.status)
+
+    if (statusA?.order && statusB?.order) {
+      return statusA.order > statusB.order ? 1 : -1
+    }
+
+    return 0
+  })
+
   return (
     <ul role="list" className="flex flex-col">
       {loadingGetProjects ? (
         <Loader className="animate-spin" />
       ) : (
-        projects?.map((project) => <ProjectListItem project={project} />)
+        sorted?.map((project) => <ProjectListItem project={project} />)
       )}
     </ul>
   )
