@@ -17,7 +17,7 @@ export default async function IndexPage() {
           <Goals />
         </div>
         <Projects />
-        <div className="grid-cols-3 hidden md:grid">
+        <div className="flex flex-col gap-4">
           <TasksList statuses={["INBOX"]} title="Inbox" />
           <TasksList
             title="Overdue"
