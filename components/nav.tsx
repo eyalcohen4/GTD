@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils"
 import { usePageContext } from "@/hooks/use-page-context"
 
 import { Icons } from "./icons"
+import { ProfilePicture } from "./profile-picture"
 import { useContexts } from "./providers/contexts-provider"
 import { useProjects } from "./providers/projects-provider"
 import {

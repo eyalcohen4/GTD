@@ -12,8 +12,15 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="h-screen">
       {/* <Header /> */}
-      <div className="md:grid md:grid-cols-[250px_1fr] h-[calc(100vh-81px)] w-full">
+      <div className="md:grid md:grid-cols-[265px_1fr] h-[calc(100vh-81px)] w-full">
         <aside className="h-full border-r md:block hidden">
+          <div className="mt-4 px-4 flex  h-[60px] items-center justify-between">
+            <p className="text-xl font-bold">Current</p>
+            <div className="flex items-center gap-4">
+              <ProfilePicture />
+            </div>
+          </div>
+
           <div className="flex flex-col items-center gap-4 mt-8">
             <Nav />
           </div>
@@ -40,15 +47,10 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
 const Header = () => {
   return (
     <div className="h-[80px] top-0 z-50 bg-background sticky border-b flex justify-between items-center px-4">
-      <div>
-        <ProfilePicture />
-      </div>
-      <div>
+      <div className="w-full">
         <AppCommand />
       </div>
-      <div>
-        <ThemeToggle />
-      </div>
+      <ThemeToggle />
     </div>
   )
 }

@@ -68,15 +68,15 @@ export function AppCommand({ ...props }: any) {
   }
 
   return (
-    <div className="relative">
-      <form onSubmit={handleCreate}>
+    <div className="relative w-full">
+      <form onSubmit={handleCreate} className="w-full md:w-1/2 relative">
         <Input
           ref={ref}
           variant="outline"
           className={cn(
-            "relative h-9 w-full justify-start rounded-[0.5rem] sm:pr-12 md:w-40 lg:w-[500px]"
+            "relative h-9 w-full justify-start rounded-[0.5rem] sm:pr-12"
           )}
-          placeholder="Create new task"
+          placeholder="Capture new task"
           {...props}
         />
         <button
