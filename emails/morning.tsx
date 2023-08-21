@@ -14,6 +14,7 @@ import {
   Preview,
   Row,
   Section,
+  Tailwind,
   Text,
 } from "@react-email/components"
 import dayjs from "dayjs"
@@ -37,6 +38,7 @@ interface EmailTemplateProps {
       }
     }
   >
+  aiFeedback: string
   inbox: Array<TaskPreview>
   completed: Array<TaskPreview>
 }
@@ -48,187 +50,136 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
   today,
   projects,
   inbox,
-}) => (
-  <Html>
-    <Head />
-    <Preview>Remember To Be Current</Preview>
-    <Body style={main}>
-      <Section
-        style={{
-          width: "100%",
-          margin: "auto",
-        }}
-      >
-        <Column
-          style={{
-            textAlign: "center",
-          }}
-        >
-          <Img
-            height={50}
-            width={50}
-            src="https://staycurrent.app/logo.png"
-            alt="Remember To Be Current"
-          />
-        </Column>
-        <Column
-          style={{
-            textAlign: "center",
-          }}
-        >
-          <Text style={{ margin: "24px 0 0 0" }}>
+  aiFeedback,
+}) => {
+  return (
+    <Html>
+      <Tailwind>
+        <Head />
+        <Preview>Remember To Be Current</Preview>
+        <Body style={main}>
+          <Section
+            style={{
+              width: "100%",
+              margin: "auto",
+              textAlign: "center",
+            }}
+          >
             <Link href="https://staycurrent.app">
-              {" "}
-              <Text
-                style={{
-                  textDecoration: "underline",
-                  color: "#020617",
-                }}
-              >
-                Current
-              </Text>
+              <Img
+                height={50}
+                width={50}
+                src="https://staycurrent.app/logo.png"
+                alt="Remember To Be Current"
+              />
             </Link>
-          </Text>
-        </Column>
-      </Section>
-      <Container style={container}>
-        <Section>
-          <Heading style={h1}>{dayjs().format("dddd, MMMM DD")}</Heading>
-          <Text
-            style={{
-              fontSize: "16px",
-            }}
-          >
-            {firstName?.split(" ")?.[0] || firstName}, Good Morning ☀️
-          </Text>
-          <Text style={text}>
-            Here is your morning report so you can be current today.
-          </Text>
-        </Section>
-        <Section style={aiFeedback}>
-          <Text
-            style={{
-              fontWeight: "bold",
-              padding: "0 16px",
-              verticalAlign: "middle",
-            }}
-          >
-            🤖 AI Feedback
-          </Text>
-        </Section>
-        <Hr />
-        <Section>
-          <Column>
-            <Button
-              style={{
-                backgroundColor: "#60a5fa",
-                color: "#fff",
-                padding: "16px 0px",
-                borderRadius: "12px",
-                border: "none",
-                margin: "16px auto",
-                textDecoration: "none",
-                maxWidth: "100%",
-                width: "250px",
-                fontWeight: "bold",
-              }}
-            >
-              Process Inbox (5 minutes)
-            </Button>
-          </Column>
-          <Column>
-            <Button
-              style={{
-                backgroundColor: "#60a5fa",
-                color: "#fff",
-                padding: "16px 0px",
-                borderRadius: "12px",
-                border: "none",
-                margin: "16px auto",
-                textDecoration: "none",
-                maxWidth: "100%",
-                width: "250px",
-                fontWeight: "bold",
-              }}
-            >
-              Add Tasks
-            </Button>
-          </Column>
-        </Section>
-        <Hr />
-        <Section>
-          <Text style={sectionHeader}>Tasks you completed yesterday</Text>
-          {completed.length > 0 ? (
-            completed.map((task) => <Task task={task} />)
-          ) : (
-            <Text style={text}>You have no tasks completed yesterday.</Text>
-          )}
-        </Section>
-        <Hr />
-        <Section>
-          <Text style={sectionHeader}>Tasks to complete today</Text>
-          {completed.length > 0 ? (
-            completed.map((task) => <Task task={task} />)
-          ) : (
-            <Text style={text}>You have no tasks due today.</Text>
-          )}
-        </Section>
-        <Hr />
-        <Section>
-          <Text style={sectionHeader}>Overdue Tasks</Text>
-          {overdue.length > 0 ? (
-            overdue.map((task) => <Task task={task} />)
-          ) : (
-            <Text style={text}>You have no overdue tasks.</Text>
-          )}
-        </Section>
-        <Hr />
-        <Section>
-          <Text style={sectionHeader}>Inbox</Text>
-          {inbox.length > 0 ? (
-            inbox.map((task) => <Task task={task} noSubtitle />)
-          ) : (
-            <Text style={text}>You have no overdue tasks.</Text>
-          )}
-        </Section>
-        <Hr />
-        <Section>
-          <Text style={sectionHeader}>Projects</Text>
-          <Row>
-            <Column>
-              <Text style={{ fontSize: "14px", color: "GrayText" }}>Name</Text>
-            </Column>
-            <Column>
+          </Section>
+          <Container style={container}>
+            <Section>
+              <Heading style={h1}>{dayjs().format("dddd, MMMM DD")}</Heading>
               <Text
                 style={{
-                  fontSize: "14px",
-                  color: "GrayText",
-                  textAlign: "right",
+                  fontSize: "16px",
                 }}
               >
-                Status
+                {firstName?.split(" ")?.[0] || firstName}, Good Morning ☀️
               </Text>
-            </Column>
-          </Row>
-          {projects?.length
-            ? projects
-                .sort((a, b) => {
-                  const aStatus = goalsStatuses.find(
-                    (s) => s.value === a.status
-                  ) || { order: 1 }
-                  const bStatus = goalsStatuses.find(
-                    (s) => s.value === b.status
-                  ) || { order: 1 }
+              <Text style={text}>
+                Here is your morning report so you can be current today.
+              </Text>
+            </Section>
+            <Section>
+              <Text style={sectionHeader}>🤖 AI Feedback</Text>
+              <Section style={aiFeedbackStyle}>
+                <Text style={aiFeedbackTextStyle}>{aiFeedback}</Text>
+              </Section>
+              <Button
+                pX={20}
+                pY={12}
+                className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center mt-4"
+                href={`https://staycurrent.app/status/inbox`}
+              >
+                Process Inbox (5 minutes)
+              </Button>
+            </Section>
+            <Hr />
+            <Section>
+              <Text style={sectionHeader}>Tasks you completed yesterday</Text>
+              {completed.length > 0 ? (
+                completed.map((task) => <Task task={task} />)
+              ) : (
+                <Text style={text}>You have no tasks completed yesterday.</Text>
+              )}
+            </Section>
+            <Hr />
+            <Section>
+              <Text style={sectionHeader}>Tasks to complete today</Text>
+              {today.length > 0 ? (
+                today.map((task) => <Task task={task} />)
+              ) : (
+                <Text style={text}>You have no tasks due today.</Text>
+              )}
+            </Section>
+            <Hr />
+            <Section>
+              <Text style={sectionHeader}>Overdue Tasks</Text>
+              {overdue.length > 0 ? (
+                overdue.map((task) => <Task task={task} />)
+              ) : (
+                <Text style={text}>You have no overdue tasks.</Text>
+              )}
+            </Section>
+            <Hr />
+            <Section>
+              <Text style={sectionHeader}>Inbox</Text>
+              {inbox.length > 0 ? (
+                inbox.map((task) => <Task task={task} noSubtitle />)
+              ) : (
+                <Text style={text}>You have no overdue tasks.</Text>
+              )}
+            </Section>
+            <Hr />
+            <Section>
+              <Text style={sectionHeader}>Projects</Text>
+              <Row>
+                <Column>
+                  <Text style={{ fontSize: "14px", color: "GrayText" }}>
+                    Name
+                  </Text>
+                </Column>
+                <Column>
+                  <Text
+                    style={{
+                      fontSize: "14px",
+                      color: "GrayText",
+                      textAlign: "right",
+                    }}
+                  >
+                    Status
+                  </Text>
+                </Column>
+              </Row>
+              {projects?.length
+                ? projects
+                    .sort((a, b) => {
+                      const aStatus = goalsStatuses.find(
+                        (s) => s.value === a.status
+                      ) || { order: 1 }
+                      const bStatus = goalsStatuses.find(
+                        (s) => s.value === b.status
+                      ) || { order: 1 }
 
-                  return aStatus.order > bStatus.order ? 1 : -1
-                })
-                .map((project) => <ProjectListItem project={project} />)
-            : null}
-        </Section>
-      </Container>
-    </Body>
-  </Html>
-)
+                      return aStatus.order > bStatus.order ? 1 : -1
+                    })
+                    .map((project) => <ProjectListItem project={project} />)
+                : null}
+            </Section>
+          </Container>
+        </Body>
+      </Tailwind>
+    </Html>
+  )
+}
 
 const ProjectListItem: React.FC<{ project: Project }> = ({ project }) => {
   const status = goalsStatuses.find((s) => s.value === project.status)
@@ -341,7 +292,13 @@ const sectionHeader = {
   fontWeight: "bold",
 }
 
-const aiFeedback = {
+const aiFeedbackStyle = {
   borderRadius: "12px",
-  backgroundColor: "#86efac",
+  backgroundColor: "#047857",
+}
+
+const aiFeedbackTextStyle = {
+  fontSize: "14px",
+  color: "#fff",
+  padding: "2px 8px 2px 16px",
 }
