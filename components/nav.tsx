@@ -5,6 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { StatusConfig, goalsStatuses, statuses } from "@/constants/statuses"
 import {
+  AlignJustify,
   ChevronDown,
   Filter,
   Globe,
@@ -108,7 +109,7 @@ export const Nav = () => {
             }
           >
             <Home className="h-4 w-4" />
-            <span className="rounded-md text-lg font-semibold py-1">Home</span>
+            <span className="rounded-md py-1">Home</span>
           </Link>
 
           <Link
@@ -118,9 +119,7 @@ export const Nav = () => {
             }
           >
             <Layers className="h-4 w-4" />
-            <span className="rounded-md text-lg font-semibold py-1">
-              Boards
-            </span>
+            <span className="rounded-md py-1">Boards</span>
           </Link>
 
           <Link
@@ -130,14 +129,12 @@ export const Nav = () => {
             }
           >
             <LineChart className="h-4 w-4" />
-            <span className="rounded-md text-lg font-semibold py-1">KPIs</span>
+            <span className="rounded-md py-1">KPIs</span>
           </Link>
           <div>
             <div className="flex items-center gap-2 mb-2 px-4">
-              <Filter className="h-4 w-4" />
-              <span className="rounded-md text-lg font-semibold py-1">
-                Filters
-              </span>
+              <AlignJustify className="h-4 w-4" />
+              <span className="rounded-md py-1">Views</span>
             </div>
             <div>
               <Collapsible>
@@ -251,7 +248,7 @@ const FilterTrigger = ({ children }: { children: React.ReactNode }) => {
   return (
     <div
       className={cn(
-        "flex px-6 items-center justify-between w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+        "flex pl-8 pr-4 items-center justify-between w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
       )}
     >
       <span className="mb-1 rounded-md px-2 py-1 text-sm font-semibold">
