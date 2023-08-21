@@ -12,7 +12,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
   return (
     <div className="h-screen">
       {/* <Header /> */}
-      <div className="md:grid md:grid-cols-[200px_1fr] h-[calc(100vh-81px)] w-full">
+      <div className="md:grid md:grid-cols-[250px_1fr] h-[calc(100vh-81px)] w-full">
         <aside className="h-full border-r md:block hidden">
           <div className="flex flex-col items-center gap-4 mt-8">
             <Nav />
@@ -39,7 +39,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
 
 const Header = () => {
   return (
-    <div className="h-[80px] border-b flex justify-between items-center px-4">
+    <div className="h-[80px] top-0 z-50 bg-background sticky border-b flex justify-between items-center px-4">
       <div>
         <ProfilePicture />
       </div>

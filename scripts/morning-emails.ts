@@ -1,10 +1,10 @@
 import { statuses } from "@/constants/statuses"
+import { EmailTemplate } from "@/emails/morning"
 import dayjs from "dayjs"
 import dotenv from "dotenv"
 import { Resend } from "resend"
 
 import prisma from "@/lib/db"
-import { EmailTemplate } from "@/components/emails/morning"
 
 import { getProjects } from "../backend/project"
 import { getTasksPreview } from "../backend/task"
@@ -12,7 +12,7 @@ import { getTasksPreview } from "../backend/task"
 dotenv.config()
 
 const resend = new Resend(process.env.RESEND_API_KEY)
-const userId = "8abf3ec7-2620-4634-9f67-a42d9e402355"
+const userId = "8fe16f1b-11ca-43e5-a56e-5532cb2e9333"
 
 async function sendMorningEmail() {
   try {
@@ -24,6 +24,7 @@ async function sendMorningEmail() {
 
     const projects = await getProjects(userId)
     const overdue = await getTasksPreview(userId, {
+      hideCompleted: true,
       to: dayjs().endOf("day").subtract(1, "day").toISOString(),
     })
 
@@ -44,7 +45,7 @@ async function sendMorningEmail() {
     const data = await resend.emails.send({
       from: "Stay Current <morning@staycurrent.app>",
       to: ["eyalcohen4.ec@gmail.com"],
-      subject: `Your Current Summary: ${dayjs().format(
+      subject: `Your Current Morning: ${dayjs().format(
         "MMMM D, YYYY"
       )} Morning`,
       react: EmailTemplate({

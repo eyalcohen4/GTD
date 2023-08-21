@@ -16,10 +16,25 @@ export default async function IndexPage() {
           <Greeting />
           <Goals />
         </div>
-
         <Projects />
-        <HomeTasks />
-        <TasksList statuses={["INBOX"]} title="Inbox" />
+        <div className="grid-cols-3 hidden md:grid">
+          <TasksList statuses={["INBOX"]} title="Inbox" />
+          <TasksList
+            title="Overdue"
+            timeRange={{
+              to: dayjs().endOf("day").subtract(1, "day").toISOString(),
+            }}
+          />
+          <TasksList
+            statuses={statuses
+              .filter(({ value }) => value !== "COMPLETED")
+              .map(({ value }) => value)}
+            title="Today"
+            timeRange={{
+              to: dayjs().endOf("day").toISOString(),
+            }}
+          />
+        </div>
       </div>
     </AppLayout>
   )
