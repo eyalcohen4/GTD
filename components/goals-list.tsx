@@ -150,7 +150,7 @@ const GoalListItemDates = ({ goal }: { goal: GoalPreview }) => {
   }
 
   return (
-    <div className="flex md:items-center justify-between flex-col md:flex-row">
+    <div className="flex md:items-center justify-between flex-col lg:flex-row">
       <div>
         <DatePicker
           value={goal?.dueDate ? new Date(goal?.dueDate) : undefined}

@@ -25,7 +25,7 @@ export const AppLayout = ({ children }: { children: ReactNode }) => {
             <Nav />
           </div>
         </aside>
-        <div className="h-full w-full overflow-x-hidden">
+        <div className="w-full overflow-auto h-screen">
           <Header />
           <section className="h-full w-full mt-8">{children}</section>
         </div>
