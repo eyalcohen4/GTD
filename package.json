@@ -20,7 +20,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@headlessui/react": "^1.7.15",
-    "@highlight-run/next": "^3.1.0",
+    "@highlight-run/next": "^3.2.0",
     "@highlight-run/react": "^3.2.0",
     "@next-auth/prisma-adapter": "1.0.6",
     "@nytimes/react-prosemirror": "^0.2.3",

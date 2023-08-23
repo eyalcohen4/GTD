@@ -106,7 +106,7 @@ export const EmailTemplate: React.FC<Readonly<EmailTemplateProps>> = ({
             <Section>
               <Text style={sectionHeader}>Tasks you completed yesterday</Text>
               {completed.length > 0 ? (
-                completed.map((task) => <Task task={task} />)
+                completed.map((task) => <Task task={task} noSubtitle />)
               ) : (
                 <Text style={text}>You have no tasks completed yesterday.</Text>
               )}

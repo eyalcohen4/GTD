@@ -40,17 +40,9 @@ const isLocalHost = (host: string) => host?.includes("localhost")
 export default function RootLayout({ children, task }: RootLayoutProps) {
   return (
     <>
-      {isLocalHost(global?.location?.hostname) ? (
-        <HighlightInit
-          projectId={"2d12z3er"}
-          tracingOrigins
-          networkRecording={{
-            enabled: true,
-            recordHeadersAndBody: true,
-            urlBlocklist: [],
-          }}
-        />
-      ) : null}
+      {isLocalHost(global?.location?.hostname) ? null : (
+        <HighlightInit projectId={"odz884dp"} />
+      )}
       <html lang="en" suppressHydrationWarning>
         <head />
         <body

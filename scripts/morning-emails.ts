@@ -65,7 +65,7 @@ async function sendMorningEmail() {
       This will be included in a morning report sent to ${user?.name || ""}.
       The feedback should be very specific about the user tasks, and should help him start his day the best way possible.
       Anything general or useless will be ignored and will not be included in the report.
-      The user need to finish his day with the 2-3 most important tasks completed so he'll feel good.
+      The user need to finish his day with the 2-3 most important tasks completed so he'll feel good. 
 
       Goals: ${goals
         ?.map(({ title, id }) => `title: ${title}; id: ${id}`)
