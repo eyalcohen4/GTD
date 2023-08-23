@@ -1,6 +1,6 @@
 import "@/styles/globals.css"
 import { Metadata } from "next"
-import { HighlightInit } from "@highlight-run/next/highlight-init"
+import { HighlightInit } from "@highlight-run/next/client"
 import { Analytics } from "@vercel/analytics/react"
 import { getSession, useSession } from "next-auth/react"
 
