@@ -2,7 +2,7 @@ import { Metadata } from "next"
 import Image from "next/image"
 import Link from "next/link"
 import { redirect } from "next/navigation"
-import { Command } from "lucide-react"
+import { Command, Hourglass } from "lucide-react"
 import { getServerSession } from "next-auth"
 import { useSession } from "next-auth/react"
 
@@ -27,23 +27,21 @@ export default async function AuthenticationPage() {
       <div className="h-full md:container relative flex-col items-center justify-center md:grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <div className="relative flex-col bg-muted p-10 text-white dark:border-r lg:flex h-60 md:h-full">
           <div
-            className="absolute inset-0 bg-cover"
+            className="absolute inset-0 bg-cover opacity-50 bg-center bg-no-repeat"
             style={{
               backgroundImage:
-                "url(https://images.unsplash.com/photo-1590069261209-f8e9b8642343?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1376&q=80)",
+                "url(https://images.unsplash.com/photo-1505521377774-103a8cc2f735?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTd8fGJlYXV0aWZ1bHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60)",
             }}
           />
-          <div className="relative z-20 flex items-center text-lg font-medium">
-            <Command className="mr-2 h-6 w-6" /> Acme Inc
+          <div className="relative z-20 flex items-center text-xl font-medium">
+            <Hourglass className="mr-2 h-8 w-8" /> Current
           </div>
-          <div className="relative z-20 mt-auto">
+          <div className="relative z-20 mt-4">
             <blockquote className="space-y-2">
               <p className="text-lg">
-                &ldquo;This library has saved me countless hours of work and
-                helped me deliver stunning designs to my clients faster than
-                ever before. Highly recommended!&rdquo;
+                Current is an app designed to help you stay present and focused
+                on what matters most in your life.
               </p>
-              <footer className="text-sm">Sofia Davis</footer>
             </blockquote>
           </div>
         </div>

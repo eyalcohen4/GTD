@@ -130,23 +130,24 @@ model Project {
 }
 
 model Task {
-  id          String       @id @default(uuid())
-  title       String
-  content     Json
-  dueDate     DateTime?
-  completed   Boolean      @default(false)
-  userId      String
-  user        User         @relation(fields: [userId], references: [id])
-  projectId   String?
-  project     Project?     @relation(fields: [projectId], references: [id])
-  contexts    Context[]
-  goal        Goal?        @relation(fields: [goalId], references: [id])
-  goalId      String?
-  status      Status
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  completedAt DateTime?
-  taskColumns TaskColumn[]
+  id                   String       @id @default(uuid())
+  title                String
+  content              Json
+  dueDate              DateTime?
+  completed            Boolean      @default(false)
+  userId               String
+  user                 User         @relation(fields: [userId], references: [id])
+  projectId            String?
+  project              Project?     @relation(fields: [projectId], references: [id])
+  contexts             Context[]
+  goal                 Goal?        @relation(fields: [goalId], references: [id])
+  goalId               String?
+  status               Status
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+  completedAt          DateTime?
+  taskColumns          TaskColumn[]
+  processingAiFeedback String?
 }
 
 model TaskColumn {

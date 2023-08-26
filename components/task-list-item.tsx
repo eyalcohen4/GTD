@@ -85,19 +85,28 @@ export const TaskBadges = ({
   return (
     <div className="flex gap-4 items-center text-sm flex-wrap">
       <TaskBadge>
-        <Box className="h-4 w-4" />
+        {statusOption?.icon ? (
+          <statusOption.icon
+            className={cn("h-4 w-4")}
+            style={{
+              color: statusOption?.color,
+            }}
+          />
+        ) : null}
         <p>{statusOption?.label}</p>
       </TaskBadge>
       {task.contexts?.length && !hideContext ? (
         <TaskBadge>
-          <Locate className="h-4 w-4" />
+          <Locate
+            className="h-4 w-4"
+            style={{
+              color: task.contexts[0].color,
+            }}
+          />
           {task?.contexts?.map((context) => (
             <div
               className="flex items-center gap-2 rounded"
               key={context.title}
-              style={{
-                color: `${context.color}`,
-              }}
             >
               <span className="">{context.title}</span>
             </div>
@@ -106,7 +115,12 @@ export const TaskBadges = ({
       ) : null}
       {task.project ? (
         <TaskBadge>
-          <Flower2 className="h-4 w-4" />
+          <Flower2
+            className="h-4 w-4"
+            style={{
+              color: task.project?.color,
+            }}
+          />
           <p>{task.project?.title}</p>
         </TaskBadge>
       ) : null}
@@ -145,7 +159,7 @@ const TaskLead = ({
       {!hideComplete ? (
         <Checkbox
           circle
-          className="h-6 w-6"
+          className="h-5 w-5"
           checked={checked}
           onClick={onCheck}
         />

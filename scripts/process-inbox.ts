@@ -30,15 +30,6 @@ async function sendMorningEmail() {
 
     const goals = await getGoals(userId)
     const projects = await getProjects(userId)
-    const overdue = await getTasksPreview(userId, {
-      hideCompleted: true,
-      to: dayjs().endOf("day").subtract(1, "day").toISOString(),
-    })
-
-    const today = await getTasksPreview(userId, {
-      hideCompleted: true,
-      to: dayjs().endOf("day").toISOString(),
-    })
 
     const completedThisWeek = await getTasksPreview(userId, {
       statuses: ["ARCHIVE"],
@@ -50,6 +41,21 @@ async function sendMorningEmail() {
       hideCompleted: true,
       from: dayjs().startOf("day").toISOString(),
       to: dayjs().endOf("day").add(3, "day").toISOString(),
+    })
+    const overdue = await getTasksPreview(userId, {
+      hideCompleted: true,
+      to: dayjs().endOf("day").subtract(1, "day").toISOString(),
+    })
+
+    const today = await getTasksPreview(userId, {
+      hideCompleted: true,
+      to: dayjs().endOf("day").toISOString(),
+    })
+
+    const contexts = await prisma.context.findMany({
+      where: {
+        userId,
+      },
     })
 
     const completedYesterday = await getTasksPreview(userId, {
@@ -67,17 +73,57 @@ async function sendMorningEmail() {
       }. He's a busy person with a busy job.
       Your role - Getting Things Done (GTD) Assistant - is to help him acheive his goals and be happy.
 
-      Every morning, you'll get a list of tasks that are due today, tasks that are overdue, and tasks that were completed yesterday.
+      I'm sending you now a list of his goals, projects, today tasks, overdue tasks, tasks that were completed yesterday, and last & next week tasks.
 
-      Your job is to make sure that ${
+      Your job is to process ${
         user?.name || ""
-      } work is prioritized, and that he's working on the right thing, and not getting burned out.
+      } inbox based on the Getting Things Done process flow method.
+      For each task, provide the answers:
+      - What is this?
+      - Is it actionalbe?
+        - If yes, is it multi-step?
+          - If so, suggest a project name and the next action.
+        - If one-step, what is the actual action?
+          - Can it be done in 2 minutes?
+            - If yes, do it now.
+            - If no, can it be delegated or deferd?
+              - If defer - Either suggest a date or attach a project and status.
+              - If delegate - Either suggest a person or attach a suggestion on next action.
+        - If not actionable, is it reference material?
+          - If yes, attach a project and status.
+          - If no, is it trash?
 
-      Please generate a short feedback report of 400 chars or less based on the data above. 
-      This will be included in a morning report sent to ${user?.name || ""}.
-      The feedback should be very specific about the user tasks, and should help him start his day the best way possible.
-      Anything general or useless will be ignored and will not be included in the report.
-      The user need to finish his day with the 2-3 most important tasks completed so he'll feel good. 
+      Provide back this data structure:
+      {
+        "tasks": [
+          {
+            "taskId": "task id",
+            "task title: "task title",
+            "recommendation": "recommendation summary",
+            gtd: {
+              "actionable": true | false,
+              "multiStep": true | false,
+              "nextAction": "next action",
+              "defer": true | false
+              "delegate": true | false
+              "2min": true | false
+              "reference": true | false
+              "incubate": true | false
+              "trash": true | false
+            }            
+            params: {
+              "date": "date",
+              "project": "projectId from projects list",
+              "person": "person",
+              "status": "status",
+              "context": "context",
+            }
+          }
+      } 
+      
+      This will be shown to the user in the app.
+      Return a valid JSON and valid JSON only.
+      Remember, The goal is that the user have only 4,000 weeks to live. every day is cruical and should be lived like there's no tomorrow.
 
       Goals: ${goals
         ?.map(({ title, id }) => `title: ${title}; id: ${id}`)
@@ -88,6 +134,20 @@ async function sendMorningEmail() {
             `title: ${title}; id: ${id}; goalId: ${goalId ?? ""}`
         )
         .join(",")}
+       Completed This Week: ${completedThisWeek?.map(
+         ({ title, status, project }) =>
+           `title: ${title}; ${
+             project?.id ? `projectId: ${project.id}` : ""
+           }; status: ${status}`
+       )}
+      Planned For Next 3 Days: ${plannedForNext3Days?.map(
+        ({ title, status, project }) =>
+          `title: ${title}; ${
+            project?.id ? `projectId: ${project.id}` : ""
+          }; status: ${status}`
+      )}
+      Contexts: ${contexts?.map(({ title }) => title).join(", ")}
+
       Overdue: ${overdue
         ?.map(
           ({ title, status, project }) =>
@@ -96,31 +156,16 @@ async function sendMorningEmail() {
             }; status: ${status}`
         )
         .join(",")}
+        
       Today: ${today?.map(
         ({ title, status, project }) =>
           `title: ${title}; ${
             project?.id ? `projectId: ${project.id}` : ""
           }; status: ${status}`
       )}
-      Completed: ${completedYesterday?.map(
-        ({ title, status, project }) =>
-          `title: ${title}; ${
-            project?.id ? `projectId: ${project.id}` : ""
-          }; status: ${status}`
-      )}
-      Completed This Week: ${completedThisWeek?.map(
-        ({ title, status, project }) =>
-          `title: ${title}; ${
-            project?.id ? `projectId: ${project.id}` : ""
-          }; status: ${status}`
-      )}
-      Planned For Next 3 Days: ${plannedForNext3Days?.map(
-        ({ title, status, project }) =>
-          `title: ${title}; ${
-            project?.id ? `projectId: ${project.id}` : ""
-          }; status: ${status}`
-      )}
-      
+
+      ----- 
+      Here's the inbox tasks:
       Inbox: ${inbox?.map(({ title }) => title).join(", ")}
 
       Thank you!
@@ -145,11 +190,11 @@ async function sendMorningEmail() {
           - Stop trying to get more done, work on what important
           - Stop trying to control your time. Start live it and be present
 
-            Your goal is providing a 300 char feedback for the user, based on the data that I'll send you in the prompt.
-            The feedback should be short, and to the point.
-            It will be shared with a user in their morning email report from their app.
-            Please help the user start his day the best way possible.
-            Be very concise in your feedback, and don't include kitchey words.
+            Your goal is to process the user inbox the best that you can, based on the getting things done method of processing inbox items.
+            This is so the user can live by the above principles.
+
+            You must return a valid JSON.
+            It will be shared with a user through the app.
         `,
         },
         { role: "user", content: feedbackPrompt },
@@ -157,23 +202,7 @@ async function sendMorningEmail() {
       model: "gpt-4",
     })
 
-    const data = await resend.emails.send({
-      from: "Stay Current <morning@staycurrent.app>",
-      to: ["eyalcohen4.ec@gmail.com"],
-      subject: `Your Current Morning: ${dayjs().format(
-        "MMMM D, YYYY"
-      )} Morning`,
-      react: EmailTemplate({
-        firstName: user?.name || "",
-        aiFeedback: aiFeedback.choices?.[0]?.message.content || "",
-        // @ts-ignore
-        projects,
-        overdue,
-        today,
-        completed: completedYesterday,
-        inbox,
-      }),
-    })
+    console.log(aiFeedback.choices?.[0]?.message.content || "")
   } catch (error) {
     console.log(error)
   }

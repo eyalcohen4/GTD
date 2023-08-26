@@ -156,6 +156,7 @@ export const getTasksPreview = async (
         select: {
           id: true,
           title: true,
+          color: true,
         },
       },
     },
