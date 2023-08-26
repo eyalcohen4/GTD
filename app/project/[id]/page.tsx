@@ -396,7 +396,7 @@ const ProjectHeader = ({ project }: { project: Project }) => {
               })
             }}
           />
-          <TimeLeft date={project?.dueDate} />
+          {project?.dueDate ? <TimeLeft date={project?.dueDate} /> : null}
         </div>
       </div>
       <div className="flex flex-col gap-2 w-full">
