@@ -25,7 +25,13 @@ export const TaskGroup = ({
         <CollapsibleTrigger className="h-[40px] w-full">
           <div className="flex h-[40px] px-4 md:px-8 items-center justify-between bg-secondary w-full">
             <div className="flex gap-2 items-center">
-              {status?.icon ? <status.icon /> : null}
+              {status?.icon ? (
+                <status.icon
+                  style={{
+                    color: status?.color,
+                  }}
+                />
+              ) : null}
               <h3 className="text-md font-semibold tracking-tight">
                 {status.label}
               </h3>

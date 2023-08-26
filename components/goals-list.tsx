@@ -161,7 +161,7 @@ const GoalListItemDates = ({ goal }: { goal: GoalPreview }) => {
           }}
         />
       </div>
-      <p className={cn(color, "mt-1")}>{diffCopy}</p>
+      {goal?.dueDate && <p className={cn(color, "mt-1")}>{diffCopy}</p>}
     </div>
   )
 }
