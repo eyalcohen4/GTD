@@ -93,7 +93,13 @@ export const TaskBadges = ({
             }}
           />
         ) : null}
-        <p>{statusOption?.label}</p>
+        <p
+          style={{
+            color: statusOption?.color,
+          }}
+        >
+          {statusOption?.label}
+        </p>
       </TaskBadge>
       {task.contexts?.length && !hideContext ? (
         <TaskBadge>
@@ -107,6 +113,9 @@ export const TaskBadges = ({
             <div
               className="flex items-center gap-2 rounded"
               key={context.title}
+              style={{
+                color: context.color,
+              }}
             >
               <span className="">{context.title}</span>
             </div>
@@ -121,7 +130,13 @@ export const TaskBadges = ({
               color: task.project?.color,
             }}
           />
-          <p>{task.project?.title}</p>
+          <p
+            style={{
+              color: task.project?.color,
+            }}
+          >
+            {task.project?.title}
+          </p>
         </TaskBadge>
       ) : null}
       {task.dueDate ? (
