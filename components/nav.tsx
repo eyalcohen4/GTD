@@ -167,7 +167,7 @@ export const Nav = () => {
                     ? Object.keys(groupedProjectsByStatus).map((status) => (
                         <div>
                           <StatusGroup status={status} />
-                          <div className="ml-4">
+                          <div>
                             {groupedProjectsByStatus[status].map((project) => (
                               <NavItem
                                 isSubItem
@@ -262,10 +262,9 @@ const FilterTrigger = ({ children }: { children: React.ReactNode }) => {
 const StatusGroup = ({ status }: { status: string }) => {
   const instance = goalsStatuses.find((s) => s.value === status)
 
-  console.log(status)
   if (status === "No Status") {
     return (
-      <div className="flex items-center gap-2 mb-2 px-4 dark:bg-gray-800 bg-gray-100">
+      <div className="flex items-center gap-2 px-4 dark:bg-gray-800 bg-gray-100">
         <div className={`h-2 w-2 rounded-full bg-gray-400`} />
         <span className="font-semibold py-1">{status}</span>
       </div>
@@ -277,7 +276,7 @@ const StatusGroup = ({ status }: { status: string }) => {
   }
 
   return (
-    <div className="flex items-center gap-2 mb-2 px-4 dark:bg-gray-800 bg-gray-100">
+    <div className="flex items-center gap-2 px-4 dark:bg-gray-800 bg-gray-100">
       <div className={`h-2 w-2 rounded-full bg-${instance?.color}`} />
       {instance.icon ? (
         <instance.icon
