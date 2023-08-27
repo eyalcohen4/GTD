@@ -128,9 +128,12 @@ export function useCreateTask() {
           })
         )
 
+        console.log("here", queryClient.getQueryData(["tasks"]))
+
         return { previousTasks }
       },
       onError: (err, newTodo, context) => {
+        console.log(err)
         queryClient.setQueryData(["tasks"], context?.previousTasks)
       },
       onSettled: () => {

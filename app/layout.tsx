@@ -37,12 +37,13 @@ interface RootLayoutProps {
 
 const isLocalHost = (host: string) => host?.includes("localhost")
 
+console.log("isLocalHost", isLocalHost(global?.location?.hostname))
 export default function RootLayout({ children, task }: RootLayoutProps) {
   return (
     <>
-      {isLocalHost(global?.location?.hostname) ? null : (
+      {/* {isLocalHost(global?.location?.hostname) ? null : (
         <HighlightInit projectId={"odz884dp"} />
-      )}
+      )} */}
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
