@@ -5,7 +5,7 @@ import OpenAI from "openai"
 
 // Create an OpenAI API client (that's edge friendly!)
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY || "",
+  apiKey: (process.env.OPENAI_API_KEY as string) || "",
 })
 
 // IMPORTANT! Set the runtime to edge: https://vercel.com/docs/functions/edge-functions/edge-runtime
