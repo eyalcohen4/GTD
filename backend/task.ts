@@ -8,7 +8,9 @@ import { getContexts } from "./context"
 import { getGoals } from "./goal"
 import { getProjects } from "./project"
 
-const openai = new OpenAI(process.env.OPENAI_API_KEY || "")
+const openai = new OpenAI({
+  apiKey: (process.env.OPENAI_API_KEY || "") as string,
+})
 
 const buildFeedbackPrompt = ({
   user,
