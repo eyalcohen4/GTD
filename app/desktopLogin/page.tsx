@@ -1,9 +1,9 @@
 export default function DesktopLogin() {
   // @ts-ignore
-  const hash = window.location.hash.substr(1)
+  const hash = global?.window.location.hash.substr(1)
 
   // @ts-ignore
-  window.location.href = `
+  global.window.location.href = `
     current://auth#${hash}
   ` //
 
