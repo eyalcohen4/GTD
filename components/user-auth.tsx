@@ -14,6 +14,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const handleSignIn = () => {
     signIn("google", {
+      // @ts-ignore
       callbackUrl: window?.toDesktop ? `/desktopLogin` : undefined,
     })
   }
