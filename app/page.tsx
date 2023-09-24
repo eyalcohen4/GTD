@@ -21,22 +21,7 @@ export default async function IndexPage() {
         </div>
         <Projects />
         <div className="flex flex-col gap-4">
-          <TasksList statuses={["INBOX"]} title="Inbox" />
-          <TasksList
-            title="Overdue"
-            timeRange={{
-              to: dayjs().endOf("day").subtract(1, "day").toISOString(),
-            }}
-          />
-          <TasksList
-            statuses={statuses
-              .filter(({ value }) => value !== "COMPLETED")
-              .map(({ value }) => value)}
-            title="Today"
-            timeRange={{
-              to: dayjs().endOf("day").toISOString(),
-            }}
-          />
+         <HomeTasks />
         </div>
       </div>
     </AppLayout>
