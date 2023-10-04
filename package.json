@@ -71,7 +71,7 @@
     "next": "^13.4.5-canary.3",
     "next-auth": "^4.22.1",
     "next-themes": "^0.2.1",
-    "novel": "^0.1.17",
+    "novel": "^0.1.22",
     "openai": "^4.4.0",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
