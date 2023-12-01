@@ -4,6 +4,7 @@ import {
   Calendar,
   Check,
   Circle,
+  CircleSlashedIcon,
   Clock1,
   FastForward,
   Hourglass,
@@ -12,6 +13,7 @@ import {
   Pause,
   PlayCircle,
   XCircle,
+  XCircleIcon,
 } from "lucide-react"
 
 import { SomedayIcon } from "@/components/someday-icon"
@@ -68,6 +70,14 @@ export const goalsStatuses: Array<StatusConfig> = [
     color: "#FF0000",
     icon: XCircle,
     order: 5,
+  },
+  {
+    value: "FAILED",
+    label: "Failed",
+    slug: "failed",
+    color: "#FF0000",
+    icon: XCircleIcon,
+    order: 6,
   },
 ]
 

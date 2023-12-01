@@ -1,3 +1,5 @@
+"use client"
+
 import { ReactNode } from "react"
 import Link from "next/link"
 import { Box, Flower, Flower2, Home, Menu } from "lucide-react"
@@ -6,6 +8,7 @@ import { AppCommand } from "../app-command"
 import { GlobalLoader } from "../global-loader"
 import { Nav } from "../nav"
 import { ProfilePicture } from "../profile-picture"
+import { Search } from "../search"
 import { ThemeToggle } from "../theme-toggle"
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 
@@ -52,6 +55,7 @@ const Header = () => {
         <AppCommand />
       </div>
       <ThemeToggle />
+      <Search />
     </div>
   )
 }

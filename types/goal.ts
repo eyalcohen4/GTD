@@ -11,7 +11,7 @@ export const updateGoalInputSchema = z.object({
   title: z.string().optional(),
   content: z.string().optional(),
   status: z
-    .enum(["NOT_STARTED", "IN_PROGRESS", "ON_HOLD", "COMPLETED"])
+    .enum(["NOT_STARTED", "IN_PROGRESS", "ON_HOLD", "COMPLETED", "FAILED"])
     .optional(),
   dueDate: z.string().optional(),
   progress: z.number().min(0).max(100).optional(),
@@ -27,7 +27,13 @@ export const goalSchema = z.object({
   title: z.string(),
   content: z.string(),
   dueDate: z.string(),
-  status: z.enum(["NOT_STARTED", "IN_PROGRESS", "ON_HOLD", "COMPLETED"]),
+  status: z.enum([
+    "NOT_STARTED",
+    "IN_PROGRESS",
+    "ON_HOLD",
+    "COMPLETED",
+    "FAILED",
+  ]),
   progress: z.number().min(0).max(100),
   motivation: z.string().optional(),
   userId: z.string(),

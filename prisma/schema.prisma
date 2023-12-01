@@ -74,6 +74,7 @@ enum GoalStatus {
   ON_HOLD
   COMPLETED
   CANCELLED
+  FAILED
 }
 
 model Goal {

@@ -72,9 +72,9 @@ export const TaskForm = ({
     [contexts]
   )
 
-  const handleUpdateTask = (input: UpdateTaskInput) => {
+  const handleUpdateTask = async (input: UpdateTaskInput) => {
     if (task?.id) {
-      updateTask({ id: task.id || "", input })
+      await updateTask({ id: task.id || "", input })
     }
   }
 
@@ -85,9 +85,9 @@ export const TaskForm = ({
   }
 
   const getSelectedStatus = () => {
-    const status = statuses.find(
-      ({ value }) => value === task?.status || "INBOX"
-    )
+    const status = statuses.find(({ value }) => {
+      return value === task?.status
+    })
 
     return {
       value: status?.value || "",
@@ -97,7 +97,10 @@ export const TaskForm = ({
     }
   }
 
-  const selectedStatus = useMemo(() => getSelectedStatus(), [task])
+  const selectedStatus = useMemo(
+    () => getSelectedStatus(),
+    [statuses, task?.status]
+  )
 
   const selectedProject = useMemo(
     () => projectsOptions?.find(({ value }) => value === task?.projectId),

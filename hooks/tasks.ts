@@ -19,6 +19,7 @@ export function useGetTasks(params?: {
     from?: string
     to?: string
   }
+  skip?: boolean
 }): {
   isLoading: boolean
   tasks: TaskPreview[]
@@ -70,12 +71,18 @@ export function useGetTasks(params?: {
     return url.href
   }
 
-  const { isLoading, data, refetch } = useQuery(["tasks", params], async () => {
-    const url = buildUrl()
-    const request = await fetch(url)
+  const { isLoading, data, refetch } = useQuery(
+    ["tasks", params],
+    async () => {
+      const url = buildUrl()
+      const request = await fetch(url)
 
-    return request.json()
-  })
+      return request.json()
+    },
+    {
+      enabled: !params?.skip,
+    }
+  )
 
   return {
     isLoading,
