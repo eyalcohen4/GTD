@@ -16,7 +16,7 @@ import {
 } from "lucide-react"
 
 import { GoalPreview, UpdateGoalInput } from "@/types/goal"
-import { Project } from "@/types/project"
+import { Project, UpdateProjectInput } from "@/types/project"
 import { cn } from "@/lib/utils"
 import { useDeleteGoal } from "@/hooks/goals"
 import { useDeleteProject, useUpdateProject } from "@/hooks/projects"
@@ -73,7 +73,7 @@ const ProjectListItem = ({ project }: { project: Project }) => {
     })
   }
 
-  const handleUpdateProject = async (input: UpdateGoalInput) => {
+  const handleUpdateProject = async (input: UpdateProjectInput) => {
     await updateProject({ id: project.id, input })
     toast({
       title: "Project updated",
