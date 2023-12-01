@@ -161,7 +161,7 @@ const ProjectListItemDates = ({ project }: { project: Project }) => {
       : `${Math.abs(difference)} days overdue`
   const color = difference > 0 ? "text-green-800" : "text-red-800"
 
-  const handleUpdateProject = async (input: UpdateGoalInput) => {
+  const handleUpdateProject = async (input: UpdateProjectInput) => {
     await updateProject({ id: project.id, input })
     toast({
       title: "Project updated",
