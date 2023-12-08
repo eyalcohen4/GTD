@@ -73,7 +73,7 @@ export const Color = ({
     </div>
   ) : (
     <div
-      className="w-5 h-5 rounded-full hover:scale-110"
+      className="w-4 h-4 rounded-full hover:scale-110"
       style={{ background: color }}
       onClick={onClick}
     />

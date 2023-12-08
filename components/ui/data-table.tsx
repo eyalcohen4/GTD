@@ -1,10 +1,13 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import {
   ColumnDef,
+  SortingState,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
 
@@ -39,11 +42,18 @@ export function DataTable<TData, TValue>({
   rowCta,
   onCheck,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     enableRowSelection: true,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   })
 
   return (
@@ -52,7 +62,6 @@ export function DataTable<TData, TValue>({
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
-              <TableHead key={`${headerGroup.id}-select`}></TableHead>
               {headerGroup.headers.map((header) => {
                 return (
                   <TableHead key={header.id}>
@@ -76,24 +85,9 @@ export function DataTable<TData, TValue>({
                 data-state={row.getIsSelected() && "selected"}
                 onClick={() => onCellClick && onCellClick(row.original)}
                 className={`${onCellClick ? "cursor-pointer" : ""} 
-                  text-md animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 data-[state=open]:sm:slide-in-from-bottom-0
+                  text-sm animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 data-[state=open]:sm:slide-in-from-bottom-0
                 `}
               >
-                <TableCell
-                  key={`${row.id}-select`}
-                  className="flex items-center"
-                >
-                  <Checkbox
-                    circle
-                    className="h-6 w-6"
-                    // @ts-ignore
-                    checked={row.original?.completed}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      onCheck && onCheck(row.original)
-                    }}
-                  />
-                </TableCell>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}

@@ -4,6 +4,8 @@ import { SearchIcon } from "lucide-react"
 
 import { useGetTasks } from "@/hooks/tasks"
 
+import { useProjects } from "./providers/projects-provider"
+import { useSearch } from "./providers/search-provider"
 import { TaskListItem } from "./task-list-item"
 import { TasksList } from "./tasks-list"
 import { Button } from "./ui/button"
@@ -12,21 +14,24 @@ import { Input } from "./ui/input"
 
 export const Search = () => {
   const [query, setQuery] = useState("")
+  const { isOpen, toggle } = useSearch()
   const debouncedQuery = useDebounce(query, 500)
   const { tasks } = useGetTasks({
     includeCompleted: true,
     search: debouncedQuery,
     skip: !debouncedQuery,
   })
+  const { projects } = useProjects()
+  const possibleProjects = projects?.filter((project) =>
+    project.title.toLowerCase().includes(debouncedQuery.toLowerCase())
+  )
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
   }
 
-  console.log(tasks)
-
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={() => toggle()}>
       <DialogTrigger>
         <Button variant="ghost">
           <SearchIcon />
@@ -47,6 +52,11 @@ export const Search = () => {
           <div className="w-full">
             {tasks?.map((task) => (
               <TaskListItem task={task} hideComplete />
+            ))}
+          </div>
+          <div>
+            {possibleProjects?.map((project) => (
+              <TaskListItem task={project} hideComplete />
             ))}
           </div>
         </div>

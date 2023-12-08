@@ -1,6 +1,6 @@
 "use client"
 
-import { ReactNode } from "react"
+import { ReactNode, useEffect } from "react"
 import Link from "next/link"
 import { Box, Flower, Flower2, Home, Menu } from "lucide-react"
 
@@ -8,15 +8,30 @@ import { AppCommand } from "../app-command"
 import { GlobalLoader } from "../global-loader"
 import { Nav } from "../nav"
 import { ProfilePicture } from "../profile-picture"
+import { useSearch } from "../providers/search-provider"
 import { Search } from "../search"
 import { ThemeToggle } from "../theme-toggle"
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet"
 
 export const AppLayout = ({ children }: { children: ReactNode }) => {
+  const { toggle } = useSearch()
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        toggle()
+      }
+    }
+
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [])
+
   return (
     <div className="h-screen">
       <GlobalLoader />
-      <div className="md:grid md:grid-cols-[265px_1fr] h-[calc(100vh-81px)] w-full">
+      <div className="md:grid md:grid-cols-[200px_1fr] h-[calc(100vh-81px)] w-full">
         <aside className="h-full border-r md:block hidden">
           <div className="mt-4 px-4 flex  h-[60px] items-center justify-between">
             <p className="text-xl font-bold">Current</p>

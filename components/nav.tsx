@@ -8,12 +8,16 @@ import {
   AlignJustify,
   ChevronDown,
   Filter,
+  FolderOpenIcon,
   Globe,
+  GridIcon,
   Home,
   Layers,
   LineChart,
   LucideIcon,
   Sunrise,
+  TargetIcon,
+  TrophyIcon,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -101,7 +105,7 @@ export const Nav = () => {
   return (
     <nav className="flex flex-col gap-4 w-full">
       <ScrollArea>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 text-sm">
           <Link
             href="/"
             className={
@@ -111,88 +115,34 @@ export const Nav = () => {
             <Home className="h-4 w-4" />
             <span className="rounded-md py-1">Home</span>
           </Link>
-
           <Link
-            href="/boards"
+            href="/projects"
             className={
               "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
-            <Layers className="h-4 w-4" />
-            <span className="rounded-md py-1">Boards</span>
+            <GridIcon className="h-4 w-4" />
+            <span className="rounded-md py-1">Projects</span>
           </Link>
 
           <Link
-            href="/kpis"
+            href="/goals"
             className={
               "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
-            <LineChart className="h-4 w-4" />
-            <span className="rounded-md py-1">KPIs</span>
+            <TrophyIcon className="h-4 w-4" />
+            <span className="rounded-md py-1">Goals</span>
           </Link>
-          <div>
-            <div className="flex items-center gap-2 mb-2 px-4">
-              <AlignJustify className="h-4 w-4" />
-              <span className="rounded-md py-1">Views</span>
-            </div>
-            <div>
-              <Collapsible>
-                <CollapsibleTrigger className="w-full">
-                  <FilterTrigger>Time</FilterTrigger>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  {timingNavItems.map((item) => (
-                    <NavItem isSubItem key={item.name} item={item} />
-                  ))}
-                </CollapsibleContent>
-              </Collapsible>
-              <Collapsible defaultOpen={pageContext?.type === "status"}>
-                <CollapsibleTrigger className="w-full">
-                  <FilterTrigger>Status</FilterTrigger>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  {statusesNavItems.map((item) => (
-                    <NavItem isSubItem key={item.name} item={item} />
-                  ))}
-                </CollapsibleContent>
-              </Collapsible>
-
-              <Collapsible defaultOpen={pageContext?.type === "project"}>
-                <CollapsibleTrigger className="w-full">
-                  <FilterTrigger>Project</FilterTrigger>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  {groupedProjectsByStatus
-                    ? Object.keys(groupedProjectsByStatus).map((status) => (
-                        <div>
-                          <StatusGroup status={status} />
-                          <div>
-                            {groupedProjectsByStatus[status].map((project) => (
-                              <NavItem
-                                isSubItem
-                                key={project.name}
-                                item={project}
-                              />
-                            ))}
-                          </div>
-                        </div>
-                      ))
-                    : null}
-                </CollapsibleContent>
-              </Collapsible>
-              <Collapsible defaultOpen={pageContext?.type === "context"}>
-                <CollapsibleTrigger className="w-full">
-                  <FilterTrigger>Context</FilterTrigger>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  {contextsMenu?.map((context) => (
-                    <NavItem isSubItem key={context.id} item={context} />
-                  ))}
-                </CollapsibleContent>
-              </Collapsible>
-            </div>
-          </div>
+          <Link
+            href="/goals"
+            className={
+              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+            }
+          >
+            <AlignJustify className="h-4 w-4" />
+            <span className="rounded-md py-1">Views</span>
+          </Link>
         </div>
       </ScrollArea>
     </nav>

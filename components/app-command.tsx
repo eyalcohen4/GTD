@@ -21,18 +21,6 @@ export function AppCommand({ ...props }: any) {
   const session = useSession()
   const { toast } = useToast()
 
-  React.useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        ref.current?.focus()
-      }
-    }
-
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
-
   const getPageBasedParams = (): {
     projectId?: string
     status?: string

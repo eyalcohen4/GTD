@@ -22,6 +22,7 @@ import { useDeleteGoal } from "@/hooks/goals"
 import { useDeleteProject, useUpdateProject } from "@/hooks/projects"
 import { toast } from "@/hooks/use-toast"
 
+import { Color, ColorPicker } from "./color-picker"
 import { ComboboxPopover } from "./combobox"
 import { DatePicker } from "./date-picker"
 import { useGoals } from "./providers/goals-provider"
@@ -93,6 +94,7 @@ const ProjectListItem = ({ project }: { project: Project }) => {
     >
       <div className="border-b hover:bg-slate-200 dark:hover:bg-slate-900 h-full px-8">
         <div className={cn("flex items-center justify-between h-full gap-4")}>
+          <Color color={project.color || ""} />
           <div className="flex gap-4 items-center max-w-full">
             {project.title}
           </div>

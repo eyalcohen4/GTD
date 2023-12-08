@@ -8,6 +8,7 @@ import { ContextsProvider } from "./providers/contexts-provider"
 import { GoalsProvider } from "./providers/goals-provider"
 import { ProjectsProvider } from "./providers/projects-provider"
 import { TasksProvider } from "./providers/tasks-provider"
+import { SearchProvider } from "./providers/search-provider"
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,7 +28,9 @@ export default function ClientProvider({ children }: { children: ReactNode }) {
       <ContextsProvider>
         <GoalsProvider>
           <ProjectsProvider>
-            <TasksProvider>{children}</TasksProvider>
+            <SearchProvider>
+              <TasksProvider>{children}</TasksProvider>
+            </SearchProvider>
           </ProjectsProvider>
         </GoalsProvider>
       </ContextsProvider>

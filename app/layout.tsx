@@ -2,11 +2,11 @@ import "@/styles/globals.css"
 import { Metadata } from "next"
 import { HighlightInit } from "@highlight-run/next/client"
 import { Analytics } from "@vercel/analytics/react"
+import { GeistMono } from "geist/font/mono"
+import { GeistSans } from "geist/font/sans"
 import { getSession, useSession } from "next-auth/react"
 
-import "cal-sans"
 import { siteConfig } from "@/config/site"
-import { fontSans } from "@/lib/fonts"
 import { cn } from "@/lib/utils"
 import ClientProvider from "@/components/client-provider"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
@@ -34,21 +34,15 @@ interface RootLayoutProps {
   task: any
 }
 
-const isLocalHost = (host: string) => host?.includes("localhost")
-
-console.log("isLocalHost", isLocalHost(global?.location?.hostname))
 export default function RootLayout({ children, task }: RootLayoutProps) {
   return (
     <>
-      {/* {isLocalHost(global?.location?.hostname) ? null : (
-        <HighlightInit projectId={"odz884dp"} />
-      )} */}
       <html lang="en" suppressHydrationWarning>
         <head />
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
-            fontSans.variable
+            "min-h-screen bg-background antialiased",
+            GeistSans.className
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>

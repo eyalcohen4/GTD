@@ -184,9 +184,20 @@ const TaskLead = ({
   )
 }
 
-const TaskBadge = ({ children }: { children: ReactNode }) => {
+export const TaskBadge = ({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) => {
   return (
-    <div className="border rounded-md h-full flex items-center gap-2 px-2 py-1 text-xs">
+    <div
+      className={cn(
+        "border rounded-md h-full flex items-center gap-2 px-2 py-1 text-xs",
+        className
+      )}
+    >
       {children}
     </div>
   )
