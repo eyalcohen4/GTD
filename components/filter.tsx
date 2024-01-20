@@ -98,9 +98,9 @@ export function Filter({
                       <Badge
                         variant="secondary"
                         key={option.value}
-                        style={{
-                          color: option?.color || "",
-                        }}
+                        // style={{
+                        //   color: option?.color || "",
+                        // }}
                         className="rounded-sm px-1 font-normal dark:text-white"
                       >
                         {option.label}

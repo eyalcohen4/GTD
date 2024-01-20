@@ -243,7 +243,7 @@ const DueDateCell = ({ project }: { project: Project }) => {
   )
 }
 
-export const StatusCell = ({ project }: { project: Project }) => {
+const StatusCell = ({ project }: { project: Project }) => {
   const { status, id } = project
   const selectedStatus = goalsStatuses.find(({ value }) => value === status)
   const { updateProject } = useUpdateProject()

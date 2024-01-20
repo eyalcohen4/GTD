@@ -236,7 +236,7 @@ const DueDateCell = ({ goal }: { goal: GoalPreview }) => {
   )
 }
 
-export const StatusCell = ({ goal }: { goal: GoalPreview }) => {
+const StatusCell = ({ goal }: { goal: GoalPreview }) => {
   const { status, id } = goal
   const selectedStatus = goalsStatuses.find(({ value }) => value === status)
   const { updateGoal } = useUpdateGoal()

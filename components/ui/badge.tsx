@@ -3,9 +3,11 @@ import { ReactNode } from "react"
 import { cn } from "@/lib/utils"
 
 export const Badge = ({
+  variant,
   children,
   className,
 }: {
+  variant?: "primary" | "secondary" | "success" | "warning" | "danger"
   children: ReactNode
   className?: string
 }) => {
