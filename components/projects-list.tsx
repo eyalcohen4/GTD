@@ -189,8 +189,8 @@ const ProjectListItemDates = ({ project }: { project: Project }) => {
   )
 }
 
-/** 
- * 
+/**
+ *
  * <div
       key={project.title}
       className="rounded-lg border bg-card text-card-foreground shadow-sm p-6"
@@ -258,5 +258,5 @@ const ProjectListItemDates = ({ project }: { project: Project }) => {
         </div>
       </div>
     </div>
- * 
+ *
 */

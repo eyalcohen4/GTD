@@ -7,8 +7,6 @@ import { HomeTasks } from "@/components/home-tasks"
 import { AppLayout } from "@/components/layouts/app-layout"
 import { Onboarding } from "@/components/onboarding"
 import { Projects } from "@/components/projects"
-import { TasksList } from "@/components/tasks-list"
-
 
 export default async function IndexPage() {
   return (
@@ -19,10 +17,10 @@ export default async function IndexPage() {
           <Onboarding />
           <Goals />
         </div>
-        <Projects />
         <div className="flex flex-col gap-4">
-         <HomeTasks />
+          <HomeTasks />
         </div>
+        <Projects />
       </div>
     </AppLayout>
   )

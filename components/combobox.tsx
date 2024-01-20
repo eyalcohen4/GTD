@@ -5,7 +5,7 @@ import { render } from "@headlessui/react/dist/utils/render"
 import { Check, Loader, LucideIcon, PlusCircle, X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 import {
   Command,
   CommandEmpty,
@@ -46,6 +46,7 @@ export function ComboboxPopover({
   type,
   matchContainerSize,
   iconWithColor = true,
+  variant,
 }: {
   value?: Option | Option[] | null
   name: string
@@ -56,6 +57,7 @@ export function ComboboxPopover({
   matchContainerSize?: boolean
   iconWithColor?: boolean
   onChange: (option: Option | Option[] | null) => void
+  variant?: ButtonProps["variant"]
 }) {
   const [open, setOpen] = React.useState(false)
   const [selected, setSelectedItem] = React.useState<Option | null>(null)
@@ -134,6 +136,7 @@ export function ComboboxPopover({
         <PopoverTrigger className="w-full">
           <Trigger
             loading={loading}
+            variant={variant}
             selected={selected}
             multipleSelected={multipleSelected}
             name={name}
@@ -271,6 +274,7 @@ const Trigger = ({
   remove,
   iconWithColor,
   name,
+  variant,
 }: {
   loading?: boolean
   selected?: Option | null
@@ -278,10 +282,11 @@ const Trigger = ({
   name: string
   iconWithColor?: boolean
   remove?: (value?: string) => void
+  variant?: ButtonProps["variant"]
 }) => {
   return (
     <Button
-      variant="outline"
+      variant={variant || "outline"}
       size="sm"
       className="min-w-[200px] w-full justify-start"
     >

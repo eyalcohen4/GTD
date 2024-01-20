@@ -135,7 +135,7 @@ export const Nav = () => {
             <span className="rounded-md py-1">Goals</span>
           </Link>
           <Link
-            href="/goals"
+            href="/views"
             className={
               "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
             }

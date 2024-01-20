@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 import { useUpdateTask } from "@/hooks/tasks"
 
 import { Checkbox } from "./ui/checkbox"
+import { Popover } from "./ui/popover"
 import { Skeleton } from "./ui/skeleton"
 
 export const TaskListItem = ({
@@ -84,23 +85,25 @@ export const TaskBadges = ({
 
   return (
     <div className="flex gap-4 items-center text-sm flex-wrap">
-      <TaskBadge>
-        {statusOption?.icon ? (
-          <statusOption.icon
-            className={cn("h-4 w-4")}
+      <Popover>
+        <TaskBadge>
+          {statusOption?.icon ? (
+            <statusOption.icon
+              className={cn("h-4 w-4")}
+              style={{
+                color: statusOption?.color,
+              }}
+            />
+          ) : null}
+          <p
             style={{
               color: statusOption?.color,
             }}
-          />
-        ) : null}
-        <p
-          style={{
-            color: statusOption?.color,
-          }}
-        >
-          {statusOption?.label}
-        </p>
-      </TaskBadge>
+          >
+            {statusOption?.label}
+          </p>
+        </TaskBadge>
+      </Popover>
       {task.contexts?.length && !hideContext ? (
         <TaskBadge>
           <Locate

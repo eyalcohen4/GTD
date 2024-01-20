@@ -58,6 +58,7 @@ model User {
   experiments   Experiment[]
   notes         Note[]
   boards        Board[]
+  views         View[]
 }
 
 model VerificationToken {
@@ -128,6 +129,7 @@ model Project {
   kpis                Kpi[]
   experiments         Experiment[]
   notes               Note[]
+  viewsId             String?
 }
 
 model Task {
@@ -268,4 +270,20 @@ model Column {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
   color     String?
+}
+
+enum ViewType {
+  TASK
+  PROJECT
+}
+
+model View {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  name      String
+  filter    Json
+  type      ViewType
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

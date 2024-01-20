@@ -30,6 +30,7 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
   className?: string
   rowCta?: string
+  defaultSort?: [{ id: string; desc: boolean }]
   onCellClick?: (event: TData) => void
   onCheck?: (event: TData) => void
 }
@@ -40,9 +41,9 @@ export function DataTable<TData, TValue>({
   onCellClick,
   className,
   rowCta,
-  onCheck,
+  defaultSort,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([])
+  const [sorting, setSorting] = useState<SortingState>(defaultSort || [])
 
   const table = useReactTable({
     data,
@@ -84,7 +85,7 @@ export function DataTable<TData, TValue>({
                 key={row.id}
                 data-state={row.getIsSelected() && "selected"}
                 onClick={() => onCellClick && onCellClick(row.original)}
-                className={`${onCellClick ? "cursor-pointer" : ""} 
+                className={`${onCellClick ? "cursor-pointer" : ""}
                   text-sm animate-in data-[state=open]:fade-in-90 data-[state=open]:slide-in-from-bottom-10 data-[state=open]:sm:slide-in-from-bottom-0
                 `}
               >

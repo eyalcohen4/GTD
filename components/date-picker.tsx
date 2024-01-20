@@ -5,7 +5,7 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { Button, ButtonProps } from "@/components/ui/button"
 import { Calendar } from "@/components/ui/calendar"
 import {
   Popover,
@@ -17,10 +17,12 @@ export function DatePicker({
   value,
   placeholder,
   onChange,
+  variant,
 }: {
   placeholder?: string
   value: Date | undefined
   onChange: (date?: Date) => void
+  variant?: ButtonProps["variant"]
 }) {
   const [date, setDate] = React.useState<Date | null>(value || null)
 
@@ -33,7 +35,7 @@ export function DatePicker({
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
+          variant={variant || "outline"}
           className={cn(
             "w-full justify-start text-left font-normal",
             !date && "text-muted-foreground"
