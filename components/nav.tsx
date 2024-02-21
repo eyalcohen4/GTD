@@ -110,7 +110,7 @@ export const Nav = () => {
           <Link
             href="/"
             className={
-              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-1 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <Home className="h-4 w-4" />
@@ -119,7 +119,7 @@ export const Nav = () => {
           <Link
             href="/projects"
             className={
-              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-1 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <GridIcon className="h-4 w-4" />
@@ -129,7 +129,7 @@ export const Nav = () => {
           <Link
             href="/goals"
             className={
-              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-1 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <TrophyIcon className="h-4 w-4" />
@@ -138,7 +138,7 @@ export const Nav = () => {
           <Link
             href="/kpis"
             className={
-              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-1 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <BarChart className="h-4 w-4" />
@@ -147,7 +147,7 @@ export const Nav = () => {
           <Link
             href="/views"
             className={
-              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-1 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <AlignJustify className="h-4 w-4" />

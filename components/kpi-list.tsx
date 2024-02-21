@@ -10,6 +10,7 @@ import {
   HashIcon,
   Loader,
   MoreHorizontal,
+  PlusCircleIcon,
   PlusIcon,
   TrashIcon,
 } from "lucide-react"
@@ -66,15 +67,15 @@ export const KpiList = () => {
 
 const KpiListItem = ({ kpi }: { kpi: Kpi }) => {
   return (
-    <Card className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+    <Card className="rounded-lg border bg-card text-card-foreground shadow-sm p-6 w-full">
       <CardHeader className="flex justify-between items-center flex-row p-2">
         <CardTitle>{kpi.title}</CardTitle>
-        <div>
+        <div className="flex gap-2">
           <DeleteKpi id={kpi.id} />
           <AddEntry id={kpi.id} />
         </div>
       </CardHeader>
-      <CardContent className="h-[300px]">
+      <CardContent className="h-[350px]">
         <ResponsiveLine
           data={[
             {
@@ -86,14 +87,23 @@ const KpiListItem = ({ kpi }: { kpi: Kpi }) => {
             },
           ]}
           margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
-          xScale={{ type: "time", format: "%Y-%m-%d", useUTC: false }}
+          xScale={{
+            type: "time",
+            format: "%Y-%m-%d",
+            useUTC: false,
+            precision: "day",
+          }}
           xFormat="time:%Y-%m-%d"
           yScale={{ type: "linear", min: "auto", max: "auto", stacked: false }}
-          axisTop={null}
-          axisRight={null}
           axisBottom={{
             format: "%b %d",
             tickValues: "every 1 day",
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "transportation",
+            legendOffset: 36,
+            legendPosition: "middle",
           }}
           axisLeft={{
             // orient: "left",
@@ -104,7 +114,6 @@ const KpiListItem = ({ kpi }: { kpi: Kpi }) => {
             legendOffset: -40,
             legendPosition: "middle",
           }}
-          colors={{ scheme: "category10" }}
           pointSize={10}
           pointColor={{ theme: "background" }}
           pointBorderWidth={2}
@@ -129,7 +138,7 @@ const DeleteKpi = ({ id }: { id: string }) => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <TrashIcon className="h-4 w-4 text-red-400" />
+        <TrashIcon className="text-red-400" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -163,7 +172,7 @@ const AddEntry = ({ id }: { id: string }) => {
   return (
     <Popover>
       <PopoverTrigger>
-        <PlusIcon />
+        <PlusCircleIcon />
       </PopoverTrigger>
       <PopoverContent>
         <div className="grid gap-4">
