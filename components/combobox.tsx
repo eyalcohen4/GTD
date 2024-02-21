@@ -28,7 +28,7 @@ export type Option = {
   color?: string
   value: string
   label: string
-  icon?: LucideIcon
+  icon?: LucideIcon 
 }
 
 const CREATE_COMPONENTS = {

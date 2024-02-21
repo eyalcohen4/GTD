@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { GoalPreview } from "@/types/goal"
-import { Kpi, KpiInput, UpdateKpiInput } from "@/types/kpi"
+import { Kpi, KpiEntryInput, KpiInput, UpdateKpiInput } from "@/types/kpi"
 
 export const useCreateKpi = () => {
   const queryClient = useQueryClient()
@@ -48,6 +48,30 @@ export const useCreateKpi = () => {
       onError: (err, newTodo, context) => {
         queryClient.setQueryData(["kpis"], context?.previousKpis)
       },
+      onSettled: () => {
+        queryClient.invalidateQueries({ queryKey: ["kpis"] })
+      },
+    }
+  )
+
+  return mutation
+}
+
+export const useCreateKpiEntry = () => {
+  const queryClient = useQueryClient()
+
+  const mutation = useMutation(
+    async (entry: KpiEntryInput) => {
+      const response = await fetch(`/api/kpi/${entry.kpiId}/entry`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ input: entry }),
+      })
+      return response.json()
+    },
+    {
       onSettled: () => {
         queryClient.invalidateQueries({ queryKey: ["kpis"] })
       },

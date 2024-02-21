@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import { StatusConfig, goalsStatuses, statuses } from "@/constants/statuses"
 import {
   AlignJustify,
+  BarChart,
   ChevronDown,
   Filter,
   FolderOpenIcon,
@@ -109,7 +110,7 @@ export const Nav = () => {
           <Link
             href="/"
             className={
-              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <Home className="h-4 w-4" />
@@ -118,7 +119,7 @@ export const Nav = () => {
           <Link
             href="/projects"
             className={
-              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <GridIcon className="h-4 w-4" />
@@ -128,16 +129,25 @@ export const Nav = () => {
           <Link
             href="/goals"
             className={
-              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <TrophyIcon className="h-4 w-4" />
             <span className="rounded-md py-1">Goals</span>
           </Link>
           <Link
+            href="/kpis"
+            className={
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
+            }
+          >
+            <BarChart className="h-4 w-4" />
+            <span className="rounded-md py-1">KPIs</span>
+          </Link>
+          <Link
             href="/views"
             className={
-              "flex px-4 items-center w-full gap-2 cursor-pointer hover:bg-slate-200 dark:hover:bg-slate-800"
+              "flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-slate-200 dark:hover:bg-slate-800"
             }
           >
             <AlignJustify className="h-4 w-4" />

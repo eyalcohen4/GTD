@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createGoal, getGoal, getGoals, updateGoal } from "@/backend/goal"
-import { createKpi, getKpis } from "@/backend/kpi"
+import { createKpi, getKpi, getKpis, updateKpi } from "@/backend/kpi"
 import { getServerSession } from "next-auth"
 
 import {
@@ -9,7 +9,12 @@ import {
   goalInputSchema,
   updateGoalInputSchema,
 } from "@/types/goal"
-import { KpiInput } from "@/types/kpi"
+import {
+  KpiInput,
+  UpdateKpiInput,
+  kpiInputSchema,
+  updateKpiInputSchema,
+} from "@/types/kpi"
 
 import { authOptions } from "../auth/[...nextauth]/route"
 
@@ -27,7 +32,7 @@ export const POST = async (request: Request) => {
       return 422
     }
 
-    const kpi = await createKpi(goalInputSchema.parse(body.input))
+    const kpi = await createKpi(kpiInputSchema.parse(body.input))
     return NextResponse.json({ kpi })
   } catch (error) {
     console.log(error)
@@ -50,7 +55,7 @@ export const PATCH = async (request: Request) => {
   try {
     const session = await getServerSession(authOptions)
     const body = (await request.json()) as {
-      input: UpdateGoalInput
+      input: UpdateKpiInput
       id: string
     }
 
@@ -64,9 +69,9 @@ export const PATCH = async (request: Request) => {
       return 403
     }
 
-    const updated = await updateGoal(
+    const updated = await updateKpi(
       body.id,
-      updateGoalInputSchema.parse(body.input)
+      updateKpiInputSchema.parse(body.input)
     )
     return NextResponse.json({ goal: updated })
   } catch (error) {

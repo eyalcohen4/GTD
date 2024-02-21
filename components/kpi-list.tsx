@@ -1,30 +1,49 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { goalsStatuses } from "@/constants/statuses"
+import { ResponsiveLine } from "@nivo/line"
 import dayjs from "dayjs"
-import { Loader, MoreHorizontal } from "lucide-react"
+import {
+  DeleteIcon,
+  HashIcon,
+  Loader,
+  MoreHorizontal,
+  PlusIcon,
+  TrashIcon,
+} from "lucide-react"
 
 import { GoalPreview, UpdateGoalInput } from "@/types/goal"
 import { Kpi } from "@/types/kpi"
 import { cn } from "@/lib/utils"
 import { useDeleteGoal } from "@/hooks/goals"
-import { useGetKpis } from "@/hooks/kpis"
+import { useCreateKpiEntry, useDeleteKpi, useGetKpis } from "@/hooks/kpis"
 import { toast } from "@/hooks/use-toast"
 
 import { ComboboxPopover } from "./combobox"
 import { DatePicker } from "./date-picker"
+import {
+  FormProperty,
+  FormPropertyLabel,
+  FormPropertyValue,
+} from "./form-properties"
 import { useGoals } from "./providers/goals-provider"
 import { useProjects } from "./providers/projects-provider"
-import { Badge } from "./ui/badge"
-import { Card, CardTitle } from "./ui/card"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
-import { Progress } from "./ui/progress"
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTrigger,
+} from "./ui/alert-dialog"
+import { Button } from "./ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card"
+import { Dialog, DialogContent } from "./ui/dialog"
+import { Input } from "./ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover"
 
 export const KpiList = () => {
   const query = useGetKpis()
@@ -46,33 +65,118 @@ export const KpiList = () => {
 }
 
 const KpiListItem = ({ kpi }: { kpi: Kpi }) => {
-  const { projects } = useProjects()
+  return (
+    <Card className="rounded-lg border bg-card text-card-foreground shadow-sm p-6">
+      <CardHeader className="flex justify-between items-center flex-row p-2">
+        <CardTitle>{kpi.title}</CardTitle>
+        <div>
+          <DeleteKpi id={kpi.id} />
+          <AddEntry id={kpi.id} />
+        </div>
+      </CardHeader>
+      <CardContent className="h-[300px]">
+        <ResponsiveLine
+          data={[
+            {
+              id: "kpi",
+              data: kpi.entries.map((entry) => ({
+                x: dayjs(entry.date).format("YYYY-MM-DD"),
+                y: entry.value,
+              })),
+            },
+          ]}
+          margin={{ top: 10, right: 10, bottom: 10, left: 10 }}
+          xScale={{ type: "time", format: "%Y-%m-%d", useUTC: false }}
+          xFormat="time:%Y-%m-%d"
+          yScale={{ type: "linear", min: "auto", max: "auto", stacked: false }}
+          axisTop={null}
+          axisRight={null}
+          axisBottom={{
+            format: "%b %d",
+            tickValues: "every 1 day",
+          }}
+          axisLeft={{
+            // orient: "left",
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            legend: "value",
+            legendOffset: -40,
+            legendPosition: "middle",
+          }}
+          colors={{ scheme: "category10" }}
+          pointSize={10}
+          pointColor={{ theme: "background" }}
+          pointBorderWidth={2}
+          pointBorderColor={{ from: "serieColor" }}
+          pointLabelYOffset={-12}
+          useMesh={true}
+        />
+      </CardContent>
+    </Card>
+  )
+}
 
-  // const handleDeleteGoal = async () => {
-  //   await deleteGoal({ id: goal.id })
-  //   toast({
-  //     title: "Goal deleted",
-  //     description: "Your goal has been deleted",
-  //     variant: "success",
-  //   })
-  // }
+const DeleteKpi = ({ id }: { id: string }) => {
+  const deleteKpi = useDeleteKpi()
 
-  // const handleUpdateGoal = async (input: UpdateGoalInput) => {
-  //   await updateGoal({ id: goal.id, input })
-  //   toast({
-  //     title: "Goal updated",
-  //     description: "Your goal has been updated",
-  //     variant: "success",
-  //   })
-  // }
+  const handleDelete = async () => {
+    try {
+      await deleteKpi.mutateAsync({ id })
+    } catch (error) {}
+  }
 
   return (
-    <div
-      key={kpi.title}
-      className="rounded-lg border bg-card text-card-foreground shadow-sm p-6"
-    >
-      <div className="flex items-center justify-between mb-4">{kpi.title}</div>
-      <div className="flex gap-4 flex-col mt-4">{kpi.entries[0]?.value}</div>
-    </div>
+    <AlertDialog>
+      <AlertDialogTrigger>
+        <TrashIcon className="h-4 w-4 text-red-400" />
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          Areyou sure you want to delete this goal?
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction asChild>
+            <Button onClick={() => handleDelete()}>Delete</Button>
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
+
+const AddEntry = ({ id }: { id: string }) => {
+  const createEntry = useCreateKpiEntry()
+  const [value, setValue] = useState("")
+
+  const handleAddEntry = async () => {
+    try {
+      await createEntry.mutateAsync({
+        kpiId: id,
+        date: new Date().toISOString(),
+        value: parseFloat(value),
+      })
+    } catch (error) {}
+  }
+
+  return (
+    <Popover>
+      <PopoverTrigger>
+        <PlusIcon />
+      </PopoverTrigger>
+      <PopoverContent>
+        <div className="grid gap-4">
+          <Input
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            placeholder="Value"
+          />
+          <Button className="w-full" onClick={handleAddEntry}>
+            Add
+          </Button>
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }

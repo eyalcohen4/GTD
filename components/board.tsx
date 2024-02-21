@@ -36,7 +36,7 @@ export const Board = ({ boardId }: { boardId: string }) => {
   const { data, isLoading } = useGetBoard(boardId);
   const { mutate: updateTaskColumn } = useUpdateColumnTask();
   const [showCreate, setShowCreate] = useState(false);
-  
+
   const onDragEnd = async (result: any) => {
     const { destination, source, draggableId } = result;
     if (!destination) {
@@ -142,7 +142,7 @@ const ColumnTasks = ({
         <Dialog>
           <DialogTrigger asChild>
             <div
-              className="w-full flex text-sm items-center gap-4 
+              className="w-full flex text-sm items-center gap-4
          dark:hover:bg-gray-800 hover:bg-gray-100
          text-gray-500 cursor-pointer py-2 rounded-lg
         "

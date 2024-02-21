@@ -1,10 +1,7 @@
 import { useMemo, useState } from "react"
-import { Box, Calendar, Flower2, Locate, Shrub } from "lucide-react"
+import { HashIcon, TrophyIcon } from "lucide-react"
 
-import { Goal, GoalInput, UpdateGoalInput } from "@/types/goal"
-import useDebounce from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/seperator"
 
 import "remirror/styles/all.css"
 import { useSession } from "next-auth/react"
@@ -29,12 +26,16 @@ import { Input } from "./ui/input"
 export const KpiForm = ({ onCreated }: { onCreated: () => void }) => {
   const { data } = useSession()
   const { mutate: createKpi } = useCreateKpi()
-  const { projects } = useProjects()
+  const { goals } = useGoals()
 
   const [kpi, setKpi] = useState<KpiInput>({
     title: "",
     userId: data?.user?.id,
-    projectId: "",
+    goalId: "",
+    target: {
+      value: "",
+      targetDate: "",
+    },
   })
 
   const handleCreate = async () => {
@@ -42,19 +43,22 @@ export const KpiForm = ({ onCreated }: { onCreated: () => void }) => {
     onCreated?.()
   }
 
-  const projectsOptions = useMemo(
+  const goalsOptions = useMemo(
     () =>
-      projects?.map((project) => ({
-        value: project.id,
-        label: project.title,
-        color: project.color,
-      })),
-    [projects]
+      goals
+        ?.filter(
+          (goal) => goal.status !== "FAILED" && goal.status !== "COMPLETED"
+        )
+        .map((goal) => ({
+          value: goal.id,
+          label: goal.title,
+        })),
+    [goals]
   )
 
-  const selectedProject = useMemo(
-    () => projectsOptions?.find(({ value }) => value === kpi?.projectId),
-    [projectsOptions, kpi?.projectId]
+  const selectedGoal = useMemo(
+    () => goalsOptions?.find(({ value }) => value === kpi?.goalId),
+    [goalsOptions, kpi?.goalId]
   )
 
   return (
@@ -62,7 +66,7 @@ export const KpiForm = ({ onCreated }: { onCreated: () => void }) => {
       <div>
         <div className="flex items-center gap-4">
           <textarea
-            className="w-full border-0 h-8 bg-transparent border-transparent text-2xl text-slate-900 dark:text-slate-100 font-medium"
+            className="h-8 w-full border-0 border-transparent bg-transparent text-2xl font-medium text-slate-900 dark:text-slate-100"
             placeholder="Name"
             value={kpi?.title || ""}
             onChange={(e) => {
@@ -74,15 +78,15 @@ export const KpiForm = ({ onCreated }: { onCreated: () => void }) => {
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-8 dark:text-white">
           <FormProperty>
-            <FormPropertyLabel label="Project" icon={<Flower2 />} />
+            <FormPropertyLabel label="Goal" icon={<TrophyIcon />} />
             <FormPropertyValue>
               <FormPropertyValue>
                 <ComboboxPopover
                   matchContainerSize
-                  items={projectsOptions}
-                  type="project"
-                  name="Project"
-                  value={selectedProject}
+                  items={goalsOptions}
+                  type="goal"
+                  name="Goal"
+                  value={selectedGoal}
                   onChange={(value) => {
                     if (Array.isArray(value)) {
                       return
@@ -90,7 +94,54 @@ export const KpiForm = ({ onCreated }: { onCreated: () => void }) => {
 
                     setKpi({
                       ...kpi,
-                      projectId: (value?.value as string) || "",
+                      goalId: (value?.value as string) || "",
+                    })
+                  }}
+                />
+              </FormPropertyValue>
+            </FormPropertyValue>
+          </FormProperty>
+        </div>
+        <div className="flex flex-col gap-8 dark:text-white">
+          <FormProperty>
+            <FormPropertyLabel label="Target" icon={<HashIcon />} />
+            <FormPropertyValue>
+              <FormPropertyValue>
+                <Input
+                  placeholder="Name"
+                  value={kpi?.target?.value || ""}
+                  onChange={(e) => {
+                    setKpi({
+                      ...kpi,
+                      target: {
+                        value: e.target.value,
+                        targetDate: kpi.target?.targetDate || undefined,
+                      },
+                    })
+                  }}
+                />
+              </FormPropertyValue>
+            </FormPropertyValue>
+          </FormProperty>
+        </div>
+        <div className="flex flex-col gap-8 dark:text-white">
+          <FormProperty>
+            <FormPropertyLabel label="Target" icon={<HashIcon />} />
+            <FormPropertyValue>
+              <FormPropertyValue>
+                <DatePicker
+                  value={
+                    kpi?.target?.targetDate
+                      ? new Date(kpi.target.targetDate)
+                      : undefined
+                  }
+                  onChange={(value) => {
+                    setKpi({
+                      ...kpi,
+                      target: {
+                        value: kpi.target?.value || "",
+                        targetDate: value?.toISOString() || "",
+                      },
                     })
                   }}
                 />

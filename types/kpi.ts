@@ -3,14 +3,20 @@ import { z } from "zod"
 export const kpiInputSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
-  projectId: z.string().optional(),
+  goalId: z.string().optional(),
   userId: z.string(),
+  target: z
+    .object({
+      value: z.string(),
+      targetDate: z.string().optional(),
+    })
+    .optional(),
 })
 
 export const updateKpiInputSchema = z.object({
-  title: z.string(),
+  title: z.string().optional(),
   description: z.string().optional(),
-  projectId: z.string().optional(),
+  isDeleted: z.boolean().optional(),
 })
 
 export const kpiTargetInputSchema = z.object({
@@ -53,6 +59,7 @@ export const kpiSchema = z.object({
   title: z.string(),
   description: z.string().optional(),
   userId: z.string(),
+  goalId: z.string().optional(),
   projectId: z.string().optional(),
   createdAt: z.string(),
   updatedAt: z.string(),

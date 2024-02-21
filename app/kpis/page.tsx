@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button"
 import { CreateKpi } from "@/components/create-kpi"
-import { AppLayout } from "@/components/layouts/app-layout"
 import { KpiList } from "@/components/kpi-list"
+import { AppLayout } from "@/components/layouts/app-layout"
 
 export default async function IndexPage() {
   return (
@@ -11,7 +11,9 @@ export default async function IndexPage() {
           <h1 className="text-3xl font-bold tracking-tight">KPIs</h1>
           <CreateKpi />
         </div>
-        <KpiList />
+        <div className="px-2 md:px-8">
+          <KpiList />
+        </div>
       </div>
     </AppLayout>
   )

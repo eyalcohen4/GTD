@@ -1,13 +1,29 @@
 import { GoalInput, UpdateGoalInput } from "@/types/goal"
-import { Kpi, KpiEntryInput, KpiInput, KpiTargetInput } from "@/types/kpi"
+import {
+  Kpi,
+  KpiEntryInput,
+  KpiInput,
+  KpiTargetInput,
+  UpdateKpiInput,
+} from "@/types/kpi"
 import prisma from "@/lib/db"
 
 export const createKpi = async (input: KpiInput) => {
+  const target = {
+    value: parseFloat(input.target?.value || ""),
+    targetDate: input.target?.targetDate || undefined,
+  }
+
+  console.log(target)
+
   return prisma.kpi.create({
     data: {
       title: input.title,
-      projectId: input.projectId || undefined,
+      goalId: input.goalId || undefined,
       userId: input.userId,
+      targets: {
+        create: target,
+      },
     },
   })
 }
@@ -32,19 +48,14 @@ export const createKpiTarget = async (input: KpiTargetInput) => {
   })
 }
 
-export const updateGoal = async (id: string, input: UpdateGoalInput) => {
-  return prisma.goal.update({
+export const updateKpi = async (id: string, input: UpdateKpiInput) => {
+  return prisma.kpi.update({
     where: {
       id,
     },
     data: {
-      title: input.title,
-      content: input.content || "",
-      dueDate: input.dueDate,
-      status: input.status,
-      progress: input.progress,
-      motivation: input.motivation,
-      isDeleted: input.isDeleted,
+      title: input.title || undefined,
+      isDeleted: input.isDeleted || false,
     },
   })
 }
@@ -55,6 +66,7 @@ export const getKpis = async (userId: string) => {
       user: {
         id: userId,
       },
+      isDeleted: false,
     },
     include: {
       targets: true,
@@ -68,16 +80,8 @@ export const getKpis = async (userId: string) => {
   })
 }
 
-export const deleteGoal = async (id: string) => {
-  return prisma.goal.delete({
-    where: {
-      id,
-    },
-  })
-}
-
-export const getGoal = async (id: string) => {
-  return prisma.goal.findUnique({
+export const getKpi = async (id: string) => {
+  return prisma.kpi.findUnique({
     where: {
       id,
     },
